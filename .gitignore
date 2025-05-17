@@ -13,3 +13,17 @@
 /frontend/dist/
 /frontend/.angular/
 /frontend/.idea/
+# IntelliJ
+.idea/
+*.iml
+
+# Maven
+target/
+
+# Node.js
+node_modules/
+dist/
+
+# OS
+.DS_Store
+

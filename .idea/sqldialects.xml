@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/db/migration/V11_2__insert_notification_table.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/backend/src/main/resources/db/migration/V1_1__create_user_table.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/db/migration/V1_2__insert_user_table.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/db/migration/V2_1__create_audit_program_table.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/db/migration/V2_2__insert_audit_program_table.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/db/migration/V3_2__insert_program_payment_table.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/db/migration/V6_1__create_challenge_table.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/db/migration/V7_1__create_challenge_participant_table.sql" dialect="GenericSQL" />
   </component>
 </project>
