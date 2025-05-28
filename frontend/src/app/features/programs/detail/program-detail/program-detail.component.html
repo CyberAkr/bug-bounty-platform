@@ -1,0 +1,13 @@
+<h2>Détail du programme</h2>
+
+<div *ngIf="program; else loading">
+  <h3>{{ program.title }}</h3>
+  <p>{{ program.description }}</p>
+  <p><strong>Entreprise :</strong> {{ program.companyName }}</p>
+  <p><strong>Status :</strong> {{ program.status }}</p>
+  <a routerLink="/programs">⬅ Retour à la liste</a>
+</div>
+
+<ng-template #loading>
+  <p>Chargement du programme...</p>
+</ng-template>

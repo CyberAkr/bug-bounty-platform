@@ -2,7 +2,6 @@ package be.bugbounty.backend.dto.report;
 
 import lombok.*;
 import java.time.LocalDateTime;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,4 +12,5 @@ public class ReportResponseDTO {
     private String status;
     private String researcher;
     private LocalDateTime submittedAt;
+    private String programTitle; // ✅ nouveau champ pour Angular
 }

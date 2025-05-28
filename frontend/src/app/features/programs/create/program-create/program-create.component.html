@@ -1,0 +1,11 @@
+<h2>Créer un programme d’audit</h2>
+
+<form (ngSubmit)="submit()" #form="ngForm">
+  <label for="title">Titre :</label>
+  <input type="text" [(ngModel)]="title" name="title" required />
+
+  <label for="description">Description :</label>
+  <textarea [(ngModel)]="description" name="description" rows="5" required></textarea>
+
+  <button type="submit">Créer</button>
+</form>

@@ -44,9 +44,14 @@ public class ReportService {
 
     private ReportResponseDTO mapToDto(Report report) {
         return new ReportResponseDTO(
-                report.getReportId(), report.getTitle(),
-                report.getSeverity().name(), report.getStatus().name(),
-                report.getResearcher().getUsername(), report.getSubmittedAt()
+                report.getReportId(),
+                report.getTitle(),
+                report.getSeverity().name(),
+                report.getStatus().name(),
+                report.getResearcher().getUsername(),
+                report.getSubmittedAt(),
+                report.getProgram().getTitle() // ✅ Ajout ici
         );
     }
+
 }

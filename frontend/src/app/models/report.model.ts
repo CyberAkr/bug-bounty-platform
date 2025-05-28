@@ -8,8 +8,10 @@ export interface ReportRequest {
 export interface ReportResponse {
   id: number;
   title: string;
-  severity: string;
-  status: string;
+  severity: 'LOW' | 'MEDIUM' | 'HIGH';
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
   researcher: string;
   submittedAt: string;
+  programTitle: string;
 }
+

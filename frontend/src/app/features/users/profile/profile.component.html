@@ -1,1 +1,12 @@
-<p>profile works!</p>
+<h2>Mon profil</h2>
+
+<form *ngIf="user() as u" (ngSubmit)="update()" class="space-y-4">
+  <!-- Champs du profil -->
+</form>
+
+<button (click)="delete()" class="text-red-600 mt-4">🗑️ Supprimer mon compte</button>
+
+<hr class="my-6" />
+
+<h3>Mes rapports</h3>
+<app-my-reports />

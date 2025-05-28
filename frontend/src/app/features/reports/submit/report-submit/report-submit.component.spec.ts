@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SidebarComponent } from './sidebar.component';
+import { ReportSubmitComponent } from './report-submit.component';
 
-describe('SidebarComponent', () => {
-  let component: SidebarComponent;
-  let fixture: ComponentFixture<SidebarComponent>;
+describe('ReportSubmitComponent', () => {
+  let component: ReportSubmitComponent;
+  let fixture: ComponentFixture<ReportSubmitComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SidebarComponent]
+      imports: [ReportSubmitComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SidebarComponent);
+    fixture = TestBed.createComponent(ReportSubmitComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

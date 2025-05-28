@@ -1,0 +1,20 @@
+<h2>Soumettre un rapport</h2>
+
+<form (ngSubmit)="submitReport()" #form="ngForm">
+  <label for="program">Programme :</label>
+  <select [(ngModel)]="selectedProgramId" name="program" required>
+    <option *ngFor="let p of programs()" [value]="p.id">{{ p.title }}</option>
+  </select>
+
+  <label for="severity">Sévérité :</label>
+  <select [(ngModel)]="severity" name="severity" required>
+    <option value="LOW">Faible</option>
+    <option value="MEDIUM">Moyenne</option>
+    <option value="HIGH">Élevée</option>
+  </select>
+
+  <label for="title">Description :</label>
+  <textarea [(ngModel)]="title" name="title" rows="4" required></textarea>
+
+  <button type="submit">Envoyer</button>
+</form>
