@@ -1,0 +1,15 @@
+<h1>🧪 Layout actif</h1>
+
+<nav>
+  <a routerLink="/home">Accueil</a> |
+  <a *ngIf="!isLoggedIn" routerLink="/login">Login</a> |
+  <a *ngIf="!isLoggedIn" routerLink="/register">Register</a> |
+
+  <a *ngIf="isLoggedIn" routerLink="/profile">Profil</a> |
+  <a *ngIf="isLoggedIn && isCompany()" routerLink="/company">Espace entreprise</a> |
+  <a *ngIf="isLoggedIn" routerLink="/programs">Programmes</a> |
+  <a *ngIf="isLoggedIn" routerLink="/notifications">Notifications</a> |
+  <a *ngIf="isLoggedIn" (click)="logout()" style="cursor: pointer">Déconnexion</a>
+</nav>
+
+<hr />

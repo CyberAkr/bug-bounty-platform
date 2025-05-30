@@ -1,0 +1,15 @@
+<h2>Mes rapports soumis</h2>
+
+<ul *ngIf="reports().length > 0; else noReports">
+  <li *ngFor="let report of reports()" class="mb-4 border p-3 rounded">
+    <h3>{{ report.title }}</h3>
+    <p><strong>Programme :</strong> {{ report.programTitle }}</p>
+    <p><strong>Sévérité :</strong> {{ report.severity }}</p>
+    <p><strong>Status :</strong> {{ report.status }}</p>
+    <p><strong>Soumis le :</strong> {{ report.submittedAt | date:'short' }}</p>
+  </li>
+</ul>
+
+<ng-template #noReports>
+  <p>Aucun rapport soumis pour l’instant.</p>
+</ng-template>

@@ -1,0 +1,12 @@
+<h2>Mes notifications</h2>
+
+<ul *ngIf="notifications().length > 0; else noNotif">
+  <li *ngFor="let notif of notifications()" [class.font-bold]="!notif.isRead">
+    <p>{{ notif.message }}</p>
+    <p class="text-sm text-gray-500">{{ notif.sentAt | date:'short' }}</p>
+  </li>
+</ul>
+
+<ng-template #noNotif>
+  <p>Aucune notification pour l’instant.</p>
+</ng-template>

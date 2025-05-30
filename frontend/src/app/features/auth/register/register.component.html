@@ -1,0 +1,65 @@
+<h2 class="text-2xl font-semibold mb-4">
+  Inscription {{ role() === 'company' ? 'Entreprise' : 'Chercheur' }}
+</h2>
+<h2 class="text-2xl font-semibold mb-4">Créer un compte</h2>
+
+<div class="flex gap-4 mb-6">
+  <button type="button"
+          [class.bg-blue-600]="role() === 'researcher'"
+          [class.bg-gray-300]="role() !== 'researcher'"
+          class="px-4 py-2 text-white rounded"
+          (click)="role.set('researcher')">
+    Je suis un chercheur
+  </button>
+
+  <button type="button"
+          [class.bg-green-600]="role() === 'company'"
+          [class.bg-gray-300]="role() !== 'company'"
+          class="px-4 py-2 text-white rounded"
+          (click)="role.set('company')">
+    Je suis une entreprise
+  </button>
+</div>
+
+<h3 class="text-lg font-semibold mb-2">Inscription {{ role() === 'company' ? 'Entreprise' : 'Chercheur' }}</h3>
+
+
+<form (ngSubmit)="register()" class="space-y-4">
+
+  <label>Prénom :</label>
+  <input [(ngModel)]="firstName" name="firstName" required class="input" />
+
+  <label>Nom :</label>
+  <input [(ngModel)]="lastName" name="lastName" required class="input" />
+
+  <label>Email :</label>
+  <input type="email" [(ngModel)]="email" name="email" required class="input" />
+
+  <label>Mot de passe :</label>
+  <input type="password" [(ngModel)]="password" name="password" required class="input" />
+
+  <label>Nom d’utilisateur :</label>
+  <input [(ngModel)]="username" name="username" required class="input" />
+
+  <label>Langue préférée :</label>
+  <select [(ngModel)]="preferredLanguage" name="preferredLanguage" class="input">
+    <option value="fr">Français</option>
+    <option value="en">English</option>
+  </select>
+
+  <label>Bio :</label>
+  <textarea [(ngModel)]="bio" name="bio" class="input"></textarea>
+
+  <!-- Spécifique entreprise -->
+  <div *ngIf="role() === 'company'">
+    <label>Numéro d’entreprise :</label>
+    <input [(ngModel)]="companyNumber" name="companyNumber" required class="input" />
+  </div>
+
+  <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+    S'inscrire
+  </button>
+</form>
+
+<p class="success text-green-600 mt-4" *ngIf="successMessage">{{ successMessage }}</p>
+<p class="error text-red-600 mt-2" *ngIf="errorMessage">{{ errorMessage }}</p>

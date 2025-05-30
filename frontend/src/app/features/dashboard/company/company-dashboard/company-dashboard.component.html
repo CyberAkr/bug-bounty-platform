@@ -1,0 +1,22 @@
+<section class="p-6">
+  <h2 class="text-2xl font-semibold mb-4">🏢 Tableau de bord entreprise</h2>
+
+  <app-verification-status-banner [status]="verificationStatus()"></app-verification-status-banner>
+
+  <div class="my-6">
+    <a [routerLink]="isApproved() ? '/programs/create' : null">
+      <button
+        class="bg-blue-500 text-white px-4 py-2 rounded"
+        [disabled]="!isApproved()"
+        [class.opacity-50]="!isApproved()">
+        ➕ Créer un programme
+      </button>
+    </a>
+
+    <p *ngIf="!isApproved()" class="text-sm text-gray-600 mt-1">
+      Vous devez être vérifié pour créer un programme.
+    </p>
+  </div>
+
+  <app-verification-form *ngIf="!isApproved()"></app-verification-form>
+</section>
