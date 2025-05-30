@@ -14,10 +14,20 @@ public class UserService {
 
     public UserResponseDTO getCurrentUser(User user) {
         return new UserResponseDTO(
-                user.getUserId(), user.getEmail(), user.getFirstName(), user.getLastName(),
-                user.getRole(), user.getUsername(), user.getBio(), user.getPreferredLanguage(), user.getProfilePhoto()
+                user.getUserId(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getRole(),
+                user.getUsername(),
+                user.getBio(),
+                user.getPreferredLanguage(),
+                user.getProfilePhoto(),
+                user.getCompanyNumber(), // ✅ 10e
+                user.getVerificationStatus().name() // ✅ 11e
         );
     }
+
 
     public void updateUser(User user, UserUpdateRequestDTO dto) {
         user.setFirstName(dto.getFirstName());
@@ -31,4 +41,5 @@ public class UserService {
     public void deleteUser(User user) {
         userRepository.delete(user);
     }
+
 }

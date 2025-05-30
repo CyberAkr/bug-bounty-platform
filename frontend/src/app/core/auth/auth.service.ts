@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { tap } from 'rxjs/operators';
+import { UserResponse } from '@app/models/user.model';
+
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -32,7 +34,14 @@ export class AuthService {
     localStorage.removeItem('auth_token');
   }
 
-  register(data: { email: string, password: string, firstName: string, lastName: string }) {
+  register(data: FormData) {
     return this.http.post('/api/auth/register', data);
   }
+
+
+getCurrentUser() {
+  return this.http.get<UserResponse>('/api/user/me');
+}
+
+
 }

@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ProgramService } from '@app/features/programs/program.service';
 import { AuditProgramResponse } from '@app/models/program.model';
+import {ReportSubmitComponent} from '@app/features/reports/submit/report-submit/report-submit.component';
+import {ReportStatusComponent} from '@app/features/reports/status/report-status.component';
 
 @Component({
   selector: 'app-program-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ReportSubmitComponent, ReportStatusComponent],
   templateUrl: './program-detail.component.html',
 })
 export class ProgramDetailComponent implements OnInit {

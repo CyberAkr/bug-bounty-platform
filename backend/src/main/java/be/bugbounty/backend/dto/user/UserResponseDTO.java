@@ -15,5 +15,7 @@ public class UserResponseDTO {
     private String bio;
     private String preferredLanguage;
     private String profilePhoto;
-}
 
+    private String companyNumber;
+    private String verificationStatus;
+}

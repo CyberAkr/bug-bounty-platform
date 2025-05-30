@@ -8,7 +8,11 @@ export interface UserResponse {
   bio: string;
   preferredLanguage: string;
   profilePhoto: string | null;
+
+  companyNumber: string | null;         // ✅ Ajout
+  verificationStatus: string;          // ✅ Ajout
 }
+
 
 export interface UserUpdateRequest {
   firstName: string;

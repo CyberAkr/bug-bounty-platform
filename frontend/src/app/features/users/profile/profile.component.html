@@ -1,12 +1,80 @@
-<h2>Mon profil</h2>
+<h2 class="text-2xl font-bold mb-4">👤 Mon profil</h2>
 
-<form *ngIf="user() as u" (ngSubmit)="update()" class="space-y-4">
-  <!-- Champs du profil -->
+<form *ngIf="user() as u" (ngSubmit)="update()" class="space-y-4" enctype="multipart/form-data">
+  <div>
+    <label>Prénom :</label>
+    <input [(ngModel)]="u.firstName" name="firstName" class="input" />
+  </div>
+
+  <div>
+    <label>Nom :</label>
+    <input [(ngModel)]="u.lastName" name="lastName" class="input" />
+  </div>
+
+  <div>
+    <label>Email :</label>
+    <input [value]="u.email" disabled class="input" />
+  </div>
+
+  <div>
+    <label>Langue préférée :</label>
+    <select [(ngModel)]="u.preferredLanguage" name="preferredLanguage" class="input">
+      <option value="fr">Français</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+
+  <div>
+    <label>Bio :</label>
+    <textarea [(ngModel)]="u.bio" name="bio" class="input"></textarea>
+  </div>
+
+  <!-- Champ caché pour le backend -->
+  <input type="hidden" [value]="u.profilePhoto || ''" name="profilePhoto" />
+
+  <!-- Pour les entreprises uniquement -->
+  <div *ngIf="u.role === 'company'" class="mt-6 bg-gray-50 p-4 rounded border">
+    <h3 class="font-semibold mb-2">🏢 Informations entreprise</h3>
+
+    <div>
+      <label>Numéro d'entreprise :</label>
+      <input [value]="u.companyNumber" disabled class="input" />
+    </div>
+
+    <div>
+      <label>Statut de vérification :</label>
+      <span
+        class="font-semibold"
+        [ngClass]="{
+          'text-yellow-600': u.verificationStatus === 'PENDING',
+          'text-red-600': u.verificationStatus === 'REJECTED',
+          'text-green-600': u.verificationStatus === 'VERIFIED'
+        }">
+        {{ u.verificationStatus }}
+      </span>
+    </div>
+
+    <div class="mt-2">
+      <label>Document de vérification (.zip, .pdf) :</label>
+      <input type="file" (change)="onFileSelected($event)" />
+    </div>
+
+    <p class="text-sm text-gray-500 mt-1">
+      Vous pouvez modifier ou renvoyer votre document si la vérification est en attente ou rejetée.
+    </p>
+  </div>
+
+  <!-- Enregistrement -->
+  <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded">
+    💾 Enregistrer
+  </button>
 </form>
 
+<!-- Suppression -->
 <button (click)="delete()" class="text-red-600 mt-4">🗑️ Supprimer mon compte</button>
 
 <hr class="my-6" />
 
-<h3>Mes rapports</h3>
+<!-- Rapports -->
+<h3 class="text-lg font-semibold mb-2">📄 Mes rapports</h3>
 <app-my-reports />

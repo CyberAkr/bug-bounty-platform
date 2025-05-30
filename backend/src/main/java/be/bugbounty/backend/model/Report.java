@@ -39,6 +39,9 @@ public class Report {
     @Column(columnDefinition = "TEXT")
     private String adminComment;
 
+    @Column(nullable = false)
+    private String fileUrl;
+
     public enum Severity {
         LOW, MEDIUM, HIGH
     }

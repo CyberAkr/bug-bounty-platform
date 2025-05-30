@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -8,15 +7,15 @@ import { UserResponse, UserUpdateRequest } from '../../models/user.model';
 export class UserService {
   constructor(private http: HttpClient) {}
 
-  getCurrentUser(): Observable<UserResponse> {
-    return this.http.get<UserResponse>('/api/users/me');
+  getMe(): Observable<UserResponse> {
+    return this.http.get<UserResponse>('/api/user/me');
   }
 
-  updateCurrentUser(data: UserUpdateRequest): Observable<void> {
-    return this.http.put<void>('/api/users/me', data);
+  updateWithForm(data: FormData): Observable<any> {
+    return this.http.put('/api/user/me', data);
   }
 
-  deleteAccount(): Observable<void> {
-    return this.http.delete<void>('/api/users/me');
+  delete(): Observable<any> {
+    return this.http.delete('/api/user/me');
   }
 }

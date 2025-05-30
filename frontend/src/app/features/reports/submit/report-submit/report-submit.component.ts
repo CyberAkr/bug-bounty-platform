@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProgramService } from '@app/features/programs/program.service';
@@ -17,27 +17,43 @@ export class ReportSubmitComponent implements OnInit {
   private reportService = inject(ReportService);
   private router = inject(Router);
 
+  @Input({ required: false }) programId?: number;
+
   programs = signal<AuditProgramResponse[]>([]);
   selectedProgramId: number | null = null;
   title = '';
   severity: 'LOW' | 'MEDIUM' | 'HIGH' = 'LOW';
+  selectedFile: File | null = null;
 
   ngOnInit(): void {
-    this.programService.getAll().subscribe((data) => {
-      this.programs.set(data);
-    });
+    if (!this.programId) {
+      this.programService.getAll().subscribe((data) => {
+        this.programs.set(data);
+      });
+    } else {
+      this.selectedProgramId = this.programId;
+    }
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      this.selectedFile = input.files[0];
+    }
   }
 
   submitReport(): void {
-    if (!this.selectedProgramId || !this.title.trim()) return;
+    if (!this.selectedProgramId || !this.title.trim() || !this.selectedFile) return;
 
-    this.reportService.submit({
-      title: this.title,
-      severity: this.severity,
-      programId: this.selectedProgramId,
-    }).subscribe(() => {
-      alert('✅ Rapport soumis !');
-      this.router.navigate(['/reports/my']); // rediriger vers mes rapports
+    const formData = new FormData();
+    formData.append('programId', this.selectedProgramId.toString());
+    formData.append('title', this.title);
+    formData.append('severity', this.severity);
+    formData.append('file', this.selectedFile);
+
+    this.reportService.submitFormData(formData).subscribe(() => {
+      alert('✅ Rapport soumis avec succès !');
+      this.router.navigate(['/reports/my']);
     });
   }
 }

@@ -1,11 +1,24 @@
-<h2>Créer un programme d’audit</h2>
+<section class="p-6 max-w-2xl mx-auto">
+  <h2 class="text-2xl font-semibold mb-4">➕ Créer un programme</h2>
 
-<form (ngSubmit)="submit()" #form="ngForm">
-  <label for="title">Titre :</label>
-  <input type="text" [(ngModel)]="title" name="title" required />
+  <form (ngSubmit)="submit()" class="space-y-4">
+    <div>
+      <label class="block font-medium">Titre du programme</label>
+      <input [(ngModel)]="title" name="title" required class="input w-full" />
+    </div>
 
-  <label for="description">Description :</label>
-  <textarea [(ngModel)]="description" name="description" rows="5" required></textarea>
+    <div>
+      <label class="block font-medium">Description</label>
+      <textarea [(ngModel)]="description" name="description" rows="3" required class="input w-full"></textarea>
+    </div>
 
-  <button type="submit">Créer</button>
-</form>
+    <div>
+      <label class="block font-medium">Objectif</label>
+      <textarea [(ngModel)]="goal" name="goal" rows="2" class="input w-full"></textarea>
+    </div>
+
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
+      ✅ Soumettre
+    </button>
+  </form>
+</section>

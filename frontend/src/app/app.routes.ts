@@ -33,12 +33,25 @@ export const routes: Routes = [
           import('./features/auth/register/register.component').then(m => m.RegisterComponent)
       },
 
-      // 📊 Dashboard utilisateur (optionnel)
+      // 📊 Dashboard utilisateur (standard)
       {
         path: 'dashboard',
         canActivate: [authGuard],
         loadComponent: () =>
           import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent)
+      },
+
+      // 🏢 Dashboard entreprise
+      {
+        path: 'company',
+        canActivate: [authGuard],
+        loadChildren: () =>
+          import('./features/dashboard/company/company.routes').then(m => m.COMPANY_ROUTES)
+      },
+      // dashboard chercheurs
+      {
+        path: 'researcher',
+        loadChildren: () => import('./features/dashboard/researcher/researcher.routes').then(m => m.researcherRoutes)
       },
 
       // 👤 Profil utilisateur
@@ -49,7 +62,7 @@ export const routes: Routes = [
           import('./features/users/profile/profile.component').then(m => m.ProfileComponent)
       },
 
-      // ⚙️ Paramètres utilisateur (optionnel)
+      // ⚙️ Paramètres utilisateur
       {
         path: 'settings',
         canActivate: [authGuard],
@@ -57,14 +70,14 @@ export const routes: Routes = [
           import('./features/users/settings/settings.component').then(m => m.SettingsComponent)
       },
 
-      // 📦 Programmes d'audit (liste, détail, création)
+      // 📦 Programmes d'audit
       {
         path: 'programs',
         loadChildren: () =>
           import('./features/programs/programs.routes').then(m => m.PROGRAMS_ROUTES)
       },
 
-      // 🧪 Rapports (soumission uniquement)
+      // 🧪 Rapports
       {
         path: 'reports',
         loadChildren: () =>

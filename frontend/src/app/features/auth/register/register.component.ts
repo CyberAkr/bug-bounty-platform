@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,40 +12,52 @@ import { AuthService } from '@app/core/auth/auth.service';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  role = signal<'company' | 'researcher'>('researcher');
+
+  // Champs communs
   email = '';
   password = '';
   firstName = '';
   lastName = '';
+  username = '';
+  preferredLanguage = 'fr';
+  bio = '';
+
+  // Spécifique entreprise
+  companyNumber = '';
+
+  // Feedback
   errorMessage = '';
   successMessage = '';
 
-  constructor(private authService: AuthService, private router: Router) {
-  }
-
-  register() {
-    this.authService.register({
+  register(): void {
+    const payload: any = {
       email: this.email,
       password: this.password,
       firstName: this.firstName,
-      lastName: this.lastName
-    }).subscribe({
-      next: (res: any) => {
-        console.log('✅ Succès :', res);
-        this.successMessage = typeof res === 'string' ? res : res?.message || "Inscription réussie.";
+      lastName: this.lastName,
+      username: this.username,
+      bio: this.bio,
+      preferredLanguage: this.preferredLanguage,
+      role: this.role()
+    };
+
+    if (this.role() === 'company') {
+      payload.companyNumber = this.companyNumber;
+    }
+
+    this.authService.register(payload).subscribe({
+      next: () => {
+        this.successMessage = 'Inscription réussie !';
         this.errorMessage = '';
-        // Optionnel : redirection après succès
         setTimeout(() => this.router.navigate(['/login']), 2000);
       },
       error: (err) => {
-        console.error('❌ Erreur reçue :', err);
         this.successMessage = '';
-        if (typeof err.error === 'string') {
-          this.errorMessage = err.error;
-        } else if (err.error?.message) {
-          this.errorMessage = err.error.message;
-        } else {
-          this.errorMessage = "Erreur lors de l'inscription.";
-        }
+        this.errorMessage = err?.error?.message || "Erreur lors de l'inscription.";
       }
     });
   }

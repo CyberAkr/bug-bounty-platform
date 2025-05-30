@@ -8,14 +8,19 @@ export class UserService {
   private http = inject(HttpClient);
 
   getMe(): Observable<UserResponse> {
-    return this.http.get<UserResponse>('/api/users/me');
+    return this.http.get<UserResponse>('/api/user/me');
   }
 
-  update(data: UserUpdateRequest): Observable<any> {
-    return this.http.put('/api/users/me', data);
-  }
+
 
   delete(): Observable<any> {
-    return this.http.delete('/api/users/me');
+    return this.http.delete('/api/user/me');
   }
+
+
+  updateWithForm(data: FormData) {
+    return this.http.put('/api/user/me', data);
+  }
+
+
 }

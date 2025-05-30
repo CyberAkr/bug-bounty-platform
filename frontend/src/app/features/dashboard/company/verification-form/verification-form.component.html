@@ -1,0 +1,20 @@
+<h3 class="text-lg font-semibold mb-2">Vérification de l’entreprise</h3>
+
+<form (ngSubmit)="submit()" class="space-y-4">
+  <div>
+    <label>Numéro d’entreprise :</label>
+    <input [(ngModel)]="companyNumber" name="companyNumber" required class="input" />
+  </div>
+
+  <div>
+    <label>Document justificatif :</label>
+    <input type="file" (change)="onFileSelected($event)" required class="input" />
+  </div>
+
+  <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+    📤 Envoyer pour vérification
+  </button>
+
+  <p class="text-green-600 mt-2" *ngIf="successMessage">{{ successMessage }}</p>
+  <p class="text-red-600 mt-2" *ngIf="errorMessage">{{ errorMessage }}</p>
+</form>

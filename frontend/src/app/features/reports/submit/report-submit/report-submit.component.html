@@ -1,20 +1,41 @@
 <h2>Soumettre un rapport</h2>
 
-<form (ngSubmit)="submitReport()" #form="ngForm">
-  <label for="program">Programme :</label>
-  <select [(ngModel)]="selectedProgramId" name="program" required>
-    <option *ngFor="let p of programs()" [value]="p.id">{{ p.title }}</option>
-  </select>
+<form (ngSubmit)="submitReport()" #form="ngForm" class="space-y-4">
+  <!-- Sélection du programme (optionnel si déjà fourni) -->
+  <div *ngIf="!programId">
+    <label for="program">Programme :</label>
+    <select [(ngModel)]="selectedProgramId" name="program" required>
+      <option *ngFor="let p of programs()" [value]="p.id">{{ p.title }}</option>
+    </select>
+  </div>
 
-  <label for="severity">Sévérité :</label>
-  <select [(ngModel)]="severity" name="severity" required>
-    <option value="LOW">Faible</option>
-    <option value="MEDIUM">Moyenne</option>
-    <option value="HIGH">Élevée</option>
-  </select>
+  <!-- Sévérité -->
+  <div>
+    <label for="severity">Sévérité :</label>
+    <select [(ngModel)]="severity" name="severity" required>
+      <option value="LOW">Faible</option>
+      <option value="MEDIUM">Moyenne</option>
+      <option value="HIGH">Élevée</option>
+    </select>
+  </div>
 
-  <label for="title">Description :</label>
-  <textarea [(ngModel)]="title" name="title" rows="4" required></textarea>
+  <!-- Titre/Description -->
+  <div>
+    <label for="title">Description :</label>
+    <textarea [(ngModel)]="title" name="title" rows="4" required></textarea>
+  </div>
 
-  <button type="submit">Envoyer</button>
+  <!-- Upload fichier PDF -->
+  <div>
+    <label for="file">Fichier PDF :</label>
+    <input type="file" accept="application/pdf" (change)="onFileSelected($event)" required />
+  </div>
+
+  <button
+    type="submit"
+    [disabled]="!selectedFile"
+    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+  >
+    📤 Envoyer
+  </button>
 </form>

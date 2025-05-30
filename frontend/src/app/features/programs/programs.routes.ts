@@ -1,6 +1,7 @@
-import { ProgramDetailComponent } from '@app/features/programs/detail/program-detail/program-detail.component';
+import { Routes } from '@angular/router';
+import { ProgramDetailComponent } from './detail/program-detail/program-detail.component';
 
-export const PROGRAMS_ROUTES = [
+export const PROGRAMS_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () =>
@@ -18,5 +19,5 @@ export const PROGRAMS_ROUTES = [
   {
     path: ':id',
     component: ProgramDetailComponent,
-  },
+  }
 ];
