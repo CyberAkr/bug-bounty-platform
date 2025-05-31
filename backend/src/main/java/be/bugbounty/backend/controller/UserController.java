@@ -1,5 +1,6 @@
 package be.bugbounty.backend.controller;
 
+import be.bugbounty.backend.dto.user.UserPublicDTO;
 import be.bugbounty.backend.dto.user.UserResponseDTO;
 import be.bugbounty.backend.model.User;
 import be.bugbounty.backend.repository.UserRepository;
@@ -95,6 +96,23 @@ public class UserController {
         userRepository.delete(user);
         return ResponseEntity.ok(Map.of("message", "Compte supprimé"));
     }
+
+    // profile public
+    @GetMapping("/{id}/public")
+    public ResponseEntity<UserPublicDTO> getPublicProfile(@PathVariable Long id) {
+        return userRepository.findById(id)
+                .map(user -> ResponseEntity.ok(new UserPublicDTO(
+                        user.getUserId(),
+                        user.getUsername(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getPreferredLanguage(),
+                        user.getBio(),
+                        user.getPoint()
+                )))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 
 }
 

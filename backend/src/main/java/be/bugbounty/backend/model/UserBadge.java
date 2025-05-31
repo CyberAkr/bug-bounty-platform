@@ -13,11 +13,11 @@ public class UserBadge {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "badge_id", nullable = false)
-    private Badge badge;
+    @JoinColumn(name = "researcher_id", nullable = false)
+    private User researcher;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "researcher_id", nullable = false)
-    private User researcher;
+    @JoinColumn(name = "badge_id", nullable = false)
+    private Badge badge;
 }

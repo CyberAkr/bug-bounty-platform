@@ -21,3 +21,18 @@ export interface UserUpdateRequest {
   bio: string;
   profilePhoto: string | null;
 }
+export interface UserRanking {
+  userId: number;
+  username: string;
+  point: number;
+}
+
+export interface UserPublic {
+  userId: number;
+  username: string;
+  firstName: string;
+  lastName: string;
+  preferredLanguage: string;
+  bio: string | null;
+  point: number;
+}

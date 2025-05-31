@@ -1,59 +1,152 @@
-# Frontend
+🛡 Projet Bug Bounty - Plateforme citoyenne belge
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.7.
+🎯 Objectif
 
-## Development server
+Créer une plateforme de bug bounty locale et accessible pour les PME belges, permettant aux chercheurs de contribuer, se former et être valorisés tout en renforçant la cybersécurité nationale.
 
-To start a local development server, run:
+🧱 Architecture technique
 
-```bash
-ng serve
-```
+Frontend : Angular 19+, standalone components, signal(), inject(), architecture feature-based
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Backend : Spring Boot 3 REST API, sécurité JWT stateless
 
-## Code scaffolding
+Base de données : MySQL / SQL (modèle dans bugbounty.sql)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+🔐 Authentification et sécurité
 
-```bash
-ng generate component component-name
-```
+JWT stocké dans localStorage, injecté via HttpInterceptor
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Authentification via /api/auth/signin / /register
 
-```bash
-ng generate --help
-```
+Route /api/user/me pour vérifier l'utilisateur courant
 
-## Building
+Spring Security configuré via JwtAuthenticationFilter et SecurityConfig
 
-To build the project run:
+Guards Angular pour protéger les routes (auth.guard.ts, admin.guard.ts)
 
-```bash
-ng build
-```
+🧑‍💻 Fonctionnalités principales
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+✅ Authentification & gestion utilisateur
 
-## Running unit tests
+Inscription, connexion, déconnexion avec JWT
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Mise à jour du profil personnel (photo, bio, langue)
 
-```bash
-ng test
-```
+Upload de document de vérification pour les entreprises
 
-## Running end-to-end tests
+Suppression de compte
 
-For end-to-end (e2e) testing, run:
+🏆 Classement (Ranking)
 
-```bash
-ng e2e
-```
+Affichage des 10 meilleurs chercheurs via /api/rankings
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Composant Angular RankingComponent
 
-## Additional Resources
+Pseudos cliquables redirigeant vers /user/:id
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Profils publics affichés avec ProfilePublicComponent
+
+🧾 Rapports de vulnérabilités
+
+Création de rapports de bug liés à un programme
+
+Listing des rapports personnels dans MyReportsComponent
+
+Statut : en attente, validé, rejeté
+
+🎯 Programmes d'audit
+
+Création de programmes par les entreprises
+
+Détails affichés pour les chercheurs
+
+Soumission de rapports sur un programme
+
+💰 Paiements & récompenses
+
+Paiement par programme (côté entreprise)
+
+Récompenses en points pour les chercheurs
+
+Historique des transactions (structure en place)
+
+📢 Forum communautaire
+
+Messages, catégories, participations
+
+Accessibles uniquement aux membres connectés
+
+🎖 Système de badges
+
+Attribution de badges selon points et activités (structure préparée)
+
+🔔 Notifications
+
+Notifications en cas de validation/rejet de rapport ou message
+
+Composant notifications.routes.ts
+
+🧪 Tests techniques
+
+Test JWT via /api/user/me
+
+JWT intercepté dans Angular + auth.service.ts
+
+Guards vérifiant l'accès aux routes sensibles
+
+📁 Organisation du projet
+
+Backend (Spring Boot)
+
+controller/ : Auth, User, Report, Payment, Ranking
+
+model/ : User, Report, Program, Badge, etc.
+
+repository/ : JPA Repos
+
+security/ : JWT Filter, SecurityConfig
+
+Frontend (Angular)
+
+core/ : Auth guards, interceptors
+
+shared/ : Pipes (username, date format)
+
+layout/ : Header, Footer, Sidebar
+
+features/
+
+auth/ : Login, Register
+
+users/ : Profile, Settings, ProfilePublic
+
+programs/ : Create, View
+
+reports/ : My Reports
+
+rewards/, payments/, forum/, admin/, etc.
+
+🛣 Roadmap future (extraits)
+
+Affichage des badges sur profil public ✅
+
+Classement hebdomadaire ✔️
+
+Statistiques globales (dashboard admin) ✔️
+
+Recherche et filtrage dans les programmes ✔️
+
+Export PDF des rapports (côté admin) ✔️
+
+📎 Annexes disponibles
+
+bugbounty.sql : Structure de la base
+
+Diagrammes.drawio : Cas d'utilisation, navigation, contexte, classe
+
+Business_Plan_Bug_bounty.docx
+
+prototype_navigableBugBounty.pptx : UI
+
+Cahier_de_charges_fonctionnel.docx : Spécifications complètes
+

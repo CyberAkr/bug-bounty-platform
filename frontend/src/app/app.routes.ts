@@ -40,6 +40,17 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent)
       },
+      // classement
+      {
+        path: 'classement',
+        loadComponent: () => import('./features/ranking/ranking.component').then(m => m.RankingComponent)
+      },
+      //profil public du classement
+      {
+        path: 'user/:id',
+        loadComponent: () => import('./features/users/profile-public/profile-public.component').then(m => m.ProfilePublicComponent)
+      },
+
 
       // 🏢 Dashboard entreprise
       {
@@ -82,6 +93,11 @@ export const routes: Routes = [
         path: 'reports',
         loadChildren: () =>
           import('./features/reports/reports.routes').then(m => m.REPORTS_ROUTES)
+      },
+      // Challenge
+      {
+        path: 'challenge',
+        loadChildren: () => import('./features/challenges/challenges.routes').then(m => m.challengesRoutes)
       },
 
       // 🔔 Notifications

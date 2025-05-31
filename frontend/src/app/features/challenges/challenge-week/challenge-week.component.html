@@ -1,0 +1,38 @@
+<div *ngIf="challenge(); else noChallenge">
+  <h2 class="text-xl font-bold">{{ challenge().title }}</h2>
+  <p class="mt-1"><strong>Thème :</strong> {{ challenge().theme }}</p>
+  <p class="my-2">{{ challenge().description }}</p>
+  <a [href]="challenge().linkToResource" class="text-blue-600 underline" target="_blank">
+    Accéder à la ressource du défi
+  </a>
+
+  <div class="mt-4">
+    <input
+      [ngModel]="flag()"
+      (ngModelChange)="flag.set($event)"
+      placeholder="Entre ton flag ici"
+      class="border rounded px-2 py-1"
+    />
+    <button
+      (click)="submit()"
+      class="bg-green-600 text-white px-3 py-1 rounded ml-2"
+    >
+      Soumettre
+    </button>
+  </div>
+
+  <p class="mt-3" *ngIf="message()" [ngClass]="{
+    'text-green-600': status() === 'success',
+    'text-red-500': status() === 'error'
+  }">
+    {{ message() }}
+  </p>
+
+  <div *ngIf="badgeEarned()" class="mt-2 p-3 bg-yellow-100 text-yellow-800 rounded shadow">
+    🏅 Félicitations ! Tu viens de débloquer un badge exclusif !
+  </div>
+</div>
+
+<ng-template #noChallenge>
+  <p class="italic text-gray-500">Aucun défi actif actuellement.</p>
+</ng-template>

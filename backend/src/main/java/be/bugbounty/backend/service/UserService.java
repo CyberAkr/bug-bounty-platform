@@ -6,6 +6,8 @@ import be.bugbounty.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -42,4 +44,8 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    public User getByEmail(String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        return optionalUser.orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec l'email : " + email));
+    }
 }

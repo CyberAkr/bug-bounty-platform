@@ -1,0 +1,6 @@
+<div *ngIf="user() as u">
+  <h2>Profil public de {{ u.username }}</h2>
+  <p>Nom : {{ u.firstName }} {{ u.lastName }}</p>
+  <p>Points : {{ u.point }}</p>
+  <p>Bio : {{ u.bio }}</p>
+</div>
