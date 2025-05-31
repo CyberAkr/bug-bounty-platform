@@ -1,3 +1,4 @@
+
 package be.bugbounty.backend.service;
 
 import be.bugbounty.backend.dto.program.*;
@@ -46,5 +47,20 @@ public class AuditProgramService {
                 program.getCompany().getFirstName() + " " + program.getCompany().getLastName(),
                 program.getStatus()
         );
+    }
+
+    // 🔐 ADMIN: Liste filtrée par statut (PENDING, APPROVED, REJECTED)
+    public List<AuditProgram> getProgramsFilteredByStatus(String status) {
+        if (status == null) return auditProgramRepository.findAll();
+        return auditProgramRepository.findByStatus(AuditProgram.Status.valueOf(status.toUpperCase()));
+    }
+
+
+    // 🔐 ADMIN: Valider ou refuser un programme
+    public AuditProgram updateStatus(Long id, String status) {
+        AuditProgram program = auditProgramRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Programme introuvable"));
+        program.setStatus(AuditProgram.Status.valueOf(status.toUpperCase()));
+        return auditProgramRepository.save(program);
     }
 }

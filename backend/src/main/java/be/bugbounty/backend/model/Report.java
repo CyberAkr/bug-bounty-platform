@@ -42,6 +42,10 @@ public class Report {
     @Column(nullable = false)
     private String fileUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "vulnerability_type_id")
+    private VulnerabilityType vulnerabilityType;
+
     public enum Severity {
         LOW, MEDIUM, HIGH
     }

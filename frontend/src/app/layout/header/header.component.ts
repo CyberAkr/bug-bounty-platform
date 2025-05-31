@@ -36,4 +36,10 @@ export class HeaderComponent implements OnInit {
     this.auth.logout();
     this.router.navigate(['/home']);
   }
+
+  isAdmin(): boolean {
+    return this.user()?.role === 'admin';
+  }
+
+
 }

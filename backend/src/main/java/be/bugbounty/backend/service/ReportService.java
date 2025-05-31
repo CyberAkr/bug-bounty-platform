@@ -4,8 +4,10 @@ import be.bugbounty.backend.dto.report.ReportResponseDTO;
 import be.bugbounty.backend.model.AuditProgram;
 import be.bugbounty.backend.model.Report;
 import be.bugbounty.backend.model.User;
+import be.bugbounty.backend.model.VulnerabilityType;
 import be.bugbounty.backend.repository.AuditProgramRepository;
 import be.bugbounty.backend.repository.ReportRepository;
+import be.bugbounty.backend.repository.VulnerabilityTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +25,10 @@ public class ReportService {
 
     @Autowired
     private ReportRepository reportRepository;
+
+
+    @Autowired
+    private VulnerabilityTypeRepository vulnerabilityTypeRepository;
 
     @Autowired
     private AuditProgramRepository auditProgramRepository;
@@ -101,4 +107,27 @@ public class ReportService {
         return reportRepository.existsByProgramAndResearcher(program, user);
     }
 
+    public List<Report> getReportsFilteredByStatus(String status) {
+        if (status == null) return reportRepository.findAll();
+        return reportRepository.findByStatus(Report.Status.valueOf(status.toUpperCase()));
+    }
+
+
+    public Report updateStatus(Long id, String status) {
+        Report report = reportRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rapport introuvable"));
+        report.setStatus(Report.Status.valueOf(status.toUpperCase()));
+        return reportRepository.save(report);
+    }
+
+    public Report updateVulnerabilityType(Long id, Long vulnerabilityTypeId) {
+        Report report = reportRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rapport introuvable"));
+        VulnerabilityType type = vulnerabilityTypeRepository.findById(vulnerabilityTypeId)
+                .orElseThrow(() -> new RuntimeException("Type de vulnérabilité introuvable"));
+
+        report.setVulnerabilityType(type);
+        return reportRepository.save(report);
+    }
 }
+

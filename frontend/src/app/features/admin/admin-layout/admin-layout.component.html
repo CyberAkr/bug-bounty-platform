@@ -1,0 +1,18 @@
+
+<div class="flex min-h-screen">
+  <aside class="w-64 bg-gray-900 text-white p-4 space-y-4">
+    <h2 class="text-xl font-bold mb-4">Admin</h2>
+    <nav class="flex flex-col space-y-2">
+      <a routerLink="/admin/reports" class="hover:bg-gray-800 px-3 py-2 rounded">📝 Rapports</a>
+      <a routerLink="/admin/users" class="hover:bg-gray-800 px-3 py-2 rounded">👤 Utilisateurs</a>
+      <a routerLink="/admin/programs" class="hover:bg-gray-800 px-3 py-2 rounded">📂 Programmes</a>
+      <a routerLink="/admin/rewards" class="hover:bg-gray-800 px-3 py-2 rounded">💰 Récompenses</a>
+      <a routerLink="/admin/badges" class="hover:bg-gray-800 px-3 py-2 rounded">🏷️ Badges</a>
+      <a routerLink="/admin/vulnerabilities" class="hover:bg-gray-800 px-3 py-2 rounded">🧬 Vulnérabilités</a>
+      <a routerLink="/admin/challenges" class="hover:bg-gray-800 px-3 py-2 rounded">🏆 Défis</a>
+    </nav>
+  </aside>
+  <main class="flex-1 p-6 bg-gray-100">
+    <router-outlet />
+  </main>
+</div>

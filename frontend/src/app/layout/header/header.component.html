@@ -7,6 +7,8 @@
 
   <a *ngIf="isLoggedIn" routerLink="/profile">Profil</a> |
   <a *ngIf="isLoggedIn && isCompany()" routerLink="/company">Espace entreprise</a> |
+  <a *ngIf="isLoggedIn && isAdmin()" routerLink="/admin">Admin</a> |
+
   <a *ngIf="isLoggedIn" routerLink="/programs">Programmes</a> |
   <a *ngIf="isLoggedIn" routerLink="/challenge/semaine">Défi de la semaine 🏆</a> |
   <a *ngIf="isLoggedIn" routerLink="/classement">Classement</a> |
