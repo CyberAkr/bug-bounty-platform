@@ -25,7 +25,7 @@ import java.util.Collections;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String SECRET_KEY = "super_secret_key_for_dev_super_secret_key_for_dev"; // même que dans JwtService
+    private static final String SECRET_KEY = "super_secret_key_for_dev_super_secret_key_for_dev";
 
     @Autowired
     private UserRepository userRepository;
@@ -53,19 +53,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .getBody();
 
             String email = claims.getSubject();
+
             System.out.println("📨 Email extrait du token : " + email);
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 User user = userRepository.findByEmail(email).orElse(null);
 
                 if (user != null) {
+                    String role = user.getRole().toUpperCase();
+                    String authority = "ROLE_" + role;
+
+                    System.out.println("🛡️ Rôle utilisateur en base : " + user.getRole());
+                    System.out.println("✅ Authority injectée : " + authority);
+
                     UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                             user,
                             null,
-                            Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().toUpperCase()))
+                            Collections.singletonList(new SimpleGrantedAuthority(authority))
                     );
                     SecurityContextHolder.getContext().setAuthentication(auth);
-
                     System.out.println("✅ Utilisateur injecté dans SecurityContext : " + user.getEmail());
                 }
             }

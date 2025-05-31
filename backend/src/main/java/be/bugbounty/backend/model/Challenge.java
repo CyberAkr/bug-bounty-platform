@@ -16,6 +16,10 @@ public class Challenge {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long challengeId;
 
+    @ManyToOne
+    @JoinColumn(name = "badge_id", nullable = false)
+    private Badge badge;
+
     @Column(nullable = false, length = 150)
     private String title;
 
@@ -31,4 +35,14 @@ public class Challenge {
 
     @Column(nullable = false)
     private LocalDateTime endDate;
+
+    @Column(nullable = false)
+    private String theme; // ex : OSINT, Forensic, Web...
+
+    @Column(nullable = false)
+    private String linkToResource; // lien vers l’énoncé ou machine à auditer
+
+    @Column(nullable = false)
+    private String expectedFlag; // flag à trouver pour valider le défi
+
 }

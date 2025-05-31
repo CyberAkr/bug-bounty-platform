@@ -8,6 +8,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserBadgeId implements Serializable {
+    private Long researcher; // match le nom du champ dans UserBadge
     private Long badge;
-    private Long researcher;
 }

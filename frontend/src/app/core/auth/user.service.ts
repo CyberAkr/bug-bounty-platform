@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UserResponse, UserUpdateRequest } from '../../models/user.model';
+import {UserPublic, UserResponse, UserUpdateRequest} from '../../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -18,4 +18,9 @@ export class UserService {
   delete(): Observable<any> {
     return this.http.delete('/api/user/me');
   }
+  getPublic(id: number): Observable<UserPublic> {
+    return this.http.get<UserPublic>(`/api/user/${id}/public`);
+  }
+
+
 }

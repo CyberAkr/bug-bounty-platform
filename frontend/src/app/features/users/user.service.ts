@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UserResponse, UserUpdateRequest } from '@app/models/user.model';
+import {UserPublic, UserResponse, UserUpdateRequest} from '@app/models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -20,6 +20,10 @@ export class UserService {
 
   updateWithForm(data: FormData) {
     return this.http.put('/api/user/me', data);
+  }
+
+  getPublic(id: number): Observable<UserPublic> {
+    return this.http.get<UserPublic>(`/api/user/${id}/public`); // ✅ Correct
   }
 
 
