@@ -1,12 +1,13 @@
-
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export type ReportStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
 export interface Report {
   report_id: number;
+  id: number; // utilisé par Angular dans les composants
   title: string;
   submitted_at: string;
   severity: 'LOW' | 'MEDIUM' | 'HIGH';
@@ -19,34 +20,42 @@ export interface Report {
 @Injectable({ providedIn: 'root' })
 export class ReportsService {
   private http = inject(HttpClient);
-  private baseUrl = '/api/reports';
+  private baseUrl = '/api/admin/reports';
 
-  // Obtenir tous les rapports
+  private mapReport = (report: any): Report => ({
+    ...report,
+    id: report.report_id,
+  });
+
   getAllReports(): Observable<Report[]> {
-    return this.http.get<Report[]>(this.baseUrl);
+    return this.http.get<any[]>(this.baseUrl).pipe(
+      map(reports => reports.map(this.mapReport))
+    );
   }
 
-  // Obtenir uniquement les rapports en attente
   getPendingReports(): Observable<Report[]> {
-    return this.http.get<Report[]>(`${this.baseUrl}?status=PENDING`);
+    return this.http.get<any[]>(`${this.baseUrl}?status=PENDING`).pipe(
+      map(reports => reports.map(this.mapReport))
+    );
   }
 
-  // Mettre à jour le statut d'un rapport (APPROVED / REJECTED)
   updateStatus(reportId: number, status: ReportStatus, comment: string): Observable<void> {
-    return this.http.patch<void>(`${this.baseUrl}/${reportId}/status`, { status, admin_comment: comment });
+    return this.http.patch<void>(`${this.baseUrl}/${reportId}/status`, {
+      status,
+      admin_comment: comment,
+    });
   }
 
-  // Mettre à jour le type de vulnérabilité associé au rapport
-  updateVulnerability(id: number, vulnerability_type_id: number): Observable<void> {
-    return this.http.patch<void>(`${this.baseUrl}/${id}/vulnerability`, { vulnerability_type_id });
+  updateVulnerability(reportId: number, vulnerability_type_id: number): Observable<void> {
+    return this.http.patch<void>(`${this.baseUrl}/${reportId}/vulnerability`, {
+      vulnerability_type_id,
+    });
   }
 
-  // Mettre à jour des champs libres d'un rapport (optionnel, complet)
   updateReport(reportId: number, update: Partial<Report>): Observable<void> {
     return this.http.patch<void>(`${this.baseUrl}/${reportId}`, update);
   }
 
-  // Supprimer un rapport (optionnel, à activer selon les droits)
   deleteReport(reportId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${reportId}`);
   }

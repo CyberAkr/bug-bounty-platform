@@ -1,8 +1,20 @@
-<section class="py-12 text-center">
-  <h2 class="text-xl font-semibold mb-6">📊 Chiffres clés</h2>
-  <div class="flex justify-center gap-8 text-lg">
-    <div><strong>{{ programs() }}</strong> programmes</div>
-    <div><strong>{{ researchers() }}</strong> chercheurs</div>
-    <div><strong>{{ rewards() }} €</strong> distribués</div>
+<section class="py-5 text-center bg-light">
+  <div class="container">
+    <h2 class="h5 mb-4">📊 Chiffres clés</h2>
+
+    <div class="row justify-content-center text-center fs-5">
+      <div class="col-6 col-md-3 mb-3">
+        <div><strong>{{ programs() }}</strong></div>
+        <small class="text-muted">Programmes actifs</small>
+      </div>
+      <div class="col-6 col-md-3 mb-3">
+        <div><strong>{{ researchers() }}</strong></div>
+        <small class="text-muted">Chercheurs inscrits</small>
+      </div>
+      <div class="col-12 col-md-3 mb-3">
+        <div><strong>{{ rewards() }} €</strong></div>
+        <small class="text-muted">Bounties distribués</small>
+      </div>
+    </div>
   </div>
 </section>

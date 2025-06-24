@@ -14,11 +14,22 @@ export interface User {
   is_banned: boolean;
   verification_status?: VerificationStatus;
 }
+export interface NewUser {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  bio?: string;
+  preferredLanguage?: string;
+  role: UserRole;
+  companyNumber?: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class UsersService {
   private http = inject(HttpClient);
-  private baseUrl = '/api/users';
+  private baseUrl = '/api/admin/users';
 
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.baseUrl);
@@ -26,6 +37,13 @@ export class UsersService {
 
   updateUser(id: number, update: Partial<User>): Observable<void> {
     return this.http.patch<void>(`${this.baseUrl}/${id}`, update);
+  }
+  createUser(user: NewUser): Observable<User> {
+    return this.http.post<User>(this.baseUrl, user);
+  }
+
+  deleteUser(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }
 

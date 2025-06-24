@@ -12,7 +12,7 @@ export interface Badge {
 @Injectable({ providedIn: 'root' })
 export class BadgesService {
   private http = inject(HttpClient);
-  private baseUrl = '/api/badges';
+  private baseUrl = '/api/admin/badges';
 
   getAll(): Observable<Badge[]> {
     return this.http.get<Badge[]>(this.baseUrl);

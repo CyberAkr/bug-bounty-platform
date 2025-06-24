@@ -1,12 +1,23 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VulnerabilitiesService, VulnerabilityType } from '@app/features/admin/vulnerabilities/vulnerabilities.service';
-import {ReportRowComponent} from '@app/features/admin/reports/report-row/report-row.component';
 import {
   ReportsService,
   ReportStatus,
   Report as AdminReport
 } from '@app/features/admin/reports/report.service';
+import {ReportRowComponent} from '@app/features/admin/reports/report-row/report-row.component';
+
+type ReportActionPayload = {
+  id: number;
+  status: ReportStatus;
+  comment: string;
+};
+
+type VulnerabilityUpdatePayload = {
+  reportId: number;
+  vulnerabilityId: number;
+};
 
 @Component({
   selector: 'app-reports',
@@ -51,17 +62,21 @@ export class ReportsComponent {
     this.load();
   }
 
-  load() {
+  load(): void {
     this.reportsService.getPendingReports().subscribe(data => this.reports.set(data));
     this.vulnService.getAll().subscribe(data => this.vulnerabilities.set(data));
   }
 
-  handleAction({ id, status, comment }: { id: number; status: ReportStatus; comment: string }) {
+  handleAction({id, status, comment}: ReportActionPayload): void {
     this.reportsService.updateStatus(id, status, comment).subscribe(() => this.load());
   }
 
-  updateVuln({ reportId, vulnerabilityId }: { reportId: number; vulnerabilityId: number }) {
+  updateVuln({reportId, vulnerabilityId}: { reportId: number; vulnerabilityId: number }) {
+    if (!reportId || !vulnerabilityId) {
+      console.warn('ID manquant');
+      return;
+    }
     this.reportsService.updateVulnerability(reportId, vulnerabilityId).subscribe(() => this.load());
+
   }
 }
-

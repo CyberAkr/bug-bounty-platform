@@ -1,8 +1,10 @@
 package be.bugbounty.backend.controller.admin;
 
+import be.bugbounty.backend.dto.admin.AdminUserCreateRequestDTO;
+import be.bugbounty.backend.dto.admin.AdminUserResponseDTO;
+import be.bugbounty.backend.dto.admin.AdminUserUpdateRequestDTO;
 import be.bugbounty.backend.model.User;
 import be.bugbounty.backend.service.UserService;
-import be.bugbounty.backend.dto.admin.AdminUserUpdateRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,16 +21,37 @@ public class AdminUserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.findAll());
+    public ResponseEntity<List<AdminUserResponseDTO>> getAllUsers() {
+        List<User> users = userService.findAll();
+        List<AdminUserResponseDTO> response = users.stream()
+                .map(AdminUserResponseDTO::new)
+                .toList();
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> createUser(@RequestBody AdminUserCreateRequestDTO dto) {
+        try {
+            User created = userService.adminCreateUser(dto);
+            return ResponseEntity.ok(new AdminUserResponseDTO(created));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody AdminUserUpdateRequestDTO dto) {
         try {
-            return ResponseEntity.ok(userService.adminUpdateUser(id, dto));
+            User updated = userService.adminUpdateUser(id, dto);
+            return ResponseEntity.ok(new AdminUserResponseDTO(updated));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.adminDeleteUser(id);
+        return ResponseEntity.ok().build();
     }
 }

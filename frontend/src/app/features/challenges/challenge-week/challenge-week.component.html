@@ -1,38 +1,58 @@
-<div *ngIf="challenge(); else noChallenge">
-  <h2 class="text-xl font-bold">{{ challenge().title }}</h2>
-  <p class="mt-1"><strong>Thème :</strong> {{ challenge().theme }}</p>
-  <p class="my-2">{{ challenge().description }}</p>
-  <a [href]="challenge().linkToResource" class="text-blue-600 underline" target="_blank">
-    Accéder à la ressource du défi
-  </a>
+<div class="container my-5" *ngIf="challenge(); else noChallenge">
+  <div class="card shadow-sm p-4">
+    <h4 class="card-title mb-2">{{ challenge().title }}</h4>
 
-  <div class="mt-4">
-    <input
-      [ngModel]="flag()"
-      (ngModelChange)="flag.set($event)"
-      placeholder="Entre ton flag ici"
-      class="border rounded px-2 py-1"
-    />
-    <button
-      (click)="submit()"
-      class="bg-green-600 text-white px-3 py-1 rounded ml-2"
+    <p><strong>🎯 Thème :</strong> {{ challenge().theme }}</p>
+    <p class="text-muted">{{ challenge().description }}</p>
+
+    <div class="mb-3">
+      <a
+        class="btn btn-outline-primary"
+        [href]="challenge().linkToResource"
+        target="_blank"
+      >
+        🔗 Accéder à la ressource
+      </a>
+    </div>
+
+    <form class="d-flex align-items-center mb-3" (ngSubmit)="submit()">
+      <input
+        type="text"
+        class="form-control me-2"
+        placeholder="Entre ton flag ici"
+        [ngModel]="flag()"
+        (ngModelChange)="flag.set($event)"
+        name="flag"
+        required
+      />
+      <button type="submit" class="btn btn-success">
+        ✅ Soumettre
+      </button>
+    </form>
+
+    <div *ngIf="message()" class="mt-2">
+      <div
+        class="alert"
+        [ngClass]="{
+          'alert-success': status() === 'success',
+          'alert-danger': status() === 'error'
+        }"
+      >
+        {{ message() }}
+      </div>
+    </div>
+
+    <div
+      *ngIf="badgeEarned()"
+      class="alert alert-warning d-flex align-items-center gap-2 mt-3"
     >
-      Soumettre
-    </button>
-  </div>
-
-  <p class="mt-3" *ngIf="message()" [ngClass]="{
-    'text-green-600': status() === 'success',
-    'text-red-500': status() === 'error'
-  }">
-    {{ message() }}
-  </p>
-
-  <div *ngIf="badgeEarned()" class="mt-2 p-3 bg-yellow-100 text-yellow-800 rounded shadow">
-    🏅 Félicitations ! Tu viens de débloquer un badge exclusif !
+      🏅 <span>Félicitations ! Tu as débloqué un badge exclusif !</span>
+    </div>
   </div>
 </div>
 
 <ng-template #noChallenge>
-  <p class="italic text-gray-500">Aucun défi actif actuellement.</p>
+  <div class="container text-center my-5 text-muted">
+    <em>Aucun défi actif actuellement.</em>
+  </div>
 </ng-template>

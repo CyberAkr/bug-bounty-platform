@@ -19,7 +19,7 @@ export interface Program {
 @Injectable({ providedIn: 'root' })
 export class ProgramsService {
   private http = inject(HttpClient);
-  private baseUrl = '/api/programs';
+  private baseUrl = '/api/admin/programs';
 
   getAll(): Observable<Program[]> {
     return this.http.get<Program[]>(this.baseUrl);

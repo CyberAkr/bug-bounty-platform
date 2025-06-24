@@ -6,7 +6,8 @@ import be.bugbounty.backend.model.User;
 import be.bugbounty.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import be.bugbounty.backend.dto.admin.AdminUserCreateRequestDTO;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public UserResponseDTO getCurrentUser(User user) {
         return new UserResponseDTO(
@@ -73,5 +76,37 @@ public class UserService {
         }
 
         return userRepository.save(user);
+    }
+
+    // ✅ pour admin : création d'un utilisateur
+    public User adminCreateUser(AdminUserCreateRequestDTO dto) {
+        if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new RuntimeException("Cet email est déjà utilisé");
+        }
+
+        User user = new User();
+        user.setEmail(dto.getEmail());
+        user.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setUsername(dto.getUsername());
+        user.setBio(dto.getBio());
+        user.setPreferredLanguage(dto.getPreferredLanguage());
+        user.setRole(dto.getRole());
+        user.setCompanyNumber(dto.getCompanyNumber());
+
+        // valeurs par défaut
+        user.setBanned(false);
+        user.setPoint(0);
+        user.setVerificationDocument(null);
+        user.setVerificationStatus(User.VerificationStatus.PENDING);
+        user.setProfilePhoto(null);
+
+        return userRepository.save(user);
+    }
+
+    // ✅ pour admin : suppression par id
+    public void adminDeleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 }

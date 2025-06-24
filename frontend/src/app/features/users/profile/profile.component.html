@@ -1,80 +1,79 @@
-<h2 class="text-2xl font-bold mb-4">👤 Mon profil</h2>
+<div class="container my-5">
+  <h2 class="h5 mb-4">👤 Mon profil</h2>
 
-<form *ngIf="user() as u" (ngSubmit)="update()" class="space-y-4" enctype="multipart/form-data">
-  <div>
-    <label>Prénom :</label>
-    <input [(ngModel)]="u.firstName" name="firstName" class="input" />
-  </div>
-
-  <div>
-    <label>Nom :</label>
-    <input [(ngModel)]="u.lastName" name="lastName" class="input" />
-  </div>
-
-  <div>
-    <label>Email :</label>
-    <input [value]="u.email" disabled class="input" />
-  </div>
-
-  <div>
-    <label>Langue préférée :</label>
-    <select [(ngModel)]="u.preferredLanguage" name="preferredLanguage" class="input">
-      <option value="fr">Français</option>
-      <option value="en">English</option>
-    </select>
-  </div>
-
-  <div>
-    <label>Bio :</label>
-    <textarea [(ngModel)]="u.bio" name="bio" class="input"></textarea>
-  </div>
-
-  <!-- Champ caché pour le backend -->
-  <input type="hidden" [value]="u.profilePhoto || ''" name="profilePhoto" />
-
-  <!-- Pour les entreprises uniquement -->
-  <div *ngIf="u.role === 'company'" class="mt-6 bg-gray-50 p-4 rounded border">
-    <h3 class="font-semibold mb-2">🏢 Informations entreprise</h3>
-
-    <div>
-      <label>Numéro d'entreprise :</label>
-      <input [value]="u.companyNumber" disabled class="input" />
+  <form *ngIf="user() as u" (ngSubmit)="update()" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label class="form-label">Prénom</label>
+      <input [(ngModel)]="u.firstName" name="firstName" class="form-control" />
     </div>
 
-    <div>
-      <label>Statut de vérification :</label>
-      <span
-        class="font-semibold"
-        [ngClass]="{
-          'text-yellow-600': u.verificationStatus === 'PENDING',
-          'text-red-600': u.verificationStatus === 'REJECTED',
-          'text-green-600': u.verificationStatus === 'VERIFIED'
-        }">
-        {{ u.verificationStatus }}
-      </span>
+    <div class="mb-3">
+      <label class="form-label">Nom</label>
+      <input [(ngModel)]="u.lastName" name="lastName" class="form-control" />
     </div>
 
-    <div class="mt-2">
-      <label>Document de vérification (.zip, .pdf) :</label>
-      <input type="file" (change)="onFileSelected($event)" />
+    <div class="mb-3">
+      <label class="form-label">Email</label>
+      <input [value]="u.email" disabled class="form-control-plaintext" />
     </div>
 
-    <p class="text-sm text-gray-500 mt-1">
-      Vous pouvez modifier ou renvoyer votre document si la vérification est en attente ou rejetée.
-    </p>
-  </div>
+    <div class="mb-3">
+      <label class="form-label">Langue préférée</label>
+      <select [(ngModel)]="u.preferredLanguage" name="preferredLanguage" class="form-select">
+        <option value="fr">Français</option>
+        <option value="en">English</option>
+      </select>
+    </div>
 
-  <!-- Enregistrement -->
-  <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded">
-    💾 Enregistrer
+    <div class="mb-3">
+      <label class="form-label">Bio</label>
+      <textarea [(ngModel)]="u.bio" name="bio" class="form-control"></textarea>
+    </div>
+
+    <input type="hidden" [value]="u.profilePhoto || ''" name="profilePhoto" />
+
+    <!-- 🏢 Bloc entreprise -->
+    <div *ngIf="u.role === 'company'" class="border rounded p-3 mb-4 bg-light">
+      <h5 class="mb-3">🏢 Informations entreprise</h5>
+
+      <div class="mb-2">
+        <label class="form-label">Numéro d'entreprise</label>
+        <input [value]="u.companyNumber" disabled class="form-control-plaintext" />
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label">Statut de vérification</label>
+        <span class="fw-bold"
+              [ngClass]="{
+                'text-warning': u.verificationStatus === 'PENDING',
+                'text-danger': u.verificationStatus === 'REJECTED',
+                'text-success': u.verificationStatus === 'VERIFIED'
+              }">
+          {{ u.verificationStatus }}
+        </span>
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label">Document de vérification (.zip, .pdf)</label>
+        <input type="file" (change)="onFileSelected($event)" class="form-control" />
+      </div>
+
+      <small class="text-muted">
+        Vous pouvez modifier ou renvoyer votre document si la vérification est en attente ou rejetée.
+      </small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+      💾 Enregistrer
+    </button>
+  </form>
+
+  <button (click)="delete()" class="btn btn-outline-danger mt-4">
+    🗑️ Supprimer mon compte
   </button>
-</form>
 
-<!-- Suppression -->
-<button (click)="delete()" class="text-red-600 mt-4">🗑️ Supprimer mon compte</button>
+  <hr class="my-5" />
 
-<hr class="my-6" />
-
-<!-- Rapports -->
-<h3 class="text-lg font-semibold mb-2">📄 Mes rapports</h3>
-<app-my-reports />
+  <h5 class="mb-3">📄 Mes rapports</h5>
+  <app-my-reports></app-my-reports>
+</div>

@@ -1,20 +1,35 @@
-<h2 class="text-xl font-semibold mb-4">🔍 Programmes d’audit disponibles</h2>
+<div class="container my-5">
+  <h2 class="h5 mb-4">🔍 Programmes d’audit disponibles</h2>
 
-<ul *ngIf="programs().length > 0; else noPrograms">
-  <li *ngFor="let program of programs()" class="p-4 border rounded mb-3 shadow">
-    <h3 class="text-lg font-bold">{{ program.title }}</h3>
-    <p class="text-sm text-gray-700">{{ program.description }}</p>
-    <p><strong>Entreprise :</strong> {{ program.companyName }}</p>
-    <p>
-      <strong>Status :</strong>
-      <span [ngClass]="program.status | statusColor">{{ program.status }}</span>
-    </p>
-    <a [routerLink]="['/programs', program.id]" class="text-blue-600 hover:underline mt-2 inline-block">
-      ➕ Voir les détails
-    </a>
-  </li>
-</ul>
+  <ul *ngIf="programs().length > 0; else noPrograms" class="list-unstyled">
+    <li
+      *ngFor="let program of programs()"
+      class="card shadow-sm p-3 mb-3"
+    >
+      <h3 class="h6 fw-bold">{{ program.title }}</h3>
+      <p class="mb-1 text-muted">{{ program.description }}</p>
+      <p class="mb-1">
+        <strong>🏢 Entreprise :</strong> {{ program.companyName }}
+      </p>
+      <p class="mb-2">
+        <strong>📌 Statut :</strong>
+        <span
+          [ngClass]="program.status | statusColor"
+          class="badge bg-secondary"
+        >
+          {{ program.status }}
+        </span>
+      </p>
+      <a
+        [routerLink]="['/programs', program.id]"
+        class="btn btn-outline-primary btn-sm"
+      >
+        ➕ Voir les détails
+      </a>
+    </li>
+  </ul>
 
-<ng-template #noPrograms>
-  <p>Aucun programme disponible pour le moment.</p>
-</ng-template>
+  <ng-template #noPrograms>
+    <div class="alert alert-info">Aucun programme disponible pour le moment.</div>
+  </ng-template>
+</div>

@@ -1,65 +1,92 @@
-<h2 class="text-2xl font-semibold mb-4">
-  Inscription {{ role() === 'company' ? 'Entreprise' : 'Chercheur' }}
-</h2>
-<h2 class="text-2xl font-semibold mb-4">Créer un compte</h2>
+<div class="container d-flex justify-content-center align-items-center min-vh-100 bg-light">
+  <div class="card shadow-sm p-4 w-100" style="max-width: 600px;">
+    <h3 class="text-center mb-4">
+      Inscription {{ role() === 'company' ? 'Entreprise' : 'Chercheur' }}
+    </h3>
 
-<div class="flex gap-4 mb-6">
-  <button type="button"
-          [class.bg-blue-600]="role() === 'researcher'"
-          [class.bg-gray-300]="role() !== 'researcher'"
-          class="px-4 py-2 text-white rounded"
-          (click)="role.set('researcher')">
-    Je suis un chercheur
-  </button>
+    <!-- Choix du rôle -->
+    <div class="d-flex justify-content-center gap-2 mb-4">
+      <button
+        type="button"
+        class="btn"
+        [ngClass]="{
+          'btn-primary': role() === 'researcher',
+          'btn-outline-primary': role() !== 'researcher'
+        }"
+        (click)="role.set('researcher')"
+      >
+        Je suis un chercheur
+      </button>
 
-  <button type="button"
-          [class.bg-green-600]="role() === 'company'"
-          [class.bg-gray-300]="role() !== 'company'"
-          class="px-4 py-2 text-white rounded"
-          (click)="role.set('company')">
-    Je suis une entreprise
-  </button>
-</div>
+      <button
+        type="button"
+        class="btn"
+        [ngClass]="{
+          'btn-success': role() === 'company',
+          'btn-outline-success': role() !== 'company'
+        }"
+        (click)="role.set('company')"
+      >
+        Je suis une entreprise
+      </button>
+    </div>
 
-<h3 class="text-lg font-semibold mb-2">Inscription {{ role() === 'company' ? 'Entreprise' : 'Chercheur' }}</h3>
+    <!-- Formulaire -->
+    <form (ngSubmit)="register()">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Prénom</label>
+          <input [(ngModel)]="firstName" name="firstName" class="form-control" required />
+        </div>
 
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Nom</label>
+          <input [(ngModel)]="lastName" name="lastName" class="form-control" required />
+        </div>
+      </div>
 
-<form (ngSubmit)="register()" class="space-y-4">
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" [(ngModel)]="email" name="email" class="form-control" required />
+      </div>
 
-  <label>Prénom :</label>
-  <input [(ngModel)]="firstName" name="firstName" required class="input" />
+      <div class="mb-3">
+        <label class="form-label">Mot de passe</label>
+        <input type="password" [(ngModel)]="password" name="password" class="form-control" required />
+      </div>
 
-  <label>Nom :</label>
-  <input [(ngModel)]="lastName" name="lastName" required class="input" />
+      <div class="mb-3">
+        <label class="form-label">Nom d’utilisateur</label>
+        <input [(ngModel)]="username" name="username" class="form-control" required />
+      </div>
 
-  <label>Email :</label>
-  <input type="email" [(ngModel)]="email" name="email" required class="input" />
+      <div class="mb-3">
+        <label class="form-label">Langue préférée</label>
+        <select [(ngModel)]="preferredLanguage" name="preferredLanguage" class="form-select">
+          <option value="fr">Français</option>
+          <option value="en">English</option>
+        </select>
+      </div>
 
-  <label>Mot de passe :</label>
-  <input type="password" [(ngModel)]="password" name="password" required class="input" />
+      <div class="mb-3">
+        <label class="form-label">Bio</label>
+        <textarea [(ngModel)]="bio" name="bio" class="form-control"></textarea>
+      </div>
 
-  <label>Nom d’utilisateur :</label>
-  <input [(ngModel)]="username" name="username" required class="input" />
+      <!-- Champs spécifique aux entreprises -->
+      <div *ngIf="role() === 'company'" class="mb-3">
+        <label class="form-label">Numéro d’entreprise</label>
+        <input [(ngModel)]="companyNumber" name="companyNumber" class="form-control" required />
+      </div>
 
-  <label>Langue préférée :</label>
-  <select [(ngModel)]="preferredLanguage" name="preferredLanguage" class="input">
-    <option value="fr">Français</option>
-    <option value="en">English</option>
-  </select>
+      <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
 
-  <label>Bio :</label>
-  <textarea [(ngModel)]="bio" name="bio" class="input"></textarea>
-
-  <!-- Spécifique entreprise -->
-  <div *ngIf="role() === 'company'">
-    <label>Numéro d’entreprise :</label>
-    <input [(ngModel)]="companyNumber" name="companyNumber" required class="input" />
+      <div *ngIf="successMessage" class="alert alert-success mt-3">
+        {{ successMessage }}
+      </div>
+      <div *ngIf="errorMessage" class="alert alert-danger mt-2">
+        {{ errorMessage }}
+      </div>
+    </form>
   </div>
-
-  <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-    S'inscrire
-  </button>
-</form>
-
-<p class="success text-green-600 mt-4" *ngIf="successMessage">{{ successMessage }}</p>
-<p class="error text-red-600 mt-2" *ngIf="errorMessage">{{ errorMessage }}</p>
+</div>

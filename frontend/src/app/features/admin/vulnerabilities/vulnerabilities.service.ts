@@ -1,17 +1,17 @@
-
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface VulnerabilityType {
-  type_id: number;
+  typeId: number;
   name: string;
 }
+
 
 @Injectable({ providedIn: 'root' })
 export class VulnerabilitiesService {
   private http = inject(HttpClient);
-  private baseUrl = '/api/vulnerabilities';
+  private baseUrl = '/api/admin/vulnerabilities'; // ✅ CORRECTION ICI
 
   getAll(): Observable<VulnerabilityType[]> {
     return this.http.get<VulnerabilityType[]>(this.baseUrl);
@@ -29,4 +29,3 @@ export class VulnerabilitiesService {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }
-

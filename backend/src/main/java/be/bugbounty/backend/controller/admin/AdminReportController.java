@@ -1,5 +1,6 @@
 package be.bugbounty.backend.controller.admin;
 
+import be.bugbounty.backend.dto.admin.VulnerabilityUpdateDTO;
 import be.bugbounty.backend.model.Report;
 import be.bugbounty.backend.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +33,12 @@ public class AdminReportController {
     }
 
     @PatchMapping("/{id}/vulnerability")
-    public ResponseEntity<?> updateVulnerability(@PathVariable Long id, @RequestParam Long vulnerabilityTypeId) {
+    public ResponseEntity<?> updateVulnerability(@PathVariable Long id, @RequestBody VulnerabilityUpdateDTO dto) {
         try {
-            return ResponseEntity.ok(reportService.updateVulnerabilityType(id, vulnerabilityTypeId));
+            return ResponseEntity.ok(reportService.updateVulnerabilityType(id, dto.vulnerability_type_id));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 }

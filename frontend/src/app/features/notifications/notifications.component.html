@@ -1,12 +1,20 @@
-<h2>Mes notifications</h2>
+<div class="container my-5">
+  <h2 class="h4 mb-4">🔔 Mes notifications</h2>
 
-<ul *ngIf="notifications().length > 0; else noNotif">
-  <li *ngFor="let notif of notifications()" [class.font-bold]="!notif.isRead">
-    <p>{{ notif.message }}</p>
-    <p class="text-sm text-gray-500">{{ notif.sentAt | date:'short' }}</p>
-  </li>
-</ul>
+  <ul *ngIf="notifications().length > 0; else noNotif" class="list-group">
+    <li
+      *ngFor="let notif of notifications()"
+      class="list-group-item"
+      [ngClass]="{ 'fw-bold': !notif.isRead }"
+    >
+      <div>{{ notif.message }}</div>
+      <small class="text-muted">{{ notif.sentAt | date: 'short' }}</small>
+    </li>
+  </ul>
 
-<ng-template #noNotif>
-  <p>Aucune notification pour l’instant.</p>
-</ng-template>
+  <ng-template #noNotif>
+    <div class="alert alert-info">
+      Aucune notification pour l’instant.
+    </div>
+  </ng-template>
+</div>

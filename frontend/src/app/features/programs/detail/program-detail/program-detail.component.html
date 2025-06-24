@@ -1,21 +1,33 @@
-<!-- Détail du programme -->
-<div *ngIf="program; else loading">
+<div class="container my-5" *ngIf="program; else loading">
+  <!-- ✅ Bulle d'état du rapport -->
+  <app-report-status [programId]="program.id"></app-report-status>
 
-  <!-- ✅ Bulle informative si rapport déjà soumis -->
-  <app-report-status [programId]="program.id" />
+  <div class="card shadow-sm p-4">
+    <h2 class="h5 mb-3">📄 Détail du programme</h2>
 
-  <h2>Détail du programme</h2>
-  <h3>{{ program.title }}</h3>
-  <p>{{ program.description }}</p>
-  <p><strong>Entreprise :</strong> {{ program.companyName }}</p>
-  <p><strong>Status :</strong> {{ program.status }}</p>
-  <a routerLink="/programs">⬅ Retour à la liste</a>
+    <h3 class="h4">{{ program.title }}</h3>
+    <p class="mb-2">{{ program.description }}</p>
 
-  <!-- Composant de soumission -->
-  <hr class="my-4" />
-  <app-report-submit [programId]="program.id" />
+    <ul class="list-unstyled mb-3">
+      <li><strong>🏢 Entreprise :</strong> {{ program.companyName }}</li>
+      <li>
+        <strong>📌 Statut :</strong>
+        <span class="badge bg-info text-dark">{{ program.status }}</span>
+      </li>
+    </ul>
+
+    <a routerLink="/programs" class="btn btn-link px-0">
+      ⬅ Retour à la liste des programmes
+    </a>
+  </div>
+
+  <!-- ✅ Composant de soumission de rapport -->
+  <hr class="my-5" />
+  <app-report-submit [programId]="program.id"></app-report-submit>
 </div>
 
 <ng-template #loading>
-  <p>Chargement du programme...</p>
+  <div class="container my-5">
+    <div class="alert alert-secondary">⏳ Chargement du programme...</div>
+  </div>
 </ng-template>
