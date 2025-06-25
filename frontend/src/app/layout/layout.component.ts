@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+// ✅ layout.component.ts nettoyé (sans redirection)
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from '@app/layout/header/header.component';
-import {FooterComponent} from '@app/layout/footer/footer.component';
+import { FooterComponent } from '@app/layout/footer/footer.component';
+import { AuthService } from '@app/core/auth/auth.service';
 
 @Component({
   selector: 'app-layout',
@@ -11,7 +13,9 @@ import {FooterComponent} from '@app/layout/footer/footer.component';
   styleUrls: ['./layout.component.css']
 })
 export class LayoutComponent {
+  private auth = inject(AuthService);
+
   constructor() {
-    console.log('✅ LayoutComponent chargé');
+    console.log('✅ LayoutComponent initialisé');
   }
 }

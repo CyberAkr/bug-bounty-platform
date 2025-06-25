@@ -1,14 +1,17 @@
 <div class="container my-5">
-  <div class="mb-4">
-    <h2 class="h4">
-      🏢 Tableau de bord entreprise
-    </h2>
-  </div>
+  <h2 class="h4 mb-3">🏢 Tableau de bord entreprise</h2>
+  <h1 style="color: green">✅ CompanyDashboardComponent chargé !</h1>
 
-  <!-- ✅ Banner de vérification -->
+  <!-- ✅ Test de rendu -->
+  <p class="text-muted">Ce composant est bien chargé ✅</p>
+
+  <!-- ✅ Statut actuel -->
+  <p class="fw-bold">Statut de vérification : {{ verificationStatus() }}</p>
+
+  <!-- ✅ Bannière de statut -->
   <app-verification-status-banner [status]="verificationStatus()"></app-verification-status-banner>
 
-  <!-- ✅ Bouton création de programme -->
+  <!-- ✅ Formulaire affiché si non approuvé -->
   <div class="my-4">
     <button
       class="btn btn-primary"
@@ -23,6 +26,5 @@
     </div>
   </div>
 
-  <!-- ✅ Formulaire de vérification entreprise -->
   <app-verification-form *ngIf="!isApproved()"></app-verification-form>
 </div>

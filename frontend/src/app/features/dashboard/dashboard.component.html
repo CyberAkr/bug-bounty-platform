@@ -1,29 +1,23 @@
 <div class="container my-5">
-  <h2 class="h4 mb-3">📊 Dashboard</h2>
+    <h2 class="h4 mb-3">📊 Dashboard</h2>
 
-  <div *ngIf="user" class="card shadow-sm p-4">
-    <p class="mb-3">Bienvenue, <strong>{{ user.firstName }}</strong> 👋</p>
+    <div *ngIf="user()" class="card shadow-sm p-4">
+        <p class="mb-3">Bienvenue, <strong>{{ user()?.firstName }}</strong> 👋</p>
 
-    <!-- 🌐 Espace entreprise -->
-    <div *ngIf="user.role === 'company'" class="mb-4">
-      <h5 class="mb-2">🧠 Espace entreprise</h5>
-      <ul class="list-group">
-        <li class="list-group-item">
-          <a routerLink="/company" class="text-decoration-underline text-primary">→ Page entreprise</a>
-        </li>
-        <li class="list-group-item">
-          <a routerLink="/profile" class="text-decoration-underline text-primary">→ Compléter votre profil</a>
-        </li>
-      </ul>
+        <!-- 👨‍💼 Espace entreprise -->
+        <ng-container *ngIf="user()?.role === 'company'">
+            <app-company-welcome></app-company-welcome>
+            <app-verification-status-banner [status]="getVerifiedStatus()"></app-verification-status-banner>
+            <app-verification-form></app-verification-form>
+        </ng-container>
+
+        <!-- 🧒 Espace chercheur -->
+        <ng-container *ngIf="user()?.role === 'researcher'">
+            <app-researcher-welcome></app-researcher-welcome>
+            <app-researcher-training></app-researcher-training>
+            <app-report-guide></app-report-guide>
+            <app-bounty-example></app-bounty-example>
+            <app-researcher-thanks></app-researcher-thanks>
+        </ng-container>
     </div>
-
-    <!-- 🧪 Espace chercheur -->
-    <div *ngIf="user.role === 'researcher'" class="mt-4">
-      <app-researcher-welcome></app-researcher-welcome>
-      <app-researcher-training></app-researcher-training>
-      <app-report-guide></app-report-guide>
-      <app-bounty-example></app-bounty-example>
-      <app-researcher-thanks></app-researcher-thanks>
-    </div>
-  </div>
 </div>

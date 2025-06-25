@@ -1,4 +1,4 @@
-import { Component, computed, signal, inject } from '@angular/core';
+import { Component, computed, signal, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { VerificationFormComponent } from '@app/features/dashboard/company/verification-form/verification-form.component';
@@ -12,20 +12,26 @@ import { UserResponse } from '@app/models/user.model';
   imports: [
     CommonModule,
     RouterModule,
-    VerificationStatusBannerComponent,
-    VerificationFormComponent
+    VerificationFormComponent,
+    VerificationStatusBannerComponent
   ],
   templateUrl: './company-dashboard.component.html'
 })
-export class CompanyDashboardComponent {
+export class CompanyDashboardComponent implements OnInit {
   private userService = inject(UserService);
-
   verificationStatus = signal<'PENDING' | 'REJECTED' | 'APPROVED'>('PENDING');
+
   isApproved = computed(() => this.verificationStatus() === 'APPROVED');
 
-  constructor() {
-    this.userService.getMe().subscribe((user: UserResponse) => {
-      this.verificationStatus.set(user.verificationStatus as any);
+  ngOnInit() {
+    this.userService.getMe().subscribe({
+      next: (user: UserResponse) => {
+        console.log('📥 Utilisateur chargé :', user);
+        this.verificationStatus.set(user.verificationStatus as any);
+      },
+      error: err => {
+        console.error('❌ Erreur chargement utilisateur', err);
+      }
     });
   }
 }

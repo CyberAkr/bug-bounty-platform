@@ -2,30 +2,33 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from './auth.service';
 import { of } from 'rxjs';
-import { switchMap, catchError, map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 export const authGuard: CanActivateFn = () => {
-  const auth = inject(AuthService);
-  const router = inject(Router);
-  const token = auth.getToken();
-  const user = auth.getUser();
+    const auth = inject(AuthService);
+    const router = inject(Router);
+    const token = auth.getToken();
 
-  if (!token) {
-    router.navigate(['/login']);
-    return false;
-  }
+    if (!token) {
+        console.warn('🚫 Aucun token, redirection vers /login');
+        router.navigate(['/login']);
+        return false;
+    }
 
-  // Si le user est déjà connu : OK
-  if (user) {
-    return true;
-  }
-
-  // Sinon on tente de charger l'utilisateur
-  return auth.getCurrentUser().pipe(
-    map(() => true),
-    catchError(() => {
-      router.navigate(['/login']);
-      return of(false);
-    })
-  );
+    return auth.getCurrentUser().pipe(
+        map(user => {
+            if (!user) {
+                console.warn('❌ Utilisateur non trouvé malgré token');
+                router.navigate(['/login']);
+                return false;
+            }
+            console.log('✅ Utilisateur authentifié :', user.email);
+            return true;
+        }),
+        catchError(err => {
+            console.error('❌ Erreur authGuard /me :', err);
+            router.navigate(['/login']);
+            return of(false);
+        })
+    );
 };
