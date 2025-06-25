@@ -7,7 +7,9 @@ import be.bugbounty.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,11 +22,16 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    // ✅ CORRIGÉ : ne dépend plus de @AuthenticationPrincipal
     @GetMapping("/me")
-    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal User user) {
-        if (user == null) {
+    public ResponseEntity<?> getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
             return ResponseEntity.status(401).body("Non authentifié");
         }
+
+        User user = (User) auth.getPrincipal();
 
         UserResponseDTO dto = new UserResponseDTO(
                 user.getUserId(),
@@ -42,6 +49,7 @@ public class UserController {
 
         return ResponseEntity.ok(dto);
     }
+
     @PutMapping(value = "/me", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateCurrentUser(
             @AuthenticationPrincipal User user,
@@ -75,8 +83,9 @@ public class UserController {
     }
 
     @PostMapping("/verification-document")
-    public ResponseEntity<?> uploadVerificationDocument(@AuthenticationPrincipal User user,
-                                                        @RequestParam("verificationDocument") MultipartFile file) {
+    public ResponseEntity<?> uploadVerificationDocument(
+            @AuthenticationPrincipal User user,
+            @RequestParam("verificationDocument") MultipartFile file) {
         if (user == null) {
             return ResponseEntity.status(401).body("Non authentifié");
         }
@@ -87,6 +96,7 @@ public class UserController {
         userRepository.save(user);
         return ResponseEntity.ok(Map.of("message", "📄 Document envoyé"));
     }
+
     @DeleteMapping("/me")
     public ResponseEntity<?> deleteUser(@AuthenticationPrincipal User user) {
         if (user == null) {
@@ -97,7 +107,7 @@ public class UserController {
         return ResponseEntity.ok(Map.of("message", "Compte supprimé"));
     }
 
-    // profile public
+    // profil public
     @GetMapping("/{id}/public")
     public ResponseEntity<UserPublicDTO> getPublicProfile(@PathVariable Long id) {
         return userRepository.findById(id)
@@ -112,7 +122,4 @@ public class UserController {
                 )))
                 .orElse(ResponseEntity.notFound().build());
     }
-
-
 }
-

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/auth/auth.guard';
+import { adminGuard } from './core/auth/admin.guard';
 
 export const routes: Routes = [
   {
@@ -7,7 +8,7 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./layout/layout.component').then(m => m.LayoutComponent),
     children: [
-      // 🚪 Redirection vers la page d'accueil
+      // 🌐 Page d’accueil par défaut
       {
         path: '',
         redirectTo: 'home',
@@ -33,36 +34,28 @@ export const routes: Routes = [
           import('./features/auth/register/register.component').then(m => m.RegisterComponent)
       },
 
-      // 📊 Dashboard utilisateur (standard)
-      {
-        path: 'dashboard',
-        canActivate: [authGuard],
-        loadComponent: () =>
-          import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent)
-      },
-      // classement
-      {
-        path: 'classement',
-        loadComponent: () => import('./features/ranking/ranking.component').then(m => m.RankingComponent)
-      },
-      //profil public du classement
-      {
-        path: 'user/:id',
-        loadComponent: () => import('./features/users/profile-public/profile-public.component').then(m => m.ProfilePublicComponent)
-      },
-
-
-      // 🏢 Dashboard entreprise
+      // 🧑‍💼 Dashboard entreprise
       {
         path: 'company',
         canActivate: [authGuard],
         loadChildren: () =>
           import('./features/dashboard/company/company.routes').then(m => m.COMPANY_ROUTES)
       },
-      // dashboard chercheurs
+
+      // 👨‍🔬 Dashboard chercheur
       {
         path: 'researcher',
-        loadChildren: () => import('./features/dashboard/researcher/researcher.routes').then(m => m.researcherRoutes)
+        canActivate: [authGuard],
+        loadChildren: () =>
+          import('./features/dashboard/researcher/researcher.routes').then(m => m.researcherRoutes)
+      },
+
+      // 🛡️ Interface admin
+      {
+        path: 'admin',
+        canActivate: [adminGuard],
+        loadChildren: () =>
+          import('./features/admin/admin.routes').then(m => m.adminRoutes)
       },
 
       // 👤 Profil utilisateur
@@ -81,23 +74,39 @@ export const routes: Routes = [
           import('./features/users/settings/settings.component').then(m => m.SettingsComponent)
       },
 
-      // 📦 Programmes d'audit
+      // 📈 Classement
+      {
+        path: 'classement',
+        loadComponent: () =>
+          import('./features/ranking/ranking.component').then(m => m.RankingComponent)
+      },
+
+      // 🔎 Profil public depuis le classement
+      {
+        path: 'user/:id',
+        loadComponent: () =>
+          import('./features/users/profile-public/profile-public.component').then(m => m.ProfilePublicComponent)
+      },
+
+      // 🧪 Programmes d’audit
       {
         path: 'programs',
         loadChildren: () =>
           import('./features/programs/programs.routes').then(m => m.PROGRAMS_ROUTES)
       },
 
-      // 🧪 Rapports
+      // 📦 Rapports
       {
         path: 'reports',
         loadChildren: () =>
           import('./features/reports/reports.routes').then(m => m.REPORTS_ROUTES)
       },
-      // Challenge
+
+      // 🧠 Défis
       {
         path: 'challenge',
-        loadChildren: () => import('./features/challenges/challenges.routes').then(m => m.challengesRoutes)
+        loadChildren: () =>
+          import('./features/challenges/challenges.routes').then(m => m.challengesRoutes)
       },
 
       // 🔔 Notifications
@@ -105,20 +114,11 @@ export const routes: Routes = [
         path: 'notifications',
         loadChildren: () =>
           import('./features/notifications/notifications.routes').then(m => m.NOTIFICATIONS_ROUTES)
-      },
-
-      //admin route
-      {
-        path: 'admin',
-        canActivate: [authGuard], // ou un adminGuard plus strict si dispo
-        loadChildren: () =>
-          import('./features/admin/admin.routes').then(m => m.adminRoutes)
-      },
-
+      }
     ]
   },
 
-  // 🚨 Route fallback
+  // 🛑 Fallback : page inconnue → accueil
   {
     path: '**',
     redirectTo: 'home'

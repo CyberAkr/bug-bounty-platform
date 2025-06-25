@@ -1,15 +1,27 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from './auth.service';
-import { map, catchError, of } from 'rxjs';
+import { of } from 'rxjs';
+import { map, catchError, switchMap } from 'rxjs/operators';
 
 export const adminGuard: CanActivateFn = () => {
-  const authService = inject(AuthService);
+  const auth = inject(AuthService);
   const router = inject(Router);
+  const user = auth.getUser();
 
-  return authService.getCurrentUser().pipe(
+  if (user) {
+    if (user.role?.toLowerCase() === 'admin') {
+      return true;
+    } else {
+      router.navigate(['/']);
+      return false;
+    }
+  }
+
+  // fallback si non chargé
+  return auth.getCurrentUser().pipe(
     map(user => {
-      if (user.role === 'ADMIN') {
+      if (user.role?.toLowerCase() === 'admin') {
         return true;
       } else {
         router.navigate(['/']);

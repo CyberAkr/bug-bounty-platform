@@ -20,23 +20,35 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   login() {
+    this.errorMessage = '';
+
     this.authService.login(this.email, this.password).subscribe({
       next: () => {
-        this.authService.getCurrentUser().subscribe({
-          next: (user: UserResponse) => {
-            const role = user.role;
-            if (role === 'company') {
-              this.router.navigate(['/company']);
-            } else if (role === 'researcher') {
-              this.router.navigate(['/dashboard']);
-            } else {
-              this.router.navigate(['/home']);
+        // micro-délai pour que le token soit bien intercepté avant l'appel
+        setTimeout(() => {
+          this.authService.getCurrentUser().subscribe({
+            next: (user: UserResponse) => this.redirectUserByRole(user.role),
+            error: () => {
+              this.errorMessage = 'Impossible de charger votre profil.';
+              this.router.navigate(['/']);
             }
-          },
-          error: () => this.router.navigate(['/home'])
+          });
         });
       },
-      error: () => this.errorMessage = 'Identifiants invalides.'
+      error: () => {
+        this.errorMessage = 'Identifiants invalides.';
+      }
     });
+  }
+
+  private redirectUserByRole(role: string | undefined | null) {
+    const path = {
+      company: '/company',
+      researcher: '/researcher',
+      admin: '/admin'
+    }[role?.toLowerCase() ?? ''] || '/';
+
+    console.log('🔁 Redirection vers :', path);
+    this.router.navigate([path]);
   }
 }
