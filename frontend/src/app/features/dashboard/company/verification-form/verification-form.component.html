@@ -1,20 +1,39 @@
-<h3 class="text-lg font-semibold mb-2">Vérification de l’entreprise</h3>
+<div class="mt-4">
+  <h4 class="h5 mb-3">Vérification de l’entreprise</h4>
 
-<form (ngSubmit)="submit()" class="space-y-4">
-  <div>
-    <label>Numéro d’entreprise :</label>
-    <input [(ngModel)]="companyNumber" name="companyNumber" required class="input" />
-  </div>
+  <form (ngSubmit)="submit()" novalidate>
+    <div class="mb-3">
+      <label for="companyNumber" class="form-label">Numéro d’entreprise</label>
+      <input
+        type="text"
+        id="companyNumber"
+        class="form-control"
+        name="companyNumber"
+        [(ngModel)]="companyNumber"
+        required
+      />
+    </div>
 
-  <div>
-    <label>Document justificatif :</label>
-    <input type="file" (change)="onFileSelected($event)" required class="input" />
-  </div>
+    <div class="mb-3">
+      <label for="docUpload" class="form-label">Document justificatif</label>
+      <input
+        type="file"
+        id="docUpload"
+        class="form-control"
+        (change)="onFileSelected($event)"
+        required
+      />
+    </div>
 
-  <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-    📤 Envoyer pour vérification
-  </button>
+    <button type="submit" class="btn btn-success">
+      📤 Envoyer pour vérification
+    </button>
 
-  <p class="text-green-600 mt-2" *ngIf="successMessage">{{ successMessage }}</p>
-  <p class="text-red-600 mt-2" *ngIf="errorMessage">{{ errorMessage }}</p>
-</form>
+    <div *ngIf="successMessage" class="alert alert-success mt-3">
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="alert alert-danger mt-2">
+      {{ errorMessage }}
+    </div>
+  </form>
+</div>

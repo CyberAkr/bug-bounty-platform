@@ -1,14 +1,46 @@
-<div class="login-container">
-  <h2>Connexion</h2>
-  <form (ngSubmit)="login()">
-    <label>Email :</label>
-    <input type="email" [(ngModel)]="email" name="email" required>
+<div class="container d-flex justify-content-center align-items-center min-vh-100 bg-light">
+  <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%;">
+    <h3 class="text-center mb-4">Connexion à votre compte</h3>
 
-    <label>Mot de passe :</label>
-    <input type="password" [(ngModel)]="password" name="password" required>
+    <form (ngSubmit)="login()">
+      <div class="mb-3">
+        <label for="email" class="form-label">Adresse email</label>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="votre@email.com"
+          required
+        />
+      </div>
 
-    <button type="submit">Se connecter</button>
-  </form>
+      <div class="mb-3">
+        <label for="password" class="form-label">Mot de passe</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          [(ngModel)]="password"
+          name="password"
+          required
+        />
+      </div>
 
-  <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+
+      <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+        {{ errorMessage }}
+      </div>
+    </form>
+
+    <hr class="my-4" />
+
+    <div class="text-center">
+      <small>
+        Pas encore de compte ? <a routerLink="/register">Créer un compte</a>
+      </small>
+    </div>
+  </div>
 </div>

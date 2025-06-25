@@ -26,7 +26,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> {}) // Active CORS via le bean en dessous
+                .cors(cors -> {
+                }) // Active CORS via le bean en dessous
                 .csrf(csrf -> csrf.disable()) // Désactive CSRF pour API REST
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless API
                 .authorizeHttpRequests(auth -> auth
@@ -56,7 +57,7 @@ public class SecurityConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
                         .allowedOrigins("http://localhost:4200")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS") // ✅ ajoute PATCH
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }

@@ -2,7 +2,6 @@ package be.bugbounty.backend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 @Entity
 @Table(name = "users")
 @Data
@@ -45,6 +44,9 @@ public class User {
     private boolean isBanned;
 
     private int point;
+
+    @OneToMany(mappedBy = "researcher", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private java.util.List<Report> reports;
 
     public enum VerificationStatus {
         PENDING, APPROVED, REJECTED

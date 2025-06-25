@@ -1,0 +1,43 @@
+<tr class="border-b">
+  <td class="px-4 py-2">{{ report.title }}</td>
+  <td class="px-4 py-2">{{ report.severity }}</td>
+  <td class="px-4 py-2">{{ report.researcher.username }}</td>
+  <td class="px-4 py-2">{{ report.submitted_at | date: 'short' }}</td>
+
+  <!-- Sélecteur de vulnérabilité -->
+  <td class="px-4 py-2">
+    <select
+      class="text-sm border rounded p-1 w-full"
+      [ngModel]="report.vulnerability_type_id"
+      (ngModelChange)="onVulnerabilityChange($event)">
+      <option *ngFor="let vuln of vulnerabilities" [value]="vuln.typeId">{{ vuln.name }}</option>
+    </select>
+
+  </td>
+
+  <!-- Commentaire -->
+  <td class="px-4 py-2">
+    <textarea
+      [ngModel]="comment()"
+      (ngModelChange)="comment.set($event)"
+      class="text-sm border rounded w-full p-1"
+    ></textarea>
+
+  </td>
+
+  <!-- Actions -->
+  <td class="px-4 py-2 space-x-1">
+    <button
+      class="bg-green-600 text-white px-2 py-1 rounded text-sm"
+      (click)="onStatusChange('APPROVED')"
+    >
+      ✅ Valider
+    </button>
+    <button
+      class="bg-red-600 text-white px-2 py-1 rounded text-sm"
+      (click)="onStatusChange('REJECTED')"
+    >
+      ❌ Refuser
+    </button>
+  </td>
+</tr>

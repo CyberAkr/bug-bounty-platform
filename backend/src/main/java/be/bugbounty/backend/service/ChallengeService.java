@@ -83,4 +83,58 @@ public class ChallengeService {
 
         return new FlagSubmissionResult(false, null);
     }
+    // ADMIN : voir tous les challenges
+    public List<Challenge> findAll() {
+        return challengeRepository.findAll();
+    }
+
+    // ADMIN : créer challenge à partir du DTO admin
+    public Challenge create(be.bugbounty.backend.dto.admin.ChallengeRequestDTO dto) {
+        Badge badge = badgeRepository.findById(dto.getBadgeId())
+                .orElseThrow(() -> new RuntimeException("Badge introuvable"));
+        AuditProgram program = auditProgramRepository.findById(dto.getProgramId())
+                .orElseThrow(() -> new RuntimeException("Programme introuvable"));
+
+        Challenge challenge = new Challenge();
+        challenge.setTitle(dto.getTitle());
+        challenge.setDescription(dto.getDescription());
+        challenge.setStartDate(dto.getStartDate());
+        challenge.setEndDate(dto.getEndDate());
+        challenge.setTheme(dto.getTheme());
+        challenge.setLinkToResource(dto.getLinkToResource());
+        challenge.setExpectedFlag(dto.getExpectedFlag());
+        challenge.setBadge(badge);
+        challenge.setProgram(program);
+
+        return challengeRepository.save(challenge);
+    }
+
+    // ADMIN : modifier challenge
+    public Challenge update(Long id, be.bugbounty.backend.dto.admin.ChallengeRequestDTO dto) {
+        Challenge challenge = challengeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Challenge introuvable"));
+
+        Badge badge = badgeRepository.findById(dto.getBadgeId())
+                .orElseThrow(() -> new RuntimeException("Badge introuvable"));
+        AuditProgram program = auditProgramRepository.findById(dto.getProgramId())
+                .orElseThrow(() -> new RuntimeException("Programme introuvable"));
+
+        challenge.setTitle(dto.getTitle());
+        challenge.setDescription(dto.getDescription());
+        challenge.setStartDate(dto.getStartDate());
+        challenge.setEndDate(dto.getEndDate());
+        challenge.setTheme(dto.getTheme());
+        challenge.setLinkToResource(dto.getLinkToResource());
+        challenge.setExpectedFlag(dto.getExpectedFlag());
+        challenge.setBadge(badge);
+        challenge.setProgram(program);
+
+        return challengeRepository.save(challenge);
+    }
+
+    // ADMIN : supprimer challenge
+    public void delete(Long id) {
+        challengeRepository.deleteById(id);
+    }
+
 }

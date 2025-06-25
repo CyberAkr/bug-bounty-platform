@@ -1,24 +1,45 @@
-<section class="p-6 max-w-2xl mx-auto">
-  <h2 class="text-2xl font-semibold mb-4">➕ Créer un programme</h2>
+<div class="container my-5" style="max-width: 720px;">
+  <div class="card shadow-sm p-4">
+    <h2 class="h5 mb-4">➕ Créer un programme</h2>
 
-  <form (ngSubmit)="submit()" class="space-y-4">
-    <div>
-      <label class="block font-medium">Titre du programme</label>
-      <input [(ngModel)]="title" name="title" required class="input w-full" />
-    </div>
+    <form (ngSubmit)="submit()" novalidate>
+      <div class="mb-3">
+        <label for="title" class="form-label">Titre du programme</label>
+        <input
+          id="title"
+          name="title"
+          [(ngModel)]="title"
+          required
+          class="form-control"
+        />
+      </div>
 
-    <div>
-      <label class="block font-medium">Description</label>
-      <textarea [(ngModel)]="description" name="description" rows="3" required class="input w-full"></textarea>
-    </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          id="description"
+          name="description"
+          [(ngModel)]="description"
+          rows="3"
+          required
+          class="form-control"
+        ></textarea>
+      </div>
 
-    <div>
-      <label class="block font-medium">Objectif</label>
-      <textarea [(ngModel)]="goal" name="goal" rows="2" class="input w-full"></textarea>
-    </div>
+      <div class="mb-3">
+        <label for="goal" class="form-label">Objectif</label>
+        <textarea
+          id="goal"
+          name="goal"
+          [(ngModel)]="goal"
+          rows="2"
+          class="form-control"
+        ></textarea>
+      </div>
 
-    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
-      ✅ Soumettre
-    </button>
-  </form>
-</section>
+      <button type="submit" class="btn btn-primary">
+        ✅ Soumettre
+      </button>
+    </form>
+  </div>
+</div>

@@ -105,7 +105,16 @@ export const routes: Routes = [
         path: 'notifications',
         loadChildren: () =>
           import('./features/notifications/notifications.routes').then(m => m.NOTIFICATIONS_ROUTES)
-      }
+      },
+
+      //admin route
+      {
+        path: 'admin',
+        canActivate: [authGuard], // ou un adminGuard plus strict si dispo
+        loadChildren: () =>
+          import('./features/admin/admin.routes').then(m => m.adminRoutes)
+      },
+
     ]
   },
 

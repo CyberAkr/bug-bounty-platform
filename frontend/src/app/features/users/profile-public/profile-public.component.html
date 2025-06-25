@@ -1,6 +1,9 @@
-<div *ngIf="user() as u">
-  <h2>Profil public de {{ u.username }}</h2>
-  <p>Nom : {{ u.firstName }} {{ u.lastName }}</p>
-  <p>Points : {{ u.point }}</p>
-  <p>Bio : {{ u.bio }}</p>
+<div class="container my-5" *ngIf="user() as u">
+  <div class="card shadow-sm p-4">
+    <h2 class="h5 mb-3">👤 Profil public de <strong>{{ u.username }}</strong></h2>
+
+    <p class="mb-1"><strong>Nom :</strong> {{ u.firstName }} {{ u.lastName }}</p>
+    <p class="mb-1"><strong>Points :</strong> {{ u.point }}</p>
+    <p class="mb-0"><strong>Bio :</strong> {{ u.bio || '—' }}</p>
+  </div>
 </div>

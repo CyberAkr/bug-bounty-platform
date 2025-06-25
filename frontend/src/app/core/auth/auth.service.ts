@@ -17,7 +17,7 @@ export class AuthService {
 
 
   login(email: string, password: string) {
-    return this.http.post<{ token: string }>('/api/auth/signin', { email, password }).pipe(
+    return this.http.post<{ token: string }>('/api/auth/signin', {email, password}).pipe(
       tap(response => {
         this.token.set(response.token);
         localStorage.setItem('auth_token', response.token);
@@ -39,9 +39,8 @@ export class AuthService {
   }
 
 
-getCurrentUser() {
-  return this.http.get<UserResponse>('/api/user/me');
-}
-
+  getCurrentUser() {
+    return this.http.get<UserResponse>('/api/user/me');
+  }
 
 }

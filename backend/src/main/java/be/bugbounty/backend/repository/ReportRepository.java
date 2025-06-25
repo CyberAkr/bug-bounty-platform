@@ -17,4 +17,6 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
     // 🔐 Vérifier si un chercheur a déjà soumis un rapport pour un programme donné
     boolean existsByProgramAndResearcher(AuditProgram program, User researcher);
+
+    List<Report> findByStatus(Report.Status status);
 }
