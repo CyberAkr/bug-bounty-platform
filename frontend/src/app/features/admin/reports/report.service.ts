@@ -1,7 +1,7 @@
-
+// frontend/src/app/features/admin/reports/report.service.ts
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
 
 export type ReportStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
@@ -10,43 +10,61 @@ export interface Report {
   title: string;
   submitted_at: string;
   severity: 'LOW' | 'MEDIUM' | 'HIGH';
-  researcher: { id: number; username: string };
+  researcher: { id: number | null; username: string };
   status: ReportStatus;
-  admin_comment?: string;
-  vulnerability_type_id: number;
+  admin_comment?: string | null;
+  vulnerability_type_id: number | null;
 }
 
 @Injectable({ providedIn: 'root' })
 export class ReportsService {
   private http = inject(HttpClient);
-  private baseUrl = '/api/reports';
+  private baseUrl = '/api/admin/reports';
 
-  // Obtenir tous les rapports
+  /** Adaptateur backend -> UI */
+  private toUi(r: any): Report {
+    return {
+      report_id: r.report_id ?? r.reportId,
+      title: r.title,
+      submitted_at: r.submitted_at ?? r.submittedAt,
+      severity: (r.severity ?? '').toUpperCase(),
+      researcher: {
+        id: r.researcher?.id ?? r.researcher?.userId ?? null,
+        username: r.researcher?.username ?? ''
+      },
+      status: (r.status ?? '').toUpperCase(),
+      admin_comment: r.admin_comment ?? r.adminComment ?? null,
+      vulnerability_type_id:
+        r.vulnerability_type_id ??
+        r.vulnerabilityTypeId ??
+        r.vulnerabilityType?.typeId ??
+        null,
+    };
+  }
+
   getAllReports(): Observable<Report[]> {
-    return this.http.get<Report[]>(this.baseUrl);
+    return this.http.get<any[]>(this.baseUrl).pipe(
+      map(list => list.map(r => this.toUi(r)))
+    );
   }
 
-  // Obtenir uniquement les rapports en attente
   getPendingReports(): Observable<Report[]> {
-    return this.http.get<Report[]>(`${this.baseUrl}?status=PENDING`);
+    const params = new HttpParams().set('status', 'PENDING');
+    return this.http.get<any[]>(this.baseUrl, { params }).pipe(
+      map(list => list.map(r => this.toUi(r)))
+    );
   }
 
-  // Mettre à jour le statut d'un rapport (APPROVED / REJECTED)
-  updateStatus(reportId: number, status: ReportStatus, comment: string): Observable<void> {
-    return this.http.patch<void>(`${this.baseUrl}/${reportId}/status`, { status, admin_comment: comment });
+  updateStatus(reportId: number, status: ReportStatus, comment: string) {
+    const body = { status, adminComment: comment?.trim() || undefined };
+    return this.http.patch<void>(`${this.baseUrl}/${reportId}/status`, body);
   }
 
-  // Mettre à jour le type de vulnérabilité associé au rapport
-  updateVulnerability(id: number, vulnerability_type_id: number): Observable<void> {
-    return this.http.patch<void>(`${this.baseUrl}/${id}/vulnerability`, { vulnerability_type_id });
+  updateVulnerability(id: number, vulnerability_type_id: number) {
+    const body = { vulnerabilityTypeId: vulnerability_type_id };
+    return this.http.patch<void>(`${this.baseUrl}/${id}/vulnerability`, body);
   }
 
-  // Mettre à jour des champs libres d'un rapport (optionnel, complet)
-  updateReport(reportId: number, update: Partial<Report>): Observable<void> {
-    return this.http.patch<void>(`${this.baseUrl}/${reportId}`, update);
-  }
-
-  // Supprimer un rapport (optionnel, à activer selon les droits)
   deleteReport(reportId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${reportId}`);
   }

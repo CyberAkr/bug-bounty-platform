@@ -2,6 +2,9 @@
   <h2 class="text-2xl font-semibold mb-4">➕ Créer un programme</h2>
 
   <form (ngSubmit)="submit()" class="space-y-4">
+    <div *ngIf="error()" class="rounded border border-red-300 bg-red-50 text-red-700 p-2">{{ error() }}</div>
+    <div *ngIf="success()" class="rounded border border-emerald-300 bg-emerald-50 text-emerald-800 p-2">{{ success() }}</div>
+
     <div>
       <label class="block font-medium">Titre du programme</label>
       <input [(ngModel)]="title" name="title" required class="input w-full" />
@@ -17,7 +20,9 @@
       <textarea [(ngModel)]="goal" name="goal" rows="2" class="input w-full"></textarea>
     </div>
 
-    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
+    <button type="submit"
+            class="bg-blue-600 text-white px-4 py-2 rounded"
+            [disabled]="loading() || !title.trim() || !description.trim()">
       ✅ Soumettre
     </button>
   </form>

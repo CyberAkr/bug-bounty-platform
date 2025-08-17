@@ -2,5 +2,13 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/backend/src/main/resources/db/migration/V1_1__create_user_table.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/db/migration/V1_2__insert_user_table.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/db/migration/V2_1__create_audit_program_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/db/migration/V3_2__insert_program_payment_table.sql" dialect="GenericSQL" />
+    <file url="PROJECT" dialect="MySQL" />
+  </component>
+  <component name="SqlResolveMappings">
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/db/migration/V2_1__create_audit_program_table.sql" scope="{&quot;node&quot;:{  &quot;@negative&quot;:&quot;1&quot;,  &quot;group&quot;:{   &quot;@kind&quot;:&quot;root&quot;,   &quot;node&quot;:{    &quot;@negative&quot;:&quot;1&quot;   }  } }}" />
+    <file url="PROJECT" scope="{&quot;node&quot;:{  &quot;@negative&quot;:&quot;1&quot;,  &quot;group&quot;:{   &quot;@kind&quot;:&quot;root&quot;,   &quot;node&quot;:{    &quot;@negative&quot;:&quot;1&quot;   }  } }}" />
   </component>
 </project>

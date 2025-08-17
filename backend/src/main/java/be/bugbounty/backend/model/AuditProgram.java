@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "audit_program")
+@Table(name = "audit_program",
+        uniqueConstraints = @UniqueConstraint(columnNames = "company_id") // ✅ 1 seul programme par société
+)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

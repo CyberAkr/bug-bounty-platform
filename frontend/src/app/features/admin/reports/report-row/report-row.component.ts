@@ -1,44 +1,94 @@
-
+// report-row.component.ts
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Report, ReportStatus } from '@app/features/admin/reports/report.service';
+import { FormsModule } from '@angular/forms';
+import { Report } from '@app/features/admin/reports/report.service';
 import { VulnerabilityType } from '@app/features/admin/vulnerabilities/vulnerabilities.service';
-import {FormsModule} from '@angular/forms';
 
 @Component({
-  selector: 'app-report-row',
+  selector: 'tr[app-report-row]',            // ✅ host = <tr>, plus de tag custom
   standalone: true,
   imports: [CommonModule, FormsModule],
+  host: { class: 'border-b last:border-0 hover:bg-gray-50' }, // classes sur le <tr>
   template: `
-    <tr class="border-b">
-      <td class="px-4 py-2">{{ report.title }}</td>
-      <td class="px-4 py-2">{{ report.severity }}</td>
-      <td class="px-4 py-2">{{ report.researcher.username }}</td>
-      <td class="px-4 py-2">{{ report.submitted_at | date:'short' }}</td>
-      <td class="px-4 py-2">
+    <!-- ⚠️ ici: UNIQUEMENT des <td>, pas de <tr> -->
+    <td class="px-4 py-3 align-top">
+      <div class="font-medium">{{ report.title || '—' }}</div>
+      <div class="mt-1 inline-flex items-center gap-2 text-xs">
+        <span class="px-2 py-0.5 rounded-full border"
+              [class.bg-yellow-50]="report.status === 'PENDING'"
+              [class.border-yellow-300]="report.status === 'PENDING'">
+          {{ report.status }}
+        </span>
+        <span class="px-2 py-0.5 rounded-full border"
+              [class.bg-red-50]="report.severity === 'HIGH'"
+              [class.border-red-300]="report.severity === 'HIGH'"
+              [class.bg-orange-50]="report.severity === 'MEDIUM'"
+              [class.border-orange-300]="report.severity === 'MEDIUM'"
+              [class.bg-green-50]="report.severity === 'LOW'"
+              [class.border-green-300]="report.severity === 'LOW'">
+          {{ report.severity }}
+        </span>
+      </div>
+    </td>
+
+    <td class="px-4 py-3 align-top">{{ report.severity }}</td>
+    <td class="px-4 py-3 align-top">{{ report.researcher.username || '—' }}</td>
+    <td class="px-4 py-3 align-top">{{ report.submitted_at | date:'short' }}</td>
+
+    <td class="px-4 py-3 align-top min-w-44">
+      <div class="flex items-center gap-2">
         <select [(ngModel)]="report.vulnerability_type_id" class="text-sm border rounded p-1 w-full">
+          <option [ngValue]="null">—</option>
           <option *ngFor="let vuln of vulnerabilities" [value]="vuln.type_id">{{ vuln.name }}</option>
         </select>
-        <button (click)="updateVulnerability.emit({ reportId: report.report_id, vulnerabilityId: report.vulnerability_type_id })"
-                class="mt-1 bg-blue-600 text-white px-2 py-1 rounded text-xs">
-          💾 Mettre à jour
+        <!-- au lieu de (click)="saveVulnerability.emit({ ... vulnerabilityId: report.vulnerability_type_id })" -->
+        <button
+          (click)="onSaveVuln()"
+          [disabled]="report.vulnerability_type_id == null"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs">
+          💾
         </button>
-      </td>
-      <td class="px-4 py-2">
-        <textarea [(ngModel)]="comment" class="text-sm border rounded w-full p-1"></textarea>
-      </td>
-      <td class="px-4 py-2 space-x-1">
-        <button (click)="action.emit({ id: report.report_id, status: 'APPROVED', comment })" class="bg-green-500 text-white px-2 py-1 rounded text-sm">✅ Valider</button>
-        <button (click)="action.emit({ id: report.report_id, status: 'REJECTED', comment })" class="bg-red-500 text-white px-2 py-1 rounded text-sm">❌ Refuser</button>
-      </td>
-    </tr>
+
+      </div>
+    </td>
+
+    <td class="px-4 py-3 align-top">
+      <textarea [(ngModel)]="comment" placeholder="Commentaire admin…"
+                class="text-sm border rounded w-full p-2 min-h-10"></textarea>
+    </td>
+
+    <td class="px-4 py-3 align-top">
+      <div class="flex flex-wrap gap-2">
+        <button (click)="approve.emit({ id: report.report_id, comment })"
+                [disabled]="report.status === 'APPROVED'"
+                class="bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white px-3 py-1.5 rounded text-sm">
+          ✅ Valider
+        </button>
+        <button (click)="reject.emit({ id: report.report_id, comment })"
+                [disabled]="report.status === 'REJECTED'"
+                class="bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white px-3 py-1.5 rounded text-sm">
+          ❌ Refuser
+        </button>
+      </div>
+    </td>
   `,
 })
 export class ReportRowComponent {
   @Input() report!: Report;
   @Input() vulnerabilities: VulnerabilityType[] = [];
-  @Output() action = new EventEmitter<{ id: number; status: ReportStatus; comment: string }>();
-  @Output() updateVulnerability = new EventEmitter<{ reportId: number; vulnerabilityId: number }>();
+  @Output() approve = new EventEmitter<{ id: number; comment: string }>();
+  @Output() reject = new EventEmitter<{ id: number; comment: string }>();
+  @Output() saveVulnerability = new EventEmitter<{ reportId: number; vulnerabilityId: number }>();
+  comment = '';
 
-  comment: string = '';
+  onSaveVuln() {
+    // garde-fou côté TS + runtime
+    if (this.report.vulnerability_type_id == null) return;
+    this.saveVulnerability.emit({
+      reportId: this.report.report_id,
+      vulnerabilityId: this.report.vulnerability_type_id, // ici c'est garanti non-null
+    });
+  }
+
 }

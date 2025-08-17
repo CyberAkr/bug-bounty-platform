@@ -1,20 +1,37 @@
 package be.bugbounty.backend.service;
 
+import be.bugbounty.backend.dto.admin.AdminUserCreateRequestDTO;
 import be.bugbounty.backend.dto.admin.AdminUserUpdateRequestDTO;
-import be.bugbounty.backend.dto.user.*;
+import be.bugbounty.backend.dto.program.AuditProgramRequestDTO;
+import be.bugbounty.backend.dto.user.UserResponseDTO;
+import be.bugbounty.backend.dto.user.UserUpdateRequestDTO;
+import be.bugbounty.backend.model.AuditProgram;
 import be.bugbounty.backend.model.User;
 import be.bugbounty.backend.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 @Service
+@Transactional(readOnly = true)
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private static final Set<String> ALLOWED_ROLES = Set.of("admin", "researcher", "company");
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    // ======= Public (profil courant) =======
 
     public UserResponseDTO getCurrentUser(User user) {
         return new UserResponseDTO(
@@ -28,19 +45,21 @@ public class UserService {
                 user.getPreferredLanguage(),
                 user.getProfilePhoto(),
                 user.getCompanyNumber(),
-                user.getVerificationStatus().name()
+                user.getVerificationStatus() != null ? user.getVerificationStatus().name() : null
         );
     }
 
+    @Transactional
     public void updateUser(User user, UserUpdateRequestDTO dto) {
-        user.setFirstName(dto.getFirstName());
-        user.setLastName(dto.getLastName());
-        user.setPreferredLanguage(dto.getPreferredLanguage());
-        user.setBio(dto.getBio());
-        user.setProfilePhoto(dto.getProfilePhoto());
+        if (dto.getFirstName() != null) user.setFirstName(dto.getFirstName());
+        if (dto.getLastName() != null) user.setLastName(dto.getLastName());
+        if (dto.getPreferredLanguage() != null) user.setPreferredLanguage(dto.getPreferredLanguage());
+        if (dto.getBio() != null) user.setBio(dto.getBio());
+        if (dto.getProfilePhoto() != null) user.setProfilePhoto(dto.getProfilePhoto());
         userRepository.save(user);
     }
 
+    @Transactional
     public void deleteUser(User user) {
         userRepository.delete(user);
     }
@@ -50,28 +69,99 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec l'email : " + email));
     }
 
-    // ✅ pour admin : liste tous les utilisateurs
+    // ======= Admin =======
+
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
-    // ✅ pour admin : modifier rôle, ban, vérif
+    @Transactional
     public User adminUpdateUser(Long id, AdminUserUpdateRequestDTO dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
 
         if (dto.getRole() != null) {
-            user.setRole(dto.getRole());
+            String role = dto.getRole().toLowerCase();
+            validateRole(role);
+            user.setRole(role);
         }
-
         if (dto.getBanned() != null) {
             user.setBanned(dto.getBanned());
         }
-
         if (dto.getVerificationStatus() != null) {
-            user.setVerificationStatus(User.VerificationStatus.valueOf(dto.getVerificationStatus().toUpperCase()));
+            user.setVerificationStatus(
+                    User.VerificationStatus.valueOf(dto.getVerificationStatus().toUpperCase())
+            );
+        }
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    public User adminCreateUser(AdminUserCreateRequestDTO dto) {
+        if (userRepository.existsByEmail(dto.getEmail())) {
+            throw new IllegalArgumentException("Email déjà utilisé");
+        }
+        String role = dto.getRole().toLowerCase();
+        validateRole(role);
+
+        if (role.equals("company")) {
+            if (dto.getCompanyNumber() == null || dto.getCompanyNumber().isBlank()) {
+                throw new IllegalArgumentException("companyNumber requis pour un compte entreprise");
+            }
         }
 
-        return userRepository.save(user);
+        User u = new User();
+        u.setFirstName(dto.getFirstName());
+        u.setLastName(dto.getLastName());
+        u.setEmail(dto.getEmail());
+        u.setUsername(dto.getUsername());
+        u.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
+        u.setRole(role);
+        u.setBanned(Boolean.TRUE.equals(dto.getBanned()));
+        u.setVerificationStatus(
+                dto.getVerificationStatus() != null
+                        ? User.VerificationStatus.valueOf(dto.getVerificationStatus().toUpperCase())
+                        : User.VerificationStatus.PENDING
+        );
+        u.setCompanyNumber(role.equals("company") ? dto.getCompanyNumber() : null);
+        u.setVerificationDocument(role.equals("company") ? dto.getVerificationDocument() : null);
+        u.setPoint(0);
+        // champs facultatifs laissés à null par défaut (photo, langue, bio)
+
+        return userRepository.save(u);
+    }
+
+    @Transactional
+    public void adminDeleteUser(Long id) {
+        if (!userRepository.existsById(id)) return;
+        try {
+            userRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            // Si contraintes d'intégrité (FK) empêchent la suppression
+            throw new IllegalStateException("Suppression impossible : l'utilisateur est référencé (rapports, challenges, ...).");
+        }
+    }
+
+    // ======= Helpers =======
+
+    private void validateRole(String roleLowercase) {
+        if (!ALLOWED_ROLES.contains(roleLowercase)) {
+            throw new IllegalArgumentException("Rôle invalide");
+        }
+    }
+
+    @Transactional
+    public void createProgram(User company, AuditProgramRequestDTO dto) {
+        // 🔒 une seule entrée par entreprise
+        if (programRepo.existsByCompany(company)) {
+            throw new IllegalStateException("Vous avez déjà soumis un programme.");
+        }
+
+        AuditProgram p = new AuditProgram();
+        p.setTitle(dto.getTitle());
+        p.setDescription(dto.getDescription());
+        p.setCompany(company);
+        p.setStatus(AuditProgram.Status.PENDING);
+        programRepo.save(p);
     }
 }

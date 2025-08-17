@@ -129,5 +129,23 @@ public class ReportService {
         report.setVulnerabilityType(type);
         return reportRepository.save(report);
     }
+
+    public Report updateStatus(Long id, String status, String adminComment) {
+        Report report = reportRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rapport introuvable"));
+
+        Report.Status newStatus = Report.Status.valueOf(status.toUpperCase());
+        report.setStatus(newStatus);
+
+        if (adminComment != null && !adminComment.isBlank()) {
+            report.setAdminComment(adminComment.trim());
+        }
+
+        return reportRepository.save(report);
+    }
+
+
+
+
 }
 

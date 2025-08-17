@@ -2,6 +2,7 @@ package be.bugbounty.backend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonProperty; // + import
 
 @Entity
 @Table(name = "users")
@@ -24,6 +25,7 @@ public class User {
     private String email;
 
     @Column(nullable = false, length = 255)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // ← lu en entrée, jamais sérialisé en sortie
     private String passwordHash;
 
     @Column(nullable = false, length = 20)

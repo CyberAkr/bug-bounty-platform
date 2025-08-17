@@ -1,26 +1,33 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuditProgramRequest, AuditProgramResponse } from '@app/models/program.model';
+
+// DTO attendu par ton backend: AuditProgramRequestDTO { title, description }
+export interface ProgramCreateDto {
+  title: string;
+  description: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class ProgramService {
-  private readonly http = inject(HttpClient); // ✅ full inject
+  private http = inject(HttpClient);
+  private baseUrl = '/api/programs';
 
-  getAll(): Observable<AuditProgramResponse[]> {
-    return this.http.get<AuditProgramResponse[]>('/api/programs');
+  getAll(): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl);
   }
 
-  getOne(id: number): Observable<AuditProgramResponse> {
-    return this.http.get<AuditProgramResponse>(`/api/programs/${id}`);
+  getOne(id: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${id}`);
   }
 
-  getMine(): Observable<AuditProgramResponse[]> {
-    return this.http.get<AuditProgramResponse[]>('/api/programs/my');
+  getMine(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/my`);
   }
 
-  create(data: AuditProgramRequest): Observable<any> {
-    return this.http.post('/api/programs', data);
+  // 👇 nouvelle méthode pour créer un programme (entreprise connectée)
+  create(dto: ProgramCreateDto): Observable<any> {
+    // le backend renvoie "Programme soumis avec succès." (string) → on accepte any
+    return this.http.post<any>(this.baseUrl, dto);
   }
-
 }
