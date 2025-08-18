@@ -150,18 +150,5 @@ public class UserService {
         }
     }
 
-    @Transactional
-    public void createProgram(User company, AuditProgramRequestDTO dto) {
-        // 🔒 une seule entrée par entreprise
-        if (programRepo.existsByCompany(company)) {
-            throw new IllegalStateException("Vous avez déjà soumis un programme.");
-        }
 
-        AuditProgram p = new AuditProgram();
-        p.setTitle(dto.getTitle());
-        p.setDescription(dto.getDescription());
-        p.setCompany(company);
-        p.setStatus(AuditProgram.Status.PENDING);
-        programRepo.save(p);
-    }
 }

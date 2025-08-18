@@ -38,9 +38,11 @@ public class AuditProgramService {
     public List<AuditProgramResponseDTO> findByCompany(User company) {
         return programRepo.findByCompany(company).stream().map(this::toDto).toList();
     }
-
     @Transactional
     public void createProgram(User company, AuditProgramRequestDTO dto) {
+        if (programRepo.existsByCompany_UserId(company.getUserId())) {
+            throw new IllegalStateException("Vous avez déjà soumis un programme.");
+        }
         AuditProgram p = new AuditProgram();
         p.setTitle(dto.getTitle());
         p.setDescription(dto.getDescription());
@@ -49,17 +51,11 @@ public class AuditProgramService {
         programRepo.save(p);
     }
 
-    // ========= ADMIN (utilisés par /api/admin/programs) =========
-
-    public List<AuditProgramResponseDTO> adminFindAll(String status) {
-        List<AuditProgram> list = (status == null || status.isBlank())
-                ? programRepo.findAll()
-                : programRepo.findByStatus(AuditProgram.Status.valueOf(status.toUpperCase()));
-        return list.stream().map(this::toDto).toList();
-    }
-
     @Transactional
     public AuditProgramResponseDTO adminCreate(AdminProgramCreateRequestDTO dto) {
+        if (programRepo.existsByCompany_UserId(dto.getCompanyId())) {
+            throw new IllegalStateException("Cette entreprise a déjà un programme.");
+        }
         User company = userRepo.findById(dto.getCompanyId())
                 .orElseThrow(() -> new EntityNotFoundException("Entreprise introuvable: " + dto.getCompanyId()));
 
@@ -73,6 +69,7 @@ public class AuditProgramService {
 
         return toDto(programRepo.save(p));
     }
+
 
     @Transactional
     public AuditProgramResponseDTO adminUpdate(Long id, AdminProgramUpdateRequestDTO dto) {
@@ -121,5 +118,13 @@ public class AuditProgramService {
                 companyName,
                 p.getStatus()
         );
+    }
+    @Transactional(readOnly = true)
+    public List<AuditProgramResponseDTO> adminFindAll(String status) {
+        if (status == null || status.isBlank()) {
+            return programRepo.findAll().stream().map(this::toDto).toList();
+        }
+        var st = AuditProgram.Status.valueOf(status.toUpperCase());
+        return programRepo.findAllByStatus(st).stream().map(this::toDto).toList();
     }
 }
