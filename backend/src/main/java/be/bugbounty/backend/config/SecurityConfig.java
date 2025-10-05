@@ -29,9 +29,12 @@ public class SecurityConfig {
                 .cors(cors -> {}) // Active CORS via le bean en dessous
                 .csrf(csrf -> csrf.disable()) // Désactive CSRF pour API REST
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless API
+
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()        // login/register publics
                         .requestMatchers("/api/challenge/**").authenticated() // ✅ ajoute cette ligne
+                        .requestMatchers("/api/payments/programs/*/checkout").authenticated()
+                        .requestMatchers("/api/payments/programs/*/confirm").authenticated()
 
                         .requestMatchers("/api/user/me").authenticated()    // nécessite token
                         .requestMatchers("/api/user/**").permitAll()

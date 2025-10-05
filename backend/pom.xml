@@ -17,10 +17,18 @@
 	<name>backend</name>
 	<description>Bug Bounty Platform - Spring Boot</description>
 
+	<!-- ==================== PROPERTIES ==================== -->
 	<properties>
 		<java.version>21</java.version>
+		<lombok.version>1.18.30</lombok.version>
+		<stripe.version>24.8.0</stripe.version>
+
+		<!-- Encodage Maven -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
+	<!-- ==================== DEPENDENCIES ==================== -->
 	<dependencies>
 		<!-- Spring Boot essentials -->
 		<dependency>
@@ -43,6 +51,13 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- Stripe SDK -->
+		<dependency>
+			<groupId>com.stripe</groupId>
+			<artifactId>stripe-java</artifactId>
+			<version>${stripe.version}</version>
+		</dependency>
+
 		<!-- Flyway -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>
@@ -60,6 +75,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
 			<optional>true</optional>
 		</dependency>
 
@@ -96,17 +112,22 @@
 		</dependency>
 	</dependencies>
 
+	<!-- ==================== BUILD CONFIG ==================== -->
 	<build>
 		<plugins>
-			<!-- Compiler for Java + Lombok -->
+
+			<!-- Compiler Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
+					<release>${java.version}</release>
+					<parameters>true</parameters>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
@@ -116,15 +137,23 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<!-- Maven Resources Plugin (corrige l’erreur d’encodage) -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.3.1</version>
 				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
+					<encoding>UTF-8</encoding>
+					<nonFilteredFileExtensions>
+						<nonFilteredFileExtension>properties</nonFilteredFileExtension>
+						<nonFilteredFileExtension>yml</nonFilteredFileExtension>
+						<nonFilteredFileExtension>yaml</nonFilteredFileExtension>
+					</nonFilteredFileExtensions>
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 </project>

@@ -19,5 +19,11 @@ export const PROGRAMS_ROUTES: Routes = [
   {
     path: ':id',
     component: ProgramDetailComponent,
+  },
+  {
+    path: 'return',
+    loadComponent: () =>
+      import('./return/program-return.component').then(m => m.ProgramReturnComponent)
   }
+
 ];

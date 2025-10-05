@@ -1,5 +1,5 @@
 <!-- Détail du programme -->
-<div *ngIf="program; else loading">
+<div *ngIf="program; else loadingTemplate">
 
   <!-- ✅ Bulle informative si rapport déjà soumis -->
   <app-report-status [programId]="program.id" />
@@ -9,13 +9,24 @@
   <p>{{ program.description }}</p>
   <p><strong>Entreprise :</strong> {{ program.companyName }}</p>
   <p><strong>Status :</strong> {{ program.status }}</p>
+
   <a routerLink="/programs">⬅ Retour à la liste</a>
 
   <!-- Composant de soumission -->
   <hr class="my-4" />
   <app-report-submit [programId]="program.id" />
+
+  <!-- ✅ Bouton Publier -->
+  <div class="mt-4">
+    <button (click)="publish()" [disabled]="loading()" class="btn btn-primary">
+      Publier (100 €)
+    </button>
+    <p *ngIf="error()" class="text-danger mt-2">{{ error() }}</p>
+  </div>
+
 </div>
 
-<ng-template #loading>
+<!-- 🔄 Template de chargement renommé pour éviter conflit avec le signal -->
+<ng-template #loadingTemplate>
   <p>Chargement du programme...</p>
 </ng-template>

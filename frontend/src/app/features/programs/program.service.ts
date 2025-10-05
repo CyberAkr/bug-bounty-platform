@@ -25,9 +25,40 @@ export class ProgramService {
     return this.http.get<any[]>(`${this.baseUrl}/my`);
   }
 
-  // 👇 nouvelle méthode pour créer un programme (entreprise connectée)
+  // 👇 ancienne méthode (non utilisée ici)
   create(dto: ProgramCreateDto): Observable<any> {
-    // le backend renvoie "Programme soumis avec succès." (string) → on accepte any
     return this.http.post<any>(this.baseUrl, dto);
   }
+
+  // ✅ Pour la publication AVEC paiement
+  checkout(programId: number) {
+    return this.http.post<{ url: string }>(
+      `/api/payments/programs/${programId}/checkout`, {}
+    );
+  }
+
+  confirm(programId: number, sessionId: string) {
+    return this.http.post(
+      `/api/payments/programs/${programId}/confirm?sessionId=${encodeURIComponent(sessionId)}`, {}
+    );
+  }
+
+  // ✅ Nouvelle méthode Stripe avant création
+  checkoutBeforeCreate(title: string, description: string) {
+    const params = new URLSearchParams();
+    params.set('title', title);
+    params.set('description', description);
+    return this.http.post<{ url: string }>(
+      `/api/payments/programs/checkout?${params.toString()}`, {}
+    );
+  }
+
+  confirmSession(sessionId: string) {
+    return this.http.post<{ id: number; title: string }>(
+      `/api/payments/programs/confirm?sessionId=${encodeURIComponent(sessionId)}`,
+      {}
+    );
+  }
+
+
 }

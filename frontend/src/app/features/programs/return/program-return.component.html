@@ -1,0 +1,15 @@
+<section class="p-6 max-w-xl mx-auto text-center">
+  <ng-container *ngIf="loading; else loaded">
+    <p class="text-gray-500">⏳ Vérification du paiement...</p>
+  </ng-container>
+
+  <ng-template #loaded>
+    <div *ngIf="success" class="text-green-600 font-semibold text-xl">
+      ✅ Paiement confirmé, votre programme est publié !
+    </div>
+    <div *ngIf="error" class="text-red-600">
+      ❌ {{ error }}
+    </div>
+    <a routerLink="/programs" class="btn mt-4 inline-block">Retour aux programmes</a>
+  </ng-template>
+</section>
