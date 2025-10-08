@@ -24,22 +24,13 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  get isLoggedIn(): boolean {
-    return !!this.auth.getToken();
-  }
-
-  isCompany(): boolean {
-    return this.user()?.role === 'company';
-  }
+  get isLoggedIn(): boolean { return !!this.auth.getToken(); }
+  isCompany(): boolean { return this.user()?.role === 'company'; }
+  isAdmin(): boolean { return this.user()?.role === 'admin'; }
 
   logout(): void {
     this.auth.logout();
-    this.router.navigate(['/home']);
+    void this.router.navigate(['/home']);
   }
-
-  isAdmin(): boolean {
-    return this.user()?.role === 'admin';
-  }
-
-
 }
+

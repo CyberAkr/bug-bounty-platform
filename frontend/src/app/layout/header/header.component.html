@@ -1,4 +1,4 @@
-<h1>🧪 Layout actif</h1>
+<h1>🧪 Layout actif (test sans i18n)</h1>
 
 <nav>
   <a routerLink="/home">Accueil</a> |
@@ -14,7 +14,9 @@
   <a *ngIf="isLoggedIn" routerLink="/classement">Classement</a> |
   <a *ngIf="isLoggedIn" routerLink="/notifications">Notifications</a> |
 
-  <a *ngIf="isLoggedIn" (click)="logout()" style="cursor: pointer">Déconnexion</a>
+  <a *ngIf="isLoggedIn" (click)="logout()" style="cursor: pointer">
+    Déconnexion
+  </a>
 </nav>
 
 <hr />
