@@ -1,27 +1,28 @@
-<h1>{{ 'navbar.title' | translate }}</h1>
+<mat-toolbar class="px-4">
+  <button mat-button routerLink="/home" class="font-semibold">
+    <mat-icon aria-hidden="true" class="mr-2">security</mat-icon>
+    {{ 'navbar.title' | translate }}
+  </button>
 
-<nav>
-  <a routerLink="/home">{{ 'navbar.home' | translate }}</a> |
-  <a *ngIf="!isLoggedIn" routerLink="/login">{{ 'navbar.login' | translate }}</a> |
-  <a *ngIf="!isLoggedIn" routerLink="/register">{{ 'navbar.register' | translate }}</a> |
+  <span class="spacer"></span>
 
-  <a *ngIf="isLoggedIn" routerLink="/profile">{{ 'navbar.profile' | translate }}</a> |
-  <a *ngIf="isLoggedIn && isCompany()" routerLink="/company">{{ 'navbar.companySpace' | translate }}</a> |
-  <a *ngIf="isLoggedIn && isAdmin()" routerLink="/admin">{{ 'navbar.admin' | translate }}</a> |
+  <a mat-button routerLink="/classement">{{ 'navbar.ranking' | translate }}</a>
+  <a mat-button routerLink="/programs" *ngIf="isLoggedIn">{{ 'navbar.programs' | translate }}</a>
+  <a mat-button routerLink="/challenge/semaine" *ngIf="isLoggedIn">{{ 'navbar.challenge' | translate }}</a>
+  <a mat-button routerLink="/company" *ngIf="isLoggedIn && isCompany()">{{ 'navbar.companySpace' | translate }}</a>
+  <a mat-button routerLink="/admin" *ngIf="isLoggedIn && isAdmin()">{{ 'navbar.admin' | translate }}</a>
 
-  <a *ngIf="isLoggedIn" routerLink="/programs">{{ 'navbar.programs' | translate }}</a> |
-  <a *ngIf="isLoggedIn" routerLink="/challenge/semaine">{{ 'navbar.challenge' | translate }}</a> |
-  <a *ngIf="isLoggedIn" routerLink="/classement">{{ 'navbar.ranking' | translate }}</a> |
-  <a *ngIf="isLoggedIn" routerLink="/notifications">{{ 'navbar.notifications' | translate }}</a> |
-
-  <a *ngIf="isLoggedIn" (click)="logout()" style="cursor:pointer">
-    {{ 'navbar.logout' | translate }}
+  <a mat-button routerLink="/profile" *ngIf="isLoggedIn">{{ 'navbar.profile' | translate }}</a>
+  <a mat-button routerLink="/login" *ngIf="!isLoggedIn">{{ 'navbar.login' | translate }}</a>
+  <a mat-stroked-button color="primary" routerLink="/register" *ngIf="!isLoggedIn">
+    {{ 'navbar.register' | translate }}
   </a>
+  <button mat-button (click)="logout()" *ngIf="isLoggedIn">
+    <mat-icon class="mr-1" aria-hidden="true">logout</mat-icon>
+    {{ 'navbar.logout' | translate }}
+  </button>
 
-  <!-- Sélecteur de langue -->
-  <span style="margin-left:1rem;">
+  <span class="ml-2">
     <app-language-selector></app-language-selector>
   </span>
-</nav>
-
-<hr />
+</mat-toolbar>

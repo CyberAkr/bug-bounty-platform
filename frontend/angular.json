@@ -25,7 +25,10 @@
 
 
             ],
-            "styles": ["src/styles.css"],
+            "styles": [
+              "@angular/material/prebuilt-themes/azure-blue.css",
+              "src/styles.css"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -82,7 +85,10 @@
 
 
             ],
-            "styles": ["src/styles.css"],
+            "styles": [
+              "@angular/material/prebuilt-themes/azure-blue.css",
+              "src/styles.css"
+            ],
             "scripts": []
           }
         }

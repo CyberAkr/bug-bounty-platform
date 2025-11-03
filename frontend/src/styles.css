@@ -1,9 +1,32 @@
-/* You can add global styles to this file, and also import other style files */
-.input {
-  @apply w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500;
+/* Global reset minimal */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Conteneur */
+:root {
+  --container-max: 1200px;
+  --gutter: 16px;
 }
+.container { max-width: var(--container-max); margin: 0 auto; padding: 0 var(--gutter); }
+
 .input {
+  width: 100%;
   border: 1px solid #ccc;
-  padding: 8px;
+  padding: 8px 12px;
   border-radius: 6px;
+  outline: none;
 }
+.input:focus {
+  border-color: #2196f3;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, .2);
+}
+
+/* Sidenav Material full height */
+mat-sidenav-container { height: 100dvh; }
+
+/* Petits utilitaires */
+.spacer { flex: 1 1 auto; }
