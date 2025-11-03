@@ -1,16 +1,19 @@
 {
   "navbar": {
-    "title": "🧪 Active layout",
+    "language": "Language",
+    "title": "Bug Bounty Platform",
     "home": "Home",
     "login": "Login",
     "register": "Register",
     "profile": "Profile",
-    "companySpace": "Company Space",
+    "companySpace": "Company space",
     "admin": "Admin",
     "programs": "Programs",
-    "challenge": "Weekly Challenge 🏆",
+    "challenge": "Weekly challenge",
     "ranking": "Ranking",
     "notifications": "Notifications",
-    "logout": "Logout"
+    "logout": "Logout",
+    "langFr": "🇫🇷 FR",
+    "langEn": "🇬🇧 EN"
   }
 }

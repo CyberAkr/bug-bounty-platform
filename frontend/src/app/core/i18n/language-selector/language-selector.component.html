@@ -1,0 +1,9 @@
+<label class="lang-label" for="lang-select">{{ 'navbar.language' | translate }}</label>
+<select
+  id="lang-select"
+  class="lang-select"
+  [value]="lang.currentLang()"
+  (change)="onChange($event)">
+  <option value="fr">Français</option>
+  <option value="en">English</option>
+</select>

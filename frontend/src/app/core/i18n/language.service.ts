@@ -8,25 +8,26 @@ export class LanguageService {
 
   constructor() {
     const saved = localStorage.getItem('lang');
-    const browserLang = navigator.language.split('-')[0];
-    const lang = (saved === 'en' || browserLang === 'en') ? 'en' : 'fr';
+    const browser = (navigator.language || 'fr').split('-')[0];
+    const lang: 'fr' | 'en' = (saved === 'en' || browser === 'en') ? 'en' : 'fr';
 
-    this.currentLang.set(lang as 'fr' | 'en');
     this.translate.addLangs(['fr', 'en']);
     this.translate.setDefaultLang('fr');
-    this.translate.use(lang as 'fr' | 'en');
-    this.translate.addLangs(['fr', 'en']);
-    this.translate.setDefaultLang('fr');
-    this.translate.use(lang as 'fr'|'en').subscribe({
+
+    this.translate.use(lang).subscribe({
       next: () => console.log('[i18n] loaded', lang),
-      error: e => console.error('[i18n] load error', e)
+      error: (e) => console.error('[i18n] load error', e)
     });
 
+    this.currentLang.set(lang);
   }
 
   setLanguage(lang: 'fr' | 'en') {
     this.currentLang.set(lang);
-    this.translate.use(lang);
+    this.translate.use(lang).subscribe({
+      next: () => console.log('[i18n] switched to', lang),
+      error: (e) => console.error('[i18n] switch error', e)
+    });
     localStorage.setItem('lang', lang);
   }
 }

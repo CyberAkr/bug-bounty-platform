@@ -1,22 +1,13 @@
+// src/app/core/auth/jwt.interceptor.ts
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from './auth.service';
 
-export const JwtInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
-  const token = authService.getToken();
-
+export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
+  const auth = inject(AuthService);
+  const token = auth.getToken();
   if (token) {
-    console.log('✅ Token intercepté :', token);
-
-    req = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-  } else {
-    console.warn('❌ Aucun token trouvé dans l’interceptor');
+    req = req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
   }
-
   return next(req);
 };

@@ -1,22 +1,27 @@
-<h1>🧪 Layout actif (test sans i18n)</h1>
+<h1>{{ 'navbar.title' | translate }}</h1>
 
 <nav>
-  <a routerLink="/home">Accueil</a> |
-  <a *ngIf="!isLoggedIn" routerLink="/login">Login</a> |
-  <a *ngIf="!isLoggedIn" routerLink="/register">Register</a> |
+  <a routerLink="/home">{{ 'navbar.home' | translate }}</a> |
+  <a *ngIf="!isLoggedIn" routerLink="/login">{{ 'navbar.login' | translate }}</a> |
+  <a *ngIf="!isLoggedIn" routerLink="/register">{{ 'navbar.register' | translate }}</a> |
 
-  <a *ngIf="isLoggedIn" routerLink="/profile">Profil</a> |
-  <a *ngIf="isLoggedIn && isCompany()" routerLink="/company">Espace entreprise</a> |
-  <a *ngIf="isLoggedIn && isAdmin()" routerLink="/admin">Admin</a> |
+  <a *ngIf="isLoggedIn" routerLink="/profile">{{ 'navbar.profile' | translate }}</a> |
+  <a *ngIf="isLoggedIn && isCompany()" routerLink="/company">{{ 'navbar.companySpace' | translate }}</a> |
+  <a *ngIf="isLoggedIn && isAdmin()" routerLink="/admin">{{ 'navbar.admin' | translate }}</a> |
 
-  <a *ngIf="isLoggedIn" routerLink="/programs">Programmes</a> |
-  <a *ngIf="isLoggedIn" routerLink="/challenge/semaine">Défi de la semaine 🏆</a> |
-  <a *ngIf="isLoggedIn" routerLink="/classement">Classement</a> |
-  <a *ngIf="isLoggedIn" routerLink="/notifications">Notifications</a> |
+  <a *ngIf="isLoggedIn" routerLink="/programs">{{ 'navbar.programs' | translate }}</a> |
+  <a *ngIf="isLoggedIn" routerLink="/challenge/semaine">{{ 'navbar.challenge' | translate }}</a> |
+  <a *ngIf="isLoggedIn" routerLink="/classement">{{ 'navbar.ranking' | translate }}</a> |
+  <a *ngIf="isLoggedIn" routerLink="/notifications">{{ 'navbar.notifications' | translate }}</a> |
 
-  <a *ngIf="isLoggedIn" (click)="logout()" style="cursor: pointer">
-    Déconnexion
+  <a *ngIf="isLoggedIn" (click)="logout()" style="cursor:pointer">
+    {{ 'navbar.logout' | translate }}
   </a>
+
+  <!-- Sélecteur de langue -->
+  <span style="margin-left:1rem;">
+    <app-language-selector></app-language-selector>
+  </span>
 </nav>
 
 <hr />

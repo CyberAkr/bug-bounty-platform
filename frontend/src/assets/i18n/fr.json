@@ -1,5 +1,19 @@
 {
   "navbar": {
-    "title": "Bienvenue sur la plateforme Bug Bounty"
+    "language": "Langue",
+    "title": "Plateforme Bug Bounty",
+    "home": "Accueil",
+    "login": "Connexion",
+    "register": "Inscription",
+    "profile": "Profil",
+    "companySpace": "Espace entreprise",
+    "admin": "Admin",
+    "programs": "Programmes",
+    "challenge": "Défi de la semaine",
+    "ranking": "Classement",
+    "notifications": "Notifications",
+    "logout": "Déconnexion",
+    "langFr": "🇫🇷 FR",
+    "langEn": "🇬🇧 EN"
   }
 }

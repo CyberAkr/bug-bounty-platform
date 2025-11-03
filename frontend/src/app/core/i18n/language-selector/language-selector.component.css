@@ -1,0 +1,10 @@
+.lang-select {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  background: #fff;
+  cursor: pointer;
+}
+.lang-select:focus { outline: 2px solid #3b82f6; outline-offset: 2px; }
+.lang-label { margin-right: 0.5rem; font-size: 0.9rem; color: #555; }
+@media (max-width: 480px) { .lang-label { display: none; } }
