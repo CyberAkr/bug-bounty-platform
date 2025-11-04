@@ -20,26 +20,36 @@ public class ProgramStripeCreationController {
         this.service = service;
     }
 
-    // 1) Crée une session Stripe à partir du formulaire sans créer de programme
+    // Reçoit le contenu riche en JSON (pas de query string !)
+    public static record CheckoutRequest(
+            @NotBlank String title,
+            @NotBlank String description
+    ) {}
+
+    // 1) Enregistrer un brouillon (PENDING) + créer la session Stripe
     @PostMapping("/checkout")
     public ResponseEntity<?> checkout(
-            @RequestParam @NotBlank String title,
-            @RequestParam @NotBlank String description,
+            @RequestBody CheckoutRequest req,
             @AuthenticationPrincipal User user
     ) {
         try {
-            String url = service.createCheckoutSessionBeforeCreation(title, description, user);
+            Long programId = service.createDraftProgram(req.title(), req.description(), user);
+            String url = service.createCheckoutSessionForProgram(programId, user);
             return ResponseEntity.ok(new CheckoutResponse(url));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (StripeException e) {
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Erreur Stripe: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur interne: " + e.getMessage());
         }
     }
 
-    // 2) Stripe redirige ici (depuis /programs/return), on confirme et crée le programme
+    // 2) Stripe redirige → on valide le paiement et on APPROVE le programme déjà en base
     @PostMapping("/confirm")
     public ResponseEntity<?> confirm(@RequestParam String sessionId) {
         try {
-            AuditProgram program = service.confirmCheckoutSessionAndCreate(sessionId);
+            AuditProgram program = service.confirmCheckoutSession(sessionId);
             return ResponseEntity.ok(new ConfirmResponse(program.getProgramId(), program.getTitle()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -47,6 +57,5 @@ public class ProgramStripeCreationController {
     }
 
     private record ConfirmResponse(Long id, String title) {}
-
     private record CheckoutResponse(String url) {}
 }

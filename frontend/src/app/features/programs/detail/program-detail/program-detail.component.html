@@ -2,19 +2,24 @@
 <div *ngIf="program; else loadingTemplate">
 
   <!-- ✅ Bulle informative si rapport déjà soumis -->
-  <app-report-status [programId]="program.id" />
+  <app-report-status [programId]="getId()" />
 
-  <h2>Détail du programme</h2>
-  <h3>{{ program.title }}</h3>
-  <p>{{ program.description }}</p>
-  <p><strong>Entreprise :</strong> {{ program.companyName }}</p>
-  <p><strong>Status :</strong> {{ program.status }}</p>
+  <h2 class="text-2xl font-semibold mb-2">Détail du programme</h2>
+  <h3 class="text-xl font-medium mb-3">{{ program.title }}</h3>
 
-  <a routerLink="/programs">⬅ Retour à la liste</a>
+  <!-- ✅ Description HTML (TinyMCE) -->
+  <div class="prose max-w-none" [innerHTML]="safeDescription()"></div>
+
+  <div class="mt-4 text-sm text-gray-600">
+    <p><strong>Entreprise :</strong> {{ program.companyName }}</p>
+    <p><strong>Status :</strong> {{ program.status }}</p>
+  </div>
+
+  <a routerLink="/programs" class="underline block mt-4">⬅ Retour à la liste</a>
 
   <!-- Composant de soumission -->
   <hr class="my-4" />
-  <app-report-submit [programId]="program.id" />
+  <app-report-submit [programId]="getId()" />
 
   <!-- ✅ Bouton Publier -->
   <div class="mt-4">
@@ -26,7 +31,7 @@
 
 </div>
 
-<!-- 🔄 Template de chargement renommé pour éviter conflit avec le signal -->
+<!-- 🔄 Template de chargement -->
 <ng-template #loadingTemplate>
   <p>Chargement du programme...</p>
 </ng-template>

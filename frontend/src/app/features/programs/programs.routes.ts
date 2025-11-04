@@ -16,14 +16,14 @@ export const PROGRAMS_ROUTES: Routes = [
         (m) => m.ProgramCreateComponent
       ),
   },
+  // IMPORTANT: 'return' avant ':id'
+  {
+    path: 'return',
+    loadComponent: () =>
+      import('./return/program-return.component').then((m) => m.ProgramReturnComponent),
+  },
   {
     path: ':id',
     component: ProgramDetailComponent,
   },
-  {
-    path: 'return',
-    loadComponent: () =>
-      import('./return/program-return.component').then(m => m.ProgramReturnComponent)
-  }
-
 ];

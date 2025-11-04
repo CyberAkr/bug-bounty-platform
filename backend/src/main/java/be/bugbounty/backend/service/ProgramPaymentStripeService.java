@@ -12,6 +12,7 @@ import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -42,8 +43,43 @@ public class ProgramPaymentStripeService {
         }
     }
 
-    /** Crée une session Stripe Checkout AVANT création du programme */
-    public String createCheckoutSessionBeforeCreation(String title, String description, User user) throws StripeException {
+    /**
+     * 1) Crée un brouillon (PENDING) en BDD avec le HTML TinyMCE complet.
+     *    Refuse si la société a déjà un programme PENDING/APPROVED.
+     */
+    @Transactional
+    public Long createDraftProgram(String title, String descriptionHtml, User company) {
+        boolean hasActive = programRepo.findByCompany(company).stream().anyMatch(p ->
+                p.getStatus() == AuditProgram.Status.PENDING || p.getStatus() == AuditProgram.Status.APPROVED
+        );
+        if (hasActive) {
+            throw new IllegalStateException("Un programme de votre entreprise existe déjà (en cours/actif).");
+        }
+
+        AuditProgram p = new AuditProgram();
+        p.setTitle(title);
+        p.setDescription(descriptionHtml); // HTML riche, colonne TEXT en BDD
+        p.setCompany(company);
+        p.setStatus(AuditProgram.Status.PENDING);
+        p = programRepo.saveAndFlush(p);
+        return p.getProgramId();
+    }
+
+    /**
+     * 2) Crée la session Stripe pour ce brouillon.
+     *    Les metadata ne contiennent que des IDs (limite 500 chars contournée).
+     */
+    public String createCheckoutSessionForProgram(Long programId, User user) throws StripeException {
+        AuditProgram p = programRepo.findById(programId)
+                .orElseThrow(() -> new IllegalArgumentException("Programme introuvable: " + programId));
+
+        if (!p.getCompany().getUserId().equals(user.getUserId())) {
+            throw new IllegalStateException("Vous n'êtes pas autorisé à payer pour ce programme.");
+        }
+        if (p.getStatus() != AuditProgram.Status.PENDING) {
+            throw new IllegalStateException("Ce programme n'est pas dans un état autorisant le paiement.");
+        }
+
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .setSuccessUrl(frontendUrl + "/programs/return?session_id={CHECKOUT_SESSION_ID}")
@@ -58,8 +94,8 @@ public class ProgramPaymentStripeService {
                                         .build())
                                 .build())
                         .build())
-                .putMetadata("title", title)
-                .putMetadata("description", description)
+                // ✅ metadata compactes (pas de HTML ici)
+                .putMetadata("programId", String.valueOf(programId))
                 .putMetadata("companyId", String.valueOf(user.getUserId()))
                 .build();
 
@@ -67,37 +103,45 @@ public class ProgramPaymentStripeService {
         return session.getUrl();
     }
 
-    /** Rappel de Stripe → vérifier paiement et créer le programme en BDD */
-    public AuditProgram confirmCheckoutSessionAndCreate(String sessionId) throws StripeException {
+    /**
+     * 3) Confirmation Stripe : vérifie paiement, passe le programme en APPROVED et enregistre le paiement.
+     */
+    @Transactional
+    public AuditProgram confirmCheckoutSession(String sessionId) throws StripeException {
         System.out.println("➡️ [STRIPE] Vérification session Stripe ID=" + sessionId);
         Session session = Session.retrieve(sessionId);
-
-        if (!"paid".equals(session.getPaymentStatus())) {
-            System.out.println("❌ [STRIPE] Paiement non validé");
-            throw new IllegalStateException("Paiement non validé");
+        if (session == null) {
+            throw new IllegalStateException("Session Stripe introuvable: " + sessionId);
         }
 
-        String title = session.getMetadata().get("title");
-        String description = session.getMetadata().get("description");
+        String status = session.getPaymentStatus();
+        if (!"paid".equalsIgnoreCase(status) && !"succeeded".equalsIgnoreCase(status)) {
+            throw new IllegalStateException("Paiement non validé par Stripe (" + status + ")");
+        }
+
+        String programIdStr = session.getMetadata().get("programId");
+        if (programIdStr == null || programIdStr.isBlank()) {
+            throw new IllegalArgumentException("programId manquant dans la metadata Stripe");
+        }
+        Long programId = Long.valueOf(programIdStr);
+
+        AuditProgram program = programRepo.findById(programId)
+                .orElseThrow(() -> new IllegalArgumentException("Programme introuvable: " + programId));
+
+        // sécurité supplémentaire : cohérence entreprise
         String companyIdStr = session.getMetadata().get("companyId");
+        if (companyIdStr != null && !companyIdStr.isBlank()) {
+            Long companyId = Long.valueOf(companyIdStr);
+            if (!program.getCompany().getUserId().equals(companyId)) {
+                throw new IllegalStateException("Incohérence programme/session Stripe (company mismatch).");
+            }
+        }
 
-        System.out.println("✅ [STRIPE] Paiement OK :");
-        System.out.println("   → titre = " + title);
-        System.out.println("   → description = " + description);
-        System.out.println("   → companyId = " + companyIdStr);
-
-        Long companyId = Long.valueOf(companyIdStr);
-
-        User company = userRepo.findById(companyId)
-                .orElseThrow(() -> new IllegalArgumentException("Entreprise introuvable avec l'ID: " + companyId));
-
-        AuditProgram program = new AuditProgram();
-        program.setTitle(title);
-        program.setDescription(description);
-        program.setCompany(company);
+        // Valide le programme
         program.setStatus(AuditProgram.Status.APPROVED);
-        program = programRepo.save(program);
+        program = programRepo.saveAndFlush(program);
 
+        // Enregistre le paiement
         ProgramPayment payment = new ProgramPayment();
         payment.setProgram(program);
         payment.setAmount(priceInCents / 100.0);
@@ -105,7 +149,7 @@ public class ProgramPaymentStripeService {
         payment.setStatus(ProgramPayment.Status.COMPLETED);
         paymentRepo.save(payment);
 
-        System.out.println("✅✅ [STRIPE] Programme enregistré ID=" + program.getProgramId());
+        System.out.println("✅✅ [STRIPE] Programme validé ID=" + program.getProgramId());
         return program;
     }
 }

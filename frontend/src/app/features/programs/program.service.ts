@@ -25,12 +25,12 @@ export class ProgramService {
     return this.http.get<any[]>(`${this.baseUrl}/my`);
   }
 
-  // 👇 ancienne méthode (non utilisée ici)
+  // création classique (non-paiement)
   create(dto: ProgramCreateDto): Observable<any> {
     return this.http.post<any>(this.baseUrl, dto);
   }
 
-  // ✅ Pour la publication AVEC paiement
+  // pour publier EXISTING program (flux "payer après création")
   checkout(programId: number) {
     return this.http.post<{ url: string }>(
       `/api/payments/programs/${programId}/checkout`, {}
@@ -43,13 +43,13 @@ export class ProgramService {
     );
   }
 
-  // ✅ Nouvelle méthode Stripe avant création
+  // ==== méthode CORRECTE pour création + paiement via Stripe (avant création)
+  // Envoi d'un JSON dans le body (plus de query string)
   checkoutBeforeCreate(title: string, description: string) {
-    const params = new URLSearchParams();
-    params.set('title', title);
-    params.set('description', description);
+    const payload: ProgramCreateDto = { title, description };
     return this.http.post<{ url: string }>(
-      `/api/payments/programs/checkout?${params.toString()}`, {}
+      `/api/payments/programs/checkout`,
+      payload
     );
   }
 
@@ -59,6 +59,4 @@ export class ProgramService {
       {}
     );
   }
-
-
 }

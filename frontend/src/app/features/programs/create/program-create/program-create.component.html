@@ -1,7 +1,17 @@
 <section class="p-6 max-w-2xl mx-auto">
   <h2 class="text-2xl font-semibold mb-4">➕ Créer un programme</h2>
 
-  <form (ngSubmit)="publish()" class="space-y-4">
+  <div *ngIf="hasActive()" class="rounded border border-amber-300 bg-amber-50 text-amber-800 p-3 mb-4">
+    <p class="font-medium">Un programme est déjà en cours / actif pour votre entreprise.</p>
+    <p class="text-sm mt-1">
+      Vous ne pouvez pas en créer un nouveau pour le moment.
+      <a *ngIf="myProgramId()" class="underline" [routerLink]="['/programs', myProgramId()]">
+        Voir mon programme
+      </a>
+    </p>
+  </div>
+
+  <form (ngSubmit)="publish()" class="space-y-4" *ngIf="!hasActive()">
     <div *ngIf="error()" class="rounded border border-red-300 bg-red-50 text-red-700 p-2">{{ error() }}</div>
 
     <div>
@@ -10,18 +20,23 @@
     </div>
 
     <div>
-      <label class="block font-medium">Description</label>
-      <textarea [(ngModel)]="description" name="description" rows="3" required class="input w-full"></textarea>
+      <label class="block font-medium">Description (texte riche)</label>
+      <editor
+        [apiKey]="apiKey"
+        [(ngModel)]="descriptionHtml"
+        name="descriptionHtml"
+        [init]="tinyInit">
+      </editor>
     </div>
 
     <div>
-      <label class="block font-medium">Objectif</label>
+      <label class="block font-medium">Objectif (optionnel)</label>
       <textarea [(ngModel)]="goal" name="goal" rows="2" class="input w-full"></textarea>
     </div>
 
     <button type="submit"
             class="bg-blue-600 text-white px-4 py-2 rounded"
-            [disabled]="loading() || !title.trim() || !description.trim()">
+            [disabled]="loading() || !title.trim()">
       💳 Publier (100 €)
     </button>
   </form>
