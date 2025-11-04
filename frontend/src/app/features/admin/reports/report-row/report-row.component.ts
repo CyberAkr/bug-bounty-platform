@@ -1,4 +1,3 @@
-// report-row.component.ts
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -6,10 +5,10 @@ import { Report } from '@app/features/admin/reports/report.service';
 import { VulnerabilityType } from '@app/features/admin/vulnerabilities/vulnerabilities.service';
 
 @Component({
-  selector: 'tr[app-report-row]',            // ✅ host = <tr>, plus de tag custom
+  selector: 'tr[app-report-row]',            // ✅ host = <tr>
   standalone: true,
   imports: [CommonModule, FormsModule],
-  host: { class: 'border-b last:border-0 hover:bg-gray-50' }, // classes sur le <tr>
+  host: { class: 'border-b last:border-0 hover:bg-gray-50' },
   template: `
     <!-- ⚠️ ici: UNIQUEMENT des <td>, pas de <tr> -->
     <td class="px-4 py-3 align-top">
@@ -42,14 +41,12 @@ import { VulnerabilityType } from '@app/features/admin/vulnerabilities/vulnerabi
           <option [ngValue]="null">—</option>
           <option *ngFor="let vuln of vulnerabilities" [value]="vuln.type_id">{{ vuln.name }}</option>
         </select>
-        <!-- au lieu de (click)="saveVulnerability.emit({ ... vulnerabilityId: report.vulnerability_type_id })" -->
         <button
           (click)="onSaveVuln()"
           [disabled]="report.vulnerability_type_id == null"
           class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs">
           💾
         </button>
-
       </div>
     </td>
 
@@ -60,6 +57,10 @@ import { VulnerabilityType } from '@app/features/admin/vulnerabilities/vulnerabi
 
     <td class="px-4 py-3 align-top">
       <div class="flex flex-wrap gap-2">
+        <button (click)="preview.emit(report.report_id)"
+                class="bg-slate-600 hover:bg-slate-700 text-white px-3 py-1.5 rounded text-sm">
+          👁️ Aperçu
+        </button>
         <button (click)="approve.emit({ id: report.report_id, comment })"
                 [disabled]="report.status === 'APPROVED'"
                 class="bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white px-3 py-1.5 rounded text-sm">
@@ -80,15 +81,15 @@ export class ReportRowComponent {
   @Output() approve = new EventEmitter<{ id: number; comment: string }>();
   @Output() reject = new EventEmitter<{ id: number; comment: string }>();
   @Output() saveVulnerability = new EventEmitter<{ reportId: number; vulnerabilityId: number }>();
+  @Output() preview = new EventEmitter<number>();
+
   comment = '';
 
   onSaveVuln() {
-    // garde-fou côté TS + runtime
     if (this.report.vulnerability_type_id == null) return;
     this.saveVulnerability.emit({
       reportId: this.report.report_id,
-      vulnerabilityId: this.report.vulnerability_type_id, // ici c'est garanti non-null
+      vulnerabilityId: this.report.vulnerability_type_id,
     });
   }
-
 }

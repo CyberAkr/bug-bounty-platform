@@ -1,4 +1,3 @@
-
 package be.bugbounty.backend.controller;
 
 import be.bugbounty.backend.dto.program.*;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -45,5 +45,5 @@ public class AuditProgramController {
         } catch (IllegalStateException e) {
             return ResponseEntity.status(409).body(e.getMessage()); // ✅ déjà un programme
         }
-    } }
-
+    }
+}

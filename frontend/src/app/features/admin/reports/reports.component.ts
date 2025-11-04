@@ -1,182 +1,120 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ReportsService,
-  ReportStatus,
-  Report as AdminReport
-} from '@app/features/admin/reports/report.service';
-import {
-  VulnerabilitiesService,
-  VulnerabilityType
-} from '@app/features/admin/vulnerabilities/vulnerabilities.service';
+import { FormsModule } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ReportsService, Report, ReportStatus } from './report.service';
 import { ReportRowComponent } from './report-row/report-row.component';
+import { VulnerabilitiesService, VulnerabilityType } from '../vulnerabilities/vulnerabilities.service';
+import { map } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-reports',
+  selector: 'app-admin-reports',
   standalone: true,
-  imports: [CommonModule, ReportRowComponent],
+  imports: [CommonModule, FormsModule, ReportRowComponent],
   template: `
-    <div class="mx-auto max-w-7xl p-6 space-y-6">
-
-      <header class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div>
-          <h1 class="text-2xl font-semibold">Gestion des rapports</h1>
-          <p class="text-sm text-gray-500">
-            Valide ou refuse les rapports et associe un type de vulnérabilité.
-          </p>
-        </div>
-
+    <section class="p-4">
+      <header class="flex items-center justify-between mb-4">
+        <h1 class="text-xl font-semibold">Rapports</h1>
         <div class="flex items-center gap-2">
-          <button class="px-3 py-1.5 rounded-full border text-sm"
-                  [class.bg-gray-900]="filter() === 'PENDING'"
-                  [class.text-white]="filter() === 'PENDING'"
-                  (click)="setFilter('PENDING')">En attente</button>
-          <button class="px-3 py-1.5 rounded-full border text-sm"
-                  [class.bg-gray-900]="filter() === 'APPROVED'"
-                  [class.text-white]="filter() === 'APPROVED'"
-                  (click)="setFilter('APPROVED')">Validés</button>
-          <button class="px-3 py-1.5 rounded-full border text-sm"
-                  [class.bg-gray-900]="filter() === 'REJECTED'"
-                  [class.text-white]="filter() === 'REJECTED'"
-                  (click)="setFilter('REJECTED')">Refusés</button>
-          <button class="px-3 py-1.5 rounded-full border text-sm"
-                  [class.bg-gray-900]="filter() === 'ALL'"
-                  [class.text-white]="filter() === 'ALL'"
-                  (click)="setFilter('ALL')">Tous</button>
+          <label class="text-sm">Filtrer :</label>
+          <select [ngModel]="filter()" (ngModelChange)="onFilterChange($event)"
+                  class="border rounded px-2 py-1 text-sm">
+            <option value="">Tous</option>
+            <option value="PENDING">En attente</option>
+            <option value="APPROVED">Approuvés</option>
+            <option value="REJECTED">Refusés</option>
+          </select>
         </div>
       </header>
 
-      @if (loading()) {
-        <!-- Loader -->
-        <div class="rounded-xl border p-6 animate-pulse">
-          <div class="h-4 bg-gray-200 rounded w-1/3 mb-4"></div>
-          <div class="h-3 bg-gray-200 rounded w-full mb-2"></div>
-          <div class="h-3 bg-gray-200 rounded w-5/6 mb-2"></div>
-          <div class="h-3 bg-gray-200 rounded w-2/3"></div>
-        </div>
-      } @else {
-        @if (filtered().length) {
-          <!-- Table -->
-          <div class="rounded-xl border overflow-x-auto">
-            <table class="w-full table-fixed text-sm border-collapse">
-              <colgroup>
-                <col class="w-[28%]" />
-                <col class="w-[10%]" />
-                <col class="w-[14%]" />
-                <col class="w-[14%]" />
-                <col class="w-[16%]" />
-                <col class="w-[14%]" />
-                <col class="w-[14%]" />
-              </colgroup>
+      <div *ngIf="loading()">Chargement…</div>
+      <div *ngIf="!loading() && reports().length === 0" class="text-sm text-slate-500">
+        Aucun rapport.
+      </div>
 
-              <thead class="bg-gray-50">
-                <tr class="text-left">
-                  <th class="px-4 py-3 font-medium text-gray-600 sticky top-0 bg-gray-50">Titre</th>
-                  <th class="px-4 py-3 font-medium text-gray-600 sticky top-0 bg-gray-50">Sévérité</th>
-                  <th class="px-4 py-3 font-medium text-gray-600 sticky top-0 bg-gray-50">Chercheur</th>
-                  <th class="px-4 py-3 font-medium text-gray-600 sticky top-0 bg-gray-50">Soumis</th>
-                  <th class="px-4 py-3 font-medium text-gray-600 sticky top-0 bg-gray-50">Vulnérabilité</th>
-                  <th class="px-4 py-3 font-medium text-gray-600 sticky top-0 bg-gray-50">Commentaire</th>
-                  <th class="px-4 py-3 font-medium text-gray-600 sticky top-0 bg-gray-50">Actions</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                @for (r of filtered(); track r.report_id ?? $any(r).reportId ?? $index) {
-                  <tr app-report-row
-                      [report]="r"
-                      [vulnerabilities]="vulnerabilities()"
-                      (approve)="onApprove($event)"
-                      (reject)="onReject($event)"
-                      (saveVulnerability)="onSaveVuln($event)">
-                  </tr>
-                }
-              </tbody>
-
-
-            </table>
-          </div>
-        } @else {
-          <!-- Vide -->
-          <div class="rounded-xl border p-10 text-center">
-            <div class="text-lg font-medium">Aucun rapport pour ce filtre</div>
-            <div class="text-gray-500 text-sm">Essaie un autre statut ci-dessus.</div>
-          </div>
-        }
-      }
-
-      @if (error()) {
-        <div class="rounded-xl border border-red-300 bg-red-50 text-red-700 p-4">
-          {{ error() }}
-        </div>
-      }
-    </div>
-  `,
+      <div class="overflow-auto" *ngIf="!loading() && reports().length > 0">
+        <table class="min-w-full text-sm">
+          <thead>
+          <tr class="text-left border-b">
+            <th class="px-4 py-2">Rapport</th>
+            <th class="px-4 py-2">Sévérité</th>
+            <th class="px-4 py-2">Chercheur</th>
+            <th class="px-4 py-2">Soumis</th>
+            <th class="px-4 py-2">Type vuln.</th>
+            <th class="px-4 py-2">Commentaire admin</th>
+            <th class="px-4 py-2">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr app-report-row
+              *ngFor="let r of reports()"
+              [report]="r"
+              [vulnerabilities]="vulns()"
+              (preview)="onPreview($event)"
+              (approve)="onApprove($event.id, $event.comment)"
+              (reject)="onReject($event.id, $event.comment)"
+              (saveVulnerability)="onSaveVuln($event.reportId, $event.vulnerabilityId)">
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  `
 })
 export class ReportsComponent {
-  private reportsService = inject(ReportsService);
-  private vulnService = inject(VulnerabilitiesService);
+  private reportsSvc = inject(ReportsService);
+  private vulnSvc = inject(VulnerabilitiesService);
 
-  // state
-  loading = signal(true);
-  error   = signal<string | null>(null);
+  loading = signal(false);
+  reports = signal<Report[]>([]);
+  filter = signal<'' | ReportStatus>('');
 
-  reports = signal<AdminReport[]>([]);
-  vulnerabilities = signal<VulnerabilityType[]>([]);
-
-  filter = signal<ReportStatus | 'ALL'>('PENDING');
-
-  // derived
-  filtered = computed(() => {
-    const f = this.filter();
-    const list = this.reports();
-    return f === 'ALL' ? list : list.filter(r => r.status === f);
-  });
+  // ✅ Conversion propre de l’Observable en signal
+  vulns = toSignal(this.vulnSvc.getAll(), { initialValue: [] as VulnerabilityType[] });
 
   constructor() {
-    this.load();
+    this.reload();
   }
 
-  setFilter(f: ReportStatus | 'ALL') {
-    this.filter.set(f);
-    this.load();
+  onFilterChange(value: '' | ReportStatus) {
+    this.filter.set(value);
+    this.reload();
   }
 
-  load() {
+  reload() {
     this.loading.set(true);
-    this.error.set(null);
+    const status = this.filter();
+    const obs = status
+      ? this.reportsSvc.getAllReports().pipe(map(list => list.filter(r => r.status === status)))
+      : this.reportsSvc.getAllReports();
 
-    // Vulnérabilités (silent)
-    this.vulnService.getAll().subscribe({
-      next: (v) => this.vulnerabilities.set(v),
-      error: () => {},
-    });
-
-    // Rapports
-    const src =
-      this.filter() === 'PENDING'
-        ? this.reportsService.getPendingReports()
-        : this.reportsService.getAllReports();
-
-    src.subscribe({
-      next: (data) =>
-        this.reports.set(
-          this.filter() === 'ALL' ? data : data.filter(r => r.status === this.filter())
-        ),
-      error: (err) => this.error.set(err?.error || 'Erreur de chargement'),
-      complete: () => this.loading.set(false),
+    obs.subscribe({
+      next: list => {
+        this.reports.set(list);
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false),
     });
   }
 
-  onApprove({ id, comment }: { id: number; comment: string }) {
-    this.reportsService.updateStatus(id, 'APPROVED', comment).subscribe(() => this.load());
+  onPreview(reportId: number) {
+    this.reportsSvc.previewReport(reportId).subscribe({
+      next: blob => {
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank', 'noopener,noreferrer');
+      },
+    });
   }
 
-  onReject({ id, comment }: { id: number; comment: string }) {
-    this.reportsService.updateStatus(id, 'REJECTED', comment).subscribe(() => this.load());
+  onApprove(id: number, comment: string) {
+    this.reportsSvc.updateStatus(id, 'APPROVED', comment).subscribe(() => this.reload());
   }
 
-  onSaveVuln({ reportId, vulnerabilityId }: { reportId: number; vulnerabilityId: number }) {
-    this.reportsService.updateVulnerability(reportId, vulnerabilityId).subscribe(() => this.load());
+  onReject(id: number, comment: string) {
+    this.reportsSvc.updateStatus(id, 'REJECTED', comment).subscribe(() => this.reload());
+  }
+
+  onSaveVuln(reportId: number, vulnerabilityId: number) {
+    this.reportsSvc.updateVulnerability(reportId, vulnerabilityId).subscribe();
   }
 }

@@ -42,15 +42,17 @@ public class Report {
     @Column(nullable = false)
     private String fileUrl;
 
+    // ✅ ajout des champs pour la version nettoyée
+    @Column
+    private String sanitizedPath;
+
+    @Column(nullable = false)
+    private boolean sanitized = false;
+
     @ManyToOne
     @JoinColumn(name = "vulnerability_type_id")
     private VulnerabilityType vulnerabilityType;
 
-    public enum Severity {
-        LOW, MEDIUM, HIGH
-    }
-
-    public enum Status {
-        PENDING, APPROVED, REJECTED
-    }
+    public enum Severity { LOW, MEDIUM, HIGH }
+    public enum Status { PENDING, APPROVED, REJECTED }
 }

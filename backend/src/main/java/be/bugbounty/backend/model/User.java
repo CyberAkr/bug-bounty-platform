@@ -48,6 +48,9 @@ public class User {
 
     private int point;
 
+    public Object getId() {
+    }
+
     public enum VerificationStatus {
         PENDING, APPROVED, REJECTED
     }

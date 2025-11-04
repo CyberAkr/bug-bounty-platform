@@ -68,4 +68,12 @@ export class ReportsService {
   deleteReport(reportId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${reportId}`);
   }
+
+  /**
+   * Preview a sanitized PDF for a report.
+   * Returns an Observable<Blob> that the component can convert to object URL.
+   */
+  previewReport(reportId: number): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/${reportId}/preview`, { responseType: 'blob' });
+  }
 }

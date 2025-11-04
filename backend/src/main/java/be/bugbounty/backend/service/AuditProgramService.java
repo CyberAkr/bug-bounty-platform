@@ -23,10 +23,12 @@ public class AuditProgramService {
     private final AuditProgramRepository programRepo;
     private final UserRepository userRepo;
 
-    // ========= PUBLIC (déjà utilisés par /api/programs) =========
+    // ========= PUBLIC (utilisé par /api/programs) =========
 
     public List<AuditProgramResponseDTO> findAll() {
-        return programRepo.findAll().stream().map(this::toDto).toList();
+        return programRepo.findAll().stream()
+                .map(this::toDto)
+                .toList();
     }
 
     public AuditProgramResponseDTO findById(Long id) {
@@ -36,13 +38,17 @@ public class AuditProgramService {
     }
 
     public List<AuditProgramResponseDTO> findByCompany(User company) {
-        return programRepo.findByCompany(company).stream().map(this::toDto).toList();
+        return programRepo.findByCompany(company).stream()
+                .map(this::toDto)
+                .toList();
     }
+
     @Transactional
     public void createProgram(User company, AuditProgramRequestDTO dto) {
         if (programRepo.existsByCompany_UserId(company.getUserId())) {
             throw new IllegalStateException("Vous avez déjà soumis un programme.");
         }
+
         AuditProgram p = new AuditProgram();
         p.setTitle(dto.getTitle());
         p.setDescription(dto.getDescription());
@@ -51,11 +57,14 @@ public class AuditProgramService {
         programRepo.save(p);
     }
 
+    // ========= ADMIN (utilisé par /api/admin/programs) =========
+
     @Transactional
     public AuditProgramResponseDTO adminCreate(AdminProgramCreateRequestDTO dto) {
         if (programRepo.existsByCompany_UserId(dto.getCompanyId())) {
             throw new IllegalStateException("Cette entreprise a déjà un programme.");
         }
+
         User company = userRepo.findById(dto.getCompanyId())
                 .orElseThrow(() -> new EntityNotFoundException("Entreprise introuvable: " + dto.getCompanyId()));
 
@@ -69,7 +78,6 @@ public class AuditProgramService {
 
         return toDto(programRepo.save(p));
     }
-
 
     @Transactional
     public AuditProgramResponseDTO adminUpdate(Long id, AdminProgramUpdateRequestDTO dto) {
@@ -112,13 +120,14 @@ public class AuditProgramService {
                         : (p.getCompany() != null ? p.getCompany().getEmail() : "—");
 
         return new AuditProgramResponseDTO(
-                p.getProgramId(),            // adapte si l'id a un autre nom
+                p.getProgramId(),
                 p.getTitle(),
                 p.getDescription(),
                 companyName,
                 p.getStatus()
         );
     }
+
     @Transactional(readOnly = true)
     public List<AuditProgramResponseDTO> adminFindAll(String status) {
         if (status == null || status.isBlank()) {

@@ -19,6 +19,7 @@ public class ReportController {
     @Autowired
     private ReportService service;
 
+    // Soumission d’un rapport (chercheur)
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<?> submit(
             @AuthenticationPrincipal User user,
@@ -31,23 +32,25 @@ public class ReportController {
         return ResponseEntity.ok(Map.of("message", "Rapport soumis avec succès."));
     }
 
+    // Mes rapports (chercheur)
     @GetMapping("/my")
     public List<ReportResponseDTO> myReports(@AuthenticationPrincipal User user) {
         return service.findByResearcher(user);
     }
 
+    // Rapports d’un programme (visibilité selon tes règles)
     @GetMapping("/program/{programId}")
     public List<ReportResponseDTO> byProgram(@PathVariable Long programId) {
         return service.findByProgram(programId);
     }
 
-@GetMapping("/submitted")
-public ResponseEntity<?> hasSubmitted(
-        @AuthenticationPrincipal User user,
-        @RequestParam Long programId
-) {    System.out.println("🔍 Authenticated user = " + (user != null ? user.getEmail() : "null"));
-
-    boolean submitted = service.hasAlreadySubmitted(programId, user);
-    return ResponseEntity.ok(Map.of("submitted", submitted));
-}
+    // Vérifie si l’utilisateur a déjà soumis un rapport pour ce programme
+    @GetMapping("/submitted")
+    public ResponseEntity<?> hasSubmitted(
+            @AuthenticationPrincipal User user,
+            @RequestParam Long programId
+    ) {
+        boolean submitted = service.hasAlreadySubmitted(programId, user);
+        return ResponseEntity.ok(Map.of("submitted", submitted));
+    }
 }
