@@ -50,7 +50,7 @@ public class ProgramStripeCreationController {
     public ResponseEntity<?> confirm(@RequestParam String sessionId) {
         try {
             AuditProgram program = service.confirmCheckoutSession(sessionId);
-            return ResponseEntity.ok(new ConfirmResponse(program.getProgramId(), program.getTitle()));
+            return ResponseEntity.ok(new ConfirmResponse(program.getId(), program.getTitle()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

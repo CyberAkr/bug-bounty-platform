@@ -1,7 +1,8 @@
 package be.bugbounty.backend.dto.program;
 
 import lombok.*;
-import be.bugbounty.backend.model.AuditProgram.Status;
+import be.bugbounty.backend.model.ProgramStatus;
+
 
 @Data
 @NoArgsConstructor
@@ -11,5 +12,5 @@ public class AuditProgramResponseDTO {
     private String title;
     private String description;
     private String companyName;
-    private Status status;
+    private ProgramStatus status;
 }

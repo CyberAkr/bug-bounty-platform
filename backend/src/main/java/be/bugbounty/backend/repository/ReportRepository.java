@@ -13,7 +13,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findByResearcher(User researcher);
 
     // 🔍 Trouver tous les rapports liés à un programme
-    List<Report> findByProgram_ProgramId(Long programId);
+    List<Report> findByProgram_Id(Long programId);
 
     // 🔐 Vérifier si un chercheur a déjà soumis un rapport pour un programme donné
     boolean existsByProgramAndResearcher(AuditProgram program, User researcher);

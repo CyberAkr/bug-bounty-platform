@@ -2,6 +2,7 @@ package be.bugbounty.backend.service;
 
 import be.bugbounty.backend.model.AuditProgram;
 import be.bugbounty.backend.model.ProgramPayment;
+import be.bugbounty.backend.model.ProgramStatus;
 import be.bugbounty.backend.model.User;
 import be.bugbounty.backend.repository.AuditProgramRepository;
 import be.bugbounty.backend.repository.ProgramPaymentRepository;
@@ -45,12 +46,12 @@ public class ProgramPaymentStripeService {
 
     /**
      * 1) Crée un brouillon (PENDING) en BDD avec le HTML TinyMCE complet.
-     *    Refuse si la société a déjà un programme PENDING/APPROVED.
+     *    Refuse si la société a déjà un programme PENDING/APPROVED non supprimé.
      */
     @Transactional
     public Long createDraftProgram(String title, String descriptionHtml, User company) {
-        boolean hasActive = programRepo.findByCompany(company).stream().anyMatch(p ->
-                p.getStatus() == AuditProgram.Status.PENDING || p.getStatus() == AuditProgram.Status.APPROVED
+        boolean hasActive = programRepo.findByCompanyAndIsDeletedFalse(company).stream().anyMatch(p ->
+                p.getStatus() == ProgramStatus.PENDING || p.getStatus() == ProgramStatus.APPROVED
         );
         if (hasActive) {
             throw new IllegalStateException("Un programme de votre entreprise existe déjà (en cours/actif).");
@@ -58,11 +59,11 @@ public class ProgramPaymentStripeService {
 
         AuditProgram p = new AuditProgram();
         p.setTitle(title);
-        p.setDescription(descriptionHtml); // HTML riche, colonne TEXT en BDD
+        p.setDescription(descriptionHtml);   // HTML riche, colonne TEXT en BDD
         p.setCompany(company);
-        p.setStatus(AuditProgram.Status.PENDING);
+        p.setStatus(ProgramStatus.PENDING);
         p = programRepo.saveAndFlush(p);
-        return p.getProgramId();
+        return p.getId();
     }
 
     /**
@@ -76,7 +77,7 @@ public class ProgramPaymentStripeService {
         if (!p.getCompany().getUserId().equals(user.getUserId())) {
             throw new IllegalStateException("Vous n'êtes pas autorisé à payer pour ce programme.");
         }
-        if (p.getStatus() != AuditProgram.Status.PENDING) {
+        if (p.getStatus() != ProgramStatus.PENDING) {
             throw new IllegalStateException("Ce programme n'est pas dans un état autorisant le paiement.");
         }
 
@@ -138,7 +139,7 @@ public class ProgramPaymentStripeService {
         }
 
         // Valide le programme
-        program.setStatus(AuditProgram.Status.APPROVED);
+        program.setStatus(ProgramStatus.APPROVED);
         program = programRepo.saveAndFlush(program);
 
         // Enregistre le paiement
@@ -149,7 +150,7 @@ public class ProgramPaymentStripeService {
         payment.setStatus(ProgramPayment.Status.COMPLETED);
         paymentRepo.save(payment);
 
-        System.out.println("✅✅ [STRIPE] Programme validé ID=" + program.getProgramId());
+        System.out.println("✅✅ [STRIPE] Programme validé ID=" + program.getId());
         return program;
     }
 }

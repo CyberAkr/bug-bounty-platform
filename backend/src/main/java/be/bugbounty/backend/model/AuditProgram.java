@@ -2,32 +2,38 @@ package be.bugbounty.backend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDateTime;
 
-// backend/src/main/java/be/bugbounty/backend/model/AuditProgram.java
 @Entity
-@Table(
-        name = "audit_program",
-        uniqueConstraints = @UniqueConstraint(columnNames = "company_id") // ✅ 1 seul programme par société
-)
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "audit_program")
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class AuditProgram {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long programId;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "company_id", nullable = false)
-    private User company;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "program_id")
+    private Long id;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false)
     private String title;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    // ✅ Relation vers l’entreprise (User)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "company_id") // doit exister en DB
+    private User company;
 
-    public enum Status { PENDING, APPROVED }
+    // ✅ statut
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private ProgramStatus status = ProgramStatus.DRAFT;
+
+    // ✅ soft delete
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 }

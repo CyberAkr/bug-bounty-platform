@@ -1,4 +1,3 @@
-// backend/src/main/java/be/bugbounty/backend/controller/admin/AdminProgramController.java
 package be.bugbounty.backend.controller.admin;
 
 import be.bugbounty.backend.dto.admin.AdminProgramCreateRequestDTO;
@@ -46,7 +45,7 @@ public class AdminProgramController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.adminDelete(id);
+        service.adminDelete(id); // soft delete
         return ResponseEntity.noContent().build();
     }
 }

@@ -61,7 +61,7 @@ public class ReportService {
 
             Report report = new Report();
             report.setTitle(title);
-            report.setSeverity(Report.Severity.valueOf(severity));
+            report.setSeverity(Report.Severity.valueOf(severity.toUpperCase(Locale.ROOT)));
             report.setStatus(Report.Status.PENDING);
             report.setSubmittedAt(LocalDateTime.now());
             report.setResearcher(researcher);
@@ -80,24 +80,22 @@ public class ReportService {
     // ========================= SANITIZE =========================
     private boolean sanitizePdf(Path input, Path output) {
         // 1) qpdf
-        if (runCommandCapture(outOf(Arrays.asList(
-                // direct PATH
-                Arrays.asList("qpdf", "--linearize", input.toString(), output.toString()),
-                Arrays.asList("qpdf.exe", "--linearize", input.toString(), output.toString()),
-                // chemins probables Windows
-                Arrays.asList("C:\\Program Files\\QPDF\\bin\\qpdf.exe", "--linearize", input.toString(), output.toString()),
-                Arrays.asList("C:\\Program Files (x86)\\QPDF\\bin\\qpdf.exe", "--linearize", input.toString(), output.toString())
+        if (runCommandCapture(outOf(List.of(
+                List.of("qpdf", "--linearize", input.toString(), output.toString()),
+                List.of("qpdf.exe", "--linearize", input.toString(), output.toString()),
+                List.of("C:\\Program Files\\QPDF\\bin\\qpdf.exe", "--linearize", input.toString(), output.toString()),
+                List.of("C:\\Program Files (x86)\\QPDF\\bin\\qpdf.exe", "--linearize", input.toString(), output.toString())
         )))) {
             return fileLooksOk(output);
         }
 
         // 2) Ghostscript (Windows: gswin64c.exe)
-        if (runCommandCapture(outOf(Arrays.asList(
-                Arrays.asList("gswin64c", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.4",
+        if (runCommandCapture(outOf(List.of(
+                List.of("gswin64c", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.4",
                         "-dNOPAUSE", "-dBATCH", "-dSAFER", "-sOutputFile=" + output, input.toString()),
-                Arrays.asList("gswin64c.exe", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.4",
+                List.of("gswin64c.exe", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.4",
                         "-dNOPAUSE", "-dBATCH", "-dSAFER", "-sOutputFile=" + output, input.toString()),
-                Arrays.asList("C:\\Program Files\\gs\\gs10.03.1\\bin\\gswin64c.exe", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.4",
+                List.of("C:\\Program Files\\gs\\gs10.03.1\\bin\\gswin64c.exe", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.4",
                         "-dNOPAUSE", "-dBATCH", "-dSAFER", "-sOutputFile=" + output, input.toString())
         )))) {
             return fileLooksOk(output);
@@ -120,8 +118,7 @@ public class ReportService {
         for (List<String> cmd : candidates) {
             try {
                 if (!Files.exists(Paths.get(cmd.get(0))) && !isOnPath(cmd.get(0))) {
-                    // binaire inexistant ET pas sur le PATH -> on essaie la suivante
-                    continue;
+                    continue; // binaire inexistant ET pas sur le PATH -> on essaie la suivante
                 }
                 System.out.println("→ Exec: " + String.join(" ", cmd));
                 ProcessBuilder pb = new ProcessBuilder(cmd);
@@ -180,14 +177,19 @@ public class ReportService {
     }
 
     public List<ReportResponseDTO> findByProgram(Long programId) {
-        return reportRepository.findByProgram_ProgramId(programId)
+        return reportRepository.findByProgram_Id(programId)
                 .stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
     private ReportResponseDTO mapToDto(Report r) {
         return new ReportResponseDTO(
-                r.getReportId(), r.getTitle(), r.getSeverity().name(), r.getStatus().name(),
-                r.getResearcher().getUsername(), r.getSubmittedAt(), r.getProgram().getTitle()
+                r.getReportId(),
+                r.getTitle(),
+                r.getSeverity().name(),
+                r.getStatus().name(),
+                r.getResearcher().getUsername(),
+                r.getSubmittedAt(),
+                r.getProgram().getTitle()
         );
     }
 
@@ -198,12 +200,14 @@ public class ReportService {
 
     public List<Report> getReportsFilteredByStatus(String status) {
         if (status == null) return reportRepository.findAll();
-        return reportRepository.findByStatus(Report.Status.valueOf(status.toUpperCase()));
+        return reportRepository.findByStatus(Report.Status.valueOf(status.toUpperCase(Locale.ROOT)));
+        // (si besoin: .findByStatusAndProgram_IsDeletedFalse(...))
     }
 
     public Report updateStatus(Long id, String status, String adminComment) {
-        Report report = reportRepository.findById(id).orElseThrow(() -> new RuntimeException("Rapport introuvable"));
-        report.setStatus(Report.Status.valueOf(status.toUpperCase()));
+        Report report = reportRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rapport introuvable"));
+        report.setStatus(Report.Status.valueOf(status.toUpperCase(Locale.ROOT)));
         if (adminComment != null && !adminComment.isBlank()) {
             report.setAdminComment(adminComment.trim());
         }
@@ -211,7 +215,8 @@ public class ReportService {
     }
 
     public Report updateVulnerabilityType(Long id, Long vulnerabilityTypeId) {
-        Report report = reportRepository.findById(id).orElseThrow(() -> new RuntimeException("Rapport introuvable"));
+        Report report = reportRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rapport introuvable"));
         VulnerabilityType type = vulnerabilityTypeRepository.findById(vulnerabilityTypeId)
                 .orElseThrow(() -> new RuntimeException("Type de vulnérabilité introuvable"));
         report.setVulnerabilityType(type);
@@ -223,7 +228,8 @@ public class ReportService {
     }
 
     public Resource getSanitizedResource(Long id) throws IOException {
-        Report report = reportRepository.findById(id).orElseThrow(() -> new RuntimeException("Rapport introuvable"));
+        Report report = reportRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rapport introuvable"));
         if (!report.isSanitized() || report.getSanitizedPath() == null) {
             throw new RuntimeException("Aperçu non disponible (non sanitizé)");
         }
