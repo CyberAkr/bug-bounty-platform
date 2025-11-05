@@ -5,24 +5,23 @@ import be.bugbounty.backend.model.ProgramStatus;
 import be.bugbounty.backend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 public interface AuditProgramRepository extends JpaRepository<AuditProgram, Long> {
 
-    // Programmes d’une entreprise (non supprimés)
+    // Programmes de l'entreprise (non supprimés)
     List<AuditProgram> findByCompanyAndIsDeletedFalse(User company);
 
-    // Vérifie si une entreprise (userId) a déjà un programme
-    boolean existsByCompany_UserId(Long userId);
+    // Vérification "1 programme ouvert max" (non supprimé + status dans la liste)
+    boolean existsByCompany_UserIdAndIsDeletedFalseAndStatusIn(
+            Long userId, Collection<ProgramStatus> statuses
+    );
 
-    // Liste par statut (non supprimés)
+    // Listes filtrées
+    List<AuditProgram> findAllByIsDeletedFalse();
     List<AuditProgram> findAllByStatusAndIsDeletedFalse(ProgramStatus status);
 
-    // Liste “actives” (non supprimées)
-    List<AuditProgram> findAllByIsDeletedFalse();
-
-    // Recherche par titre
-    Optional<AuditProgram> findByTitle(String title);
-    // Optional<AuditProgram> findByTitleIgnoreCase(String title);
+    Optional<Object> findByTitle(String défisHebdo);
 }

@@ -15,7 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.EnumSet;
 import java.util.List;
+
+import static be.bugbounty.backend.model.ProgramStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,10 @@ public class AuditProgramService {
 
     private final AuditProgramRepository programRepo;
     private final UserRepository userRepo;
+
+    // Statuts considérés "ouverts" (bloquants pour une nouvelle création)
+    private static final EnumSet<ProgramStatus> OPEN_STATUSES =
+            EnumSet.of(PENDING, APPROVED, PUBLISHED, ACTIVE, PAUSED);
 
     // ========= PUBLIC (utilisé par /api/programs) =========
 
@@ -50,14 +57,19 @@ public class AuditProgramService {
 
     @Transactional
     public void createProgram(User company, AuditProgramRequestDTO dto) {
-        if (programRepo.existsByCompany_UserId(company.getUserId())) {
-            throw new IllegalStateException("Vous avez déjà soumis un programme.");
+        // ✅ Règle modèle A : refuser si un programme "ouvert" non supprimé existe déjà
+        boolean blocked = programRepo.existsByCompany_UserIdAndIsDeletedFalseAndStatusIn(
+                company.getUserId(), OPEN_STATUSES
+        );
+        if (blocked) {
+            throw new IllegalStateException("Un programme est déjà en cours pour cette entreprise.");
         }
+
         AuditProgram p = new AuditProgram();
         p.setTitle(dto.getTitle());
         p.setDescription(dto.getDescription());
         p.setCompany(company);
-        // statut par défaut côté “soumission” publique
+        // statut par défaut côté soumission publique
         p.setStatus(ProgramStatus.DRAFT);
         programRepo.save(p);
     }
@@ -66,8 +78,12 @@ public class AuditProgramService {
 
     @Transactional
     public AuditProgramResponseDTO adminCreate(AdminProgramCreateRequestDTO dto) {
-        if (programRepo.existsByCompany_UserId(dto.getCompanyId())) {
-            throw new IllegalStateException("Cette entreprise a déjà un programme.");
+        // ✅ même règle pour l'admin
+        boolean blocked = programRepo.existsByCompany_UserIdAndIsDeletedFalseAndStatusIn(
+                dto.getCompanyId(), OPEN_STATUSES
+        );
+        if (blocked) {
+            throw new IllegalStateException("Cette entreprise a déjà un programme en cours.");
         }
 
         User company = userRepo.findById(dto.getCompanyId())
@@ -117,8 +133,7 @@ public class AuditProgramService {
 
     @Transactional
     public void adminDelete(Long id) {
-        AuditProgram p = programRepo.findById(id)
-                .orElse(null);
+        AuditProgram p = programRepo.findById(id).orElse(null);
         if (p == null || p.isDeleted()) return;
 
         // ✅ Soft delete côté service
@@ -136,11 +151,11 @@ public class AuditProgramService {
                         : (p.getCompany() != null ? p.getCompany().getEmail() : "—");
 
         return new AuditProgramResponseDTO(
-                p.getId(),                  // <-- id correct
+                p.getId(),
                 p.getTitle(),
                 p.getDescription(),
                 companyName,
-                p.getStatus()               // ProgramStatus
+                p.getStatus()
         );
     }
 

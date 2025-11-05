@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -27,8 +28,13 @@ public class AdminProgramController {
 
     @PostMapping
     public ResponseEntity<AuditProgramResponseDTO> create(@Valid @RequestBody AdminProgramCreateRequestDTO dto) {
-        var created = service.adminCreate(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        try {
+            var created = service.adminCreate(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        } catch (IllegalStateException ex) {
+            // 409 si un programme "ouvert" existe déjà
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ex.getMessage(), ex);
+        }
     }
 
     @PatchMapping("/{id}")
@@ -38,7 +44,8 @@ public class AdminProgramController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Void> updateStatus(@PathVariable Long id, @RequestBody AdminProgramUpdateRequestDTO dto) {
+    public ResponseEntity<Void> updateStatus(@PathVariable Long id,
+                                             @RequestBody AdminProgramUpdateRequestDTO dto) {
         service.adminUpdateStatus(id, dto.getStatus());
         return ResponseEntity.noContent().build();
     }
