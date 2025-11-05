@@ -1,80 +1,136 @@
-<h2 class="text-2xl font-bold mb-4">👤 Mon profil</h2>
+<mat-card class="profile-card">
+  <mat-card-header>
+    <mat-icon mat-card-avatar>person</mat-icon>
+    <mat-card-title>Mon profil</mat-card-title>
+    <mat-card-subtitle>Gérez vos informations et votre photo</mat-card-subtitle>
+  </mat-card-header>
 
-<form *ngIf="user() as u" (ngSubmit)="update()" class="space-y-4" enctype="multipart/form-data">
-  <div>
-    <label>Prénom :</label>
-    <input [(ngModel)]="u.firstName" name="firstName" class="input" />
-  </div>
+  <mat-card-content>
+    <div *ngIf="user() as u" class="profile-grid">
+      <!-- Colonne photo -->
+      <div class="photo-col">
+        <div class="avatar">
+          <!-- Preview locale si sélectionnée -->
+          <img
+            *ngIf="photoPreviewUrl(); else currentPhoto"
+            [src]="photoPreviewUrl()!"
+            alt="Preview photo"
+            class="avatar-img" />
+          <ng-template #currentPhoto>
+            <!-- Photo depuis le backend (utilise ta fonction resolvePhotoUrl si besoin) -->
+            <img
+              *ngIf="resolvePhotoUrl(u.profilePhoto); else placeholder"
+              [src]="resolvePhotoUrl(u.profilePhoto)!"
+              alt="Photo de profil"
+              class="avatar-img" />
+            <ng-template #placeholder>
+              <div class="avatar-placeholder">
+                <mat-icon>person</mat-icon>
+              </div>
+            </ng-template>
+          </ng-template>
+        </div>
 
-  <div>
-    <label>Nom :</label>
-    <input [(ngModel)]="u.lastName" name="lastName" class="input" />
-  </div>
+        <div class="photo-actions">
+          <input type="file" accept="image/*" (change)="onPhotoSelected($event)" />
+          <button mat-stroked-button color="primary" (click)="uploadPhoto()">
+            <mat-icon>upload</mat-icon>
+            Mettre à jour la photo
+          </button>
+        </div>
+      </div>
 
-  <div>
-    <label>Email :</label>
-    <input [value]="u.email" disabled class="input" />
-  </div>
+      <!-- Formulaire infos -->
+      <form class="form-col" (ngSubmit)="update()" enctype="multipart/form-data">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Prénom</mat-label>
+            <input matInput [(ngModel)]="u.firstName" name="firstName" />
+          </mat-form-field>
 
-  <div>
-    <label>Langue préférée :</label>
-    <select [(ngModel)]="u.preferredLanguage" name="preferredLanguage" class="input">
-      <option value="fr">Français</option>
-      <option value="en">English</option>
-    </select>
-  </div>
+          <mat-form-field appearance="outline">
+            <mat-label>Nom</mat-label>
+            <input matInput [(ngModel)]="u.lastName" name="lastName" />
+          </mat-form-field>
+        </div>
 
-  <div>
-    <label>Bio :</label>
-    <textarea [(ngModel)]="u.bio" name="bio" class="input"></textarea>
-  </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>Email</mat-label>
+            <input matInput [value]="u.email" disabled />
+          </mat-form-field>
 
-  <!-- Champ caché pour le backend -->
-  <input type="hidden" [value]="u.profilePhoto || ''" name="profilePhoto" />
+          <mat-form-field appearance="outline">
+            <mat-label>Langue préférée</mat-label>
+            <mat-select [(ngModel)]="u.preferredLanguage" name="preferredLanguage">
+              <mat-option value="fr">Français</mat-option>
+              <mat-option value="en">English</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-  <!-- Pour les entreprises uniquement -->
-  <div *ngIf="u.role === 'company'" class="mt-6 bg-gray-50 p-4 rounded border">
-    <h3 class="font-semibold mb-2">🏢 Informations entreprise</h3>
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Bio</mat-label>
+          <textarea matInput rows="4" [(ngModel)]="u.bio" name="bio"></textarea>
+        </mat-form-field>
 
-    <div>
-      <label>Numéro d'entreprise :</label>
-      <input [value]="u.companyNumber" disabled class="input" />
+        <!-- compat backend -->
+        <input type="hidden" [value]="u.profilePhoto || ''" name="profilePhoto" />
+
+        <!-- Entreprise -->
+        <div *ngIf="u.role === 'company'" class="company-box">
+          <h3>Informations entreprise</h3>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full">
+              <mat-label>Numéro d'entreprise</mat-label>
+              <input matInput [value]="u.companyNumber" disabled />
+            </mat-form-field>
+
+            <div class="status">
+              <span class="label">Statut :</span>
+              <span
+                [ngClass]="{
+                  pending: u.verificationStatus === 'PENDING',
+                  rejected: u.verificationStatus === 'REJECTED',
+                  verified: u.verificationStatus === 'VERIFIED'
+                }"
+                class="value"
+              >
+                {{ u.verificationStatus }}
+              </span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="full">
+              <label class="file-label">Document de vérification (.zip, .pdf)</label>
+              <input type="file" (change)="onFileSelected($event)" />
+              <p class="hint">
+                Vous pouvez renvoyer votre document si la vérification est en attente ou rejetée.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button mat-raised-button color="primary" type="submit">
+            <mat-icon>save</mat-icon>
+            Enregistrer
+          </button>
+        </div>
+      </form>
     </div>
+  </mat-card-content>
+</mat-card>
 
-    <div>
-      <label>Statut de vérification :</label>
-      <span
-        class="font-semibold"
-        [ngClass]="{
-          'text-yellow-600': u.verificationStatus === 'PENDING',
-          'text-red-600': u.verificationStatus === 'REJECTED',
-          'text-green-600': u.verificationStatus === 'VERIFIED'
-        }">
-        {{ u.verificationStatus }}
-      </span>
-    </div>
-
-    <div class="mt-2">
-      <label>Document de vérification (.zip, .pdf) :</label>
-      <input type="file" (change)="onFileSelected($event)" />
-    </div>
-
-    <p class="text-sm text-gray-500 mt-1">
-      Vous pouvez modifier ou renvoyer votre document si la vérification est en attente ou rejetée.
-    </p>
-  </div>
-
-  <!-- Enregistrement -->
-  <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded">
-    💾 Enregistrer
+<div class="danger-zone">
+  <button mat-stroked-button color="warn" (click)="delete()">
+    <mat-icon>delete</mat-icon>
+    Supprimer mon compte
   </button>
-</form>
+</div>
 
-<!-- Suppression -->
-<button (click)="delete()" class="text-red-600 mt-4">🗑️ Supprimer mon compte</button>
+<mat-divider class="my-6"></mat-divider>
 
-<hr class="my-6" />
-
-<!-- Rapports -->
-<h3 class="text-lg font-semibold mb-2">📄 Mes rapports</h3>
+<h3 class="section-title">📄 Mes rapports</h3>
 <app-my-reports />

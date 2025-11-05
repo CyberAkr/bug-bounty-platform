@@ -27,30 +27,30 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> {})                           // Active CORS via le bean en dessous
-                .csrf(csrf -> csrf.disable())              // API REST -> pas de CSRF
-                .sessionManagement(sess ->
-                        sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                .cors(cors -> {})
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Preflight CORS
+                        // Preflight
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         // Auth public
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // Protégés
-                        .requestMatchers("/api/user/me").authenticated()
-                        .requestMatchers("/api/challenge/**").authenticated()
+                        // Fichiers statiques (photos uploadées)
+                        .requestMatchers(HttpMethod.GET, "/files/**").permitAll()
 
-                        // ✅ Routes Stripe réelles (sans /*/)
+                        // Profils publics
+                        .requestMatchers(HttpMethod.GET, "/api/user/*/public").permitAll()
+
+                        // Stripe
                         .requestMatchers("/api/payments/programs/checkout").authenticated()
                         .requestMatchers("/api/payments/programs/confirm").authenticated()
-                        // (si tu ajoutes un webhook plus tard)
-                        // .requestMatchers("/api/stripe/webhook").permitAll()
 
-                        // Le reste
-                        .requestMatchers("/api/user/**").permitAll()
+                        // Tout le reste sous /api/user/** doit être authentifié (me, me/photo, update, delete, ...)
+                        .requestMatchers("/api/user/**").authenticated()
+
+                        // Autres ressources de l'app
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -69,7 +69,7 @@ public class SecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**")
+                registry.addMapping("/**")
                         .allowedOrigins("http://localhost:4200")
                         .allowedMethods("GET","POST","PUT","PATCH","DELETE","OPTIONS")
                         .allowedHeaders("*")

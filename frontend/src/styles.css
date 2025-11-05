@@ -28,5 +28,45 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 /* Sidenav Material full height */
 mat-sidenav-container { height: 100dvh; }
 
-/* Petits utilitaires */
-.spacer { flex: 1 1 auto; }
+/* === Images de profil / avatars === */
+.avatar {
+  width: 120px;               /* taille standard pour tous les avatars */
+  height: 120px;
+  border-radius: 10px;        /* coins arrondis (ou 50% pour rond) */
+  overflow: hidden;
+  border: 2px solid #e0e0e0;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  margin: 0 auto;             /* centre dans son conteneur */
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;          /* garde le cadrage, sans déformer */
+  display: block;
+}
+
+/* Variante ronde (pour header, mini-avatar, etc.) */
+.avatar--round {
+  border-radius: 50%;
+}
+
+/* Petits avatars (ex: navbar, classement, etc.) */
+.avatar--small {
+  width: 40px;
+  height: 40px;
+}
+
+/* Moyen (ex: fiche profil compacte) */
+.avatar--medium {
+  width: 80px;
+  height: 80px;
+}
+
+/* Grand (fiche profil principale) */
+.avatar--large {
+  width: 120px;
+  height: 120px;
+}
+
