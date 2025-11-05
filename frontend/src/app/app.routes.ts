@@ -7,7 +7,7 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./layout/layout.component').then(m => m.LayoutComponent),
     children: [
-      // 🚪 Redirection vers la page d'accueil
+      // 🚪 Redirection par défaut vers la page d'accueil
       {
         path: '',
         redirectTo: 'home',
@@ -32,6 +32,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/auth/register/register.component').then(m => m.RegisterComponent)
       },
+      // ✅ Vérification d'e-mail après inscription
+      {
+        path: 'verify-email',
+        loadComponent: () =>
+          import('./features/auth/verify-email/verify-email.component').then(m => m.default)
+      },
 
       // 📊 Dashboard utilisateur (standard)
       {
@@ -40,17 +46,20 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent)
       },
-      // classement
+
+      // 🏆 Classement général
       {
         path: 'classement',
-        loadComponent: () => import('./features/ranking/ranking.component').then(m => m.RankingComponent)
-      },
-      //profil public du classement
-      {
-        path: 'user/:id',
-        loadComponent: () => import('./features/users/profile-public/profile-public.component').then(m => m.ProfilePublicComponent)
+        loadComponent: () =>
+          import('./features/ranking/ranking.component').then(m => m.RankingComponent)
       },
 
+      // 👤 Profil public à partir du classement
+      {
+        path: 'user/:id',
+        loadComponent: () =>
+          import('./features/users/profile-public/profile-public.component').then(m => m.ProfilePublicComponent)
+      },
 
       // 🏢 Dashboard entreprise
       {
@@ -59,10 +68,13 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/dashboard/company/company.routes').then(m => m.COMPANY_ROUTES)
       },
-      // dashboard chercheurs
+
+      // 🧑‍💻 Dashboard chercheur
       {
         path: 'researcher',
-        loadChildren: () => import('./features/dashboard/researcher/researcher.routes').then(m => m.researcherRoutes)
+        canActivate: [authGuard],
+        loadChildren: () =>
+          import('./features/dashboard/researcher/researcher.routes').then(m => m.researcherRoutes)
       },
 
       // 👤 Profil utilisateur
@@ -81,7 +93,7 @@ export const routes: Routes = [
           import('./features/users/settings/settings.component').then(m => m.SettingsComponent)
       },
 
-      // 📦 Programmes d'audit
+      // 🧩 Programmes d'audit
       {
         path: 'programs',
         loadChildren: () =>
@@ -94,31 +106,33 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/reports/reports.routes').then(m => m.REPORTS_ROUTES)
       },
-      // Challenge
+
+      // 🎯 Challenges
       {
         path: 'challenge',
-        loadChildren: () => import('./features/challenges/challenges.routes').then(m => m.challengesRoutes)
+        loadChildren: () =>
+          import('./features/challenges/challenges.routes').then(m => m.challengesRoutes)
       },
 
       // 🔔 Notifications
       {
         path: 'notifications',
+        canActivate: [authGuard],
         loadChildren: () =>
           import('./features/notifications/notifications.routes').then(m => m.NOTIFICATIONS_ROUTES)
       },
 
-      //admin route
+      // 🛠️ Espace administrateur
       {
         path: 'admin',
-        canActivate: [authGuard], // ou un adminGuard plus strict si dispo
+        canActivate: [authGuard], // ou adminGuard si tu veux limiter davantage
         loadChildren: () =>
           import('./features/admin/admin.routes').then(m => m.adminRoutes)
       },
-
     ]
   },
 
-  // 🚨 Route fallback
+  // 🚨 Route fallback (404 → home)
   {
     path: '**',
     redirectTo: 'home'

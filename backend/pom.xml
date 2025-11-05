@@ -4,10 +4,11 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<!-- Parent Spring Boot (gère les versions des starters) -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.5</version>
+		<version>3.3.4</version>
 		<relativePath/>
 	</parent>
 
@@ -51,6 +52,14 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- ✅ Mail -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+			<version>3.3.4</version>
+
+		</dependency>
+
 		<!-- Stripe SDK -->
 		<dependency>
 			<groupId>com.stripe</groupId>
@@ -79,7 +88,7 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- JWT dependencies -->
+		<!-- JWT -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
@@ -104,7 +113,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
@@ -115,7 +123,6 @@
 	<!-- ==================== BUILD CONFIG ==================== -->
 	<build>
 		<plugins>
-
 			<!-- Compiler Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -139,7 +146,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
-			<!-- Maven Resources Plugin (corrige l’erreur d’encodage) -->
+			<!-- Maven Resources Plugin (encodage) -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -153,7 +160,6 @@
 					</nonFilteredFileExtensions>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
 </project>

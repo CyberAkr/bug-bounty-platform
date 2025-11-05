@@ -50,14 +50,34 @@ export class RegisterComponent {
     }
 
     this.authService.register(payload).subscribe({
-      next: () => {
-        this.successMessage = 'Inscription réussie !';
+      next: (res) => {
+        // Succès normal
+        this.successMessage = 'Inscription réussie ! Vérifiez votre email.';
         this.errorMessage = '';
-        setTimeout(() => this.router.navigate(['/login']), 2000);
+        this.router.navigate(['/verify-email'], { queryParams: { email: this.email } });
       },
       error: (err) => {
+        // 409: email déjà utilisé
+        if (err?.status === 409) {
+          this.successMessage = '';
+          this.errorMessage = err?.error?.message || 'Cet email est déjà utilisé.';
+          return;
+        }
+
+        // Cas réseau/5xx: le user peut être créé mais l’email a échoué → on envoie vers la vérif
+        if (err?.status === 0 || (err?.status >= 500 && err?.status < 600)) {
+          this.errorMessage = 'Problème d’envoi de mail. Entrez le code ou renvoyez-le.';
+          this.successMessage = 'Inscription enregistrée. Vérifiez votre email.';
+          this.router.navigate(['/verify-email'], { queryParams: { email: this.email } });
+          return;
+        }
+
+        // Autres erreurs
         this.successMessage = '';
-        this.errorMessage = err?.error?.message || "Erreur lors de l'inscription.";
+        this.errorMessage =
+          (typeof err?.error === 'string' && err.error) ||
+          err?.error?.message ||
+          "Erreur lors de l'inscription.";
       }
     });
   }

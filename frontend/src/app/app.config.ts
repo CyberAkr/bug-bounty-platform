@@ -1,4 +1,3 @@
-// src/app/app.config.ts
 import { ApplicationConfig, importProvidersFrom, APP_INITIALIZER } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -11,7 +10,7 @@ import { jwtInterceptor } from './core/auth/jwt.interceptor';
 import { JsonTranslateLoader } from './core/i18n/json-translate.loader';
 
 export function loaderFactory(handler: HttpBackend): TranslateLoader {
-  // 👇 on passe le prefix et le suffix explicitement
+  //  on passe le prefix et le suffix explicitement
   return new JsonTranslateLoader(handler, 'assets/i18n', '.json');
 }
 
