@@ -5,24 +5,30 @@ import be.bugbounty.backend.dto.user.UserResponseDTO;
 import be.bugbounty.backend.model.User;
 import be.bugbounty.backend.repository.UserRepository;
 import be.bugbounty.backend.service.FileStorageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final FileStorageService fileStorageService;
 
-    @Autowired
-    private FileStorageService fileStorageService;
+    public UserController(UserRepository userRepository, FileStorageService fileStorageService) {
+        this.userRepository = userRepository;
+        this.fileStorageService = fileStorageService;
+    }
+
+    // -------------------------
+    // Section: utilisateur courant (/me)
+    // -------------------------
 
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal User user) {
@@ -37,15 +43,14 @@ public class UserController {
                 user.getUsername(),
                 user.getBio(),
                 user.getPreferredLanguage(),
-                user.getProfilePhoto(), // URL publique si déjà uploadée
+                user.getProfilePhoto(),
                 user.getCompanyNumber(),
                 user.getVerificationStatus() != null ? user.getVerificationStatus().name() : null
         );
-
         return ResponseEntity.ok(dto);
     }
 
-    // Mise à jour des champs texte (sans fichier)
+    // Mise à jour des champs texte (et document éventuel)
     @PutMapping(value = "/me", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateCurrentUser(
             @AuthenticationPrincipal User user,
@@ -63,7 +68,6 @@ public class UserController {
         user.setPreferredLanguage(preferredLanguage);
         user.setBio(bio);
 
-        // On continue d'accepter une URL directe si fournie (optionnel)
         if (profilePhoto != null && !profilePhoto.isBlank()) {
             user.setProfilePhoto(profilePhoto);
         }
@@ -71,14 +75,14 @@ public class UserController {
         if (verificationDocument != null && !verificationDocument.isEmpty()) {
             user.setVerificationDocument(verificationDocument.getOriginalFilename());
             user.setVerificationStatus(User.VerificationStatus.PENDING);
-            // (Stockage réel du document d'entreprise à ajouter si nécessaire)
+            // TODO: stockage réel si nécessaire
         }
 
         userRepository.save(user);
         return ResponseEntity.ok(Map.of("message", "✅ Profil mis à jour"));
     }
 
-    // ✅ Upload photo de profil (fichier)
+    // Upload fichier photo de profil
     @PostMapping(value = "/me/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadProfilePhoto(
             @AuthenticationPrincipal User user,
@@ -108,7 +112,7 @@ public class UserController {
 
         user.setVerificationDocument(file.getOriginalFilename());
         user.setVerificationStatus(User.VerificationStatus.PENDING);
-        // (Stockage réel à ajouter selon besoin)
+        // TODO: stockage réel
         userRepository.save(user);
         return ResponseEntity.ok(Map.of("message", "📄 Document envoyé"));
     }
@@ -120,19 +124,35 @@ public class UserController {
         return ResponseEntity.ok(Map.of("message", "Compte supprimé"));
     }
 
-    // Profil public
+    // -------------------------
+    // Section: profil public (lecture)
+    // -------------------------
+
+    // GET /api/users/{id}/public
     @GetMapping("/{id}/public")
-    public ResponseEntity<UserPublicDTO> getPublicProfile(@PathVariable Long id) {
+    public ResponseEntity<UserPublicDTO> getPublic(@PathVariable Long id) {
         return userRepository.findById(id)
-                .map(u -> ResponseEntity.ok(new UserPublicDTO(
+                .map(u -> new UserPublicDTO(
                         u.getUserId(),
                         u.getUsername(),
                         u.getFirstName(),
                         u.getLastName(),
                         u.getPreferredLanguage(),
                         u.getBio(),
-                        u.getPoint()
-                )))
+                        u.getPoint(),
+                        u.getProfilePhoto()
+                ))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    // GET /api/users/{id}/badges  → pour l’instant, renvoie une liste vide (évite 404)
+    // Implémente la vraie récupération plus tard (UserBadgeRepository/Service).
+    @GetMapping("/{id}/badges")
+    public ResponseEntity<List<?>> getBadges(@PathVariable Long id) {
+        if (!userRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(List.of());
     }
 }

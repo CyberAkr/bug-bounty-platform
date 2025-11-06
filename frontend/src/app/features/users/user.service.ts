@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UserPublic, UserResponse } from '@app/models/user.model';
+import { UserBadge, UserPublic, UserResponse } from '@app/models/user.model';
 
 export interface UploadPhotoResponse {
   message: string;
@@ -12,31 +12,35 @@ export interface UploadPhotoResponse {
 export class UserService {
   private http = inject(HttpClient);
 
-  // === Récupère le profil actuel ===
+  // === 👤 Récupère le profil actuel ===
   getMe(): Observable<UserResponse> {
-    return this.http.get<UserResponse>('/api/user/me');
+    return this.http.get<UserResponse>('/api/users/me');
   }
 
-  // === Met à jour les champs du profil (sans photo) ===
+  // === ✏️ Met à jour les champs du profil (avec FormData) ===
   updateWithForm(data: FormData): Observable<any> {
-    return this.http.put('/api/user/me', data);
+    return this.http.put('/api/users/me', data);
   }
 
-  // === Supprime le compte utilisateur ===
+  // === 🗑️ Supprime le compte utilisateur ===
   delete(): Observable<any> {
-    return this.http.delete('/api/user/me');
-  }
-
-  // === Profil public par ID ===
-  getPublic(id: number): Observable<UserPublic> {
-    return this.http.get<UserPublic>(`/api/user/${id}/public`);
+    return this.http.delete('/api/users/me');
   }
 
   // === 📸 Upload d'une photo de profil ===
   uploadPhoto(photoFile: File): Observable<UploadPhotoResponse> {
     const formData = new FormData();
     formData.append('photo', photoFile); // champ "photo" attendu par ton backend
+    return this.http.post<UploadPhotoResponse>('/api/users/me/photo', formData);
+  }
 
-    return this.http.post<UploadPhotoResponse>('/api/user/me/photo', formData);
+  // === 👀 Profil public par ID ===
+  getPublic(userId: number): Observable<UserPublic> {
+    return this.http.get<UserPublic>(`/api/users/${userId}/public`);
+  }
+
+  // === 🏅 Badges du user par ID ===
+  getBadges(userId: number): Observable<UserBadge[]> {
+    return this.http.get<UserBadge[]>(`/api/users/${userId}/badges`);
   }
 }

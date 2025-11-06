@@ -1,0 +1,28 @@
+<div *ngIf="user() as u; else loadingTpl">
+  <div class="head">
+    <img *ngIf="u.profilePhoto; else initials" class="avatar-lg" [src]="u.profilePhoto" alt="avatar {{u.username}}">
+    <ng-template #initials>
+      <div class="initials-lg">{{ (u.username || '?').slice(0,2).toUpperCase() }}</div>
+    </ng-template>
+
+    <div>
+      <h3 style="margin:0">{{ u.username }}</h3>
+      <div>{{ u.point }} pts</div>
+    </div>
+  </div>
+
+  <div class="bio" style="margin-top:12px" *ngIf="u.bio">{{ u.bio }}</div>
+
+  <h4 style="margin-top:16px">Badges</h4>
+  <div class="badges" *ngIf="badges().length; else nobadges">
+    <div class="badge" *ngFor="let b of badges()">
+      <img [src]="b.iconUrl" [alt]="b.name">
+      <small>{{ b.name }}</small>
+    </div>
+  </div>
+  <ng-template #nobadges><small>Aucun badge pour l’instant.</small></ng-template>
+</div>
+
+<ng-template #loadingTpl>
+  <div style="padding:12px">Chargement…</div>
+</ng-template>

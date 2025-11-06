@@ -9,8 +9,8 @@ export interface UserResponse {
   preferredLanguage: string;
   profilePhoto: string | null;
 
-  companyNumber: string | null;         // ✅ Ajout
-  verificationStatus: string;          // ✅ Ajout
+  companyNumber: string | null;
+  verificationStatus: string;
 }
 
 
@@ -21,10 +21,13 @@ export interface UserUpdateRequest {
   bio: string;
   profilePhoto: string | null;
 }
+
+
 export interface UserRanking {
   userId: number;
   username: string;
   point: number;
+  profilePhoto?: string | null;
 }
 
 export interface UserPublic {
@@ -35,4 +38,11 @@ export interface UserPublic {
   preferredLanguage: string;
   bio: string | null;
   point: number;
+  profilePhoto?: string | null;
+}
+
+export interface UserBadge {
+  id: number;
+  name: string;
+  iconUrl: string;
 }

@@ -7,5 +7,6 @@ public record UserPublicDTO(
         String lastName,
         String preferredLanguage,
         String bio,
-        int point
+        Integer point,
+        String profilePhoto // nullable
 ) {}

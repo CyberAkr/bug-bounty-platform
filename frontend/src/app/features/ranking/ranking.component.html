@@ -1,11 +1,48 @@
-<h2>🏆 Classement des chercheurs</h2>
-<ul>
-  <li *ngFor="let user of users(); let i = index">
-    {{ i + 1 }}.
-    <a [routerLink]="'/user/' + user.userId">
-      {{ user.username }}
-    </a>
+<h2 class="rank-wrap">🏆 Classement des chercheurs</h2>
 
-    — {{ user.point }} pts
-  </li>
-</ul>
+<div class="actions rank-wrap">
+  <button mat-stroked-button color="primary" (click)="toggleView()">
+    {{ showingAll() ? 'Afficher le top 10' : 'Afficher tout' }}
+  </button>
+
+</div>
+
+<div class="rank-wrap" *ngIf="!loading(); else skeletons">
+  <mat-nav-list>
+    <button mat-list-item
+            *ngFor="let user of users(); let i = index; trackBy: trackUser"
+            type="button"
+            (click)="openProfile(user.userId)"
+            (keydown.enter)="openProfile(user.userId)">
+      <div class="row">
+        <div>
+          <img *ngIf="user.profilePhoto; else initial"
+               class="avatar"
+               [src]="user.profilePhoto"
+               alt="avatar {{user.username}}"
+               (error)="user.profilePhoto = null">
+          <ng-template #initial>
+            <div class="initials">{{ (user.username || '?').slice(0,2).toUpperCase() }}</div>
+          </ng-template>
+        </div>
+
+        <div class="username">
+          <span>{{ i + 1 }}.</span>
+          <span>{{ user.username }}</span>
+        </div>
+
+        <div class="rank-badge">
+          {{ user.point }} pts
+        </div>
+      </div>
+    </button>
+  </mat-nav-list>
+</div>
+
+<ng-template #skeletons>
+  <div class="rank-wrap" style="display:grid; gap:10px;">
+    <div class="skeleton"></div>
+    <div class="skeleton"></div>
+    <div class="skeleton"></div>
+  </div>
+</ng-template>

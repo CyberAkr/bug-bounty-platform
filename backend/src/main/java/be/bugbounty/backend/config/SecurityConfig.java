@@ -1,80 +1,106 @@
 package be.bugbounty.backend.config;
 
-import be.bugbounty.backend.security.JwtAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.cors.*;
 
-@EnableMethodSecurity
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final ObjectProvider<be.bugbounty.backend.security.JwtAuthenticationFilter> jwtFilterProvider;
+    private final ObjectProvider<AuthenticationProvider> authenticationProviderProvider;
+
+    public SecurityConfig(
+            ObjectProvider<be.bugbounty.backend.security.JwtAuthenticationFilter> jwtFilterProvider,
+            ObjectProvider<AuthenticationProvider> authenticationProviderProvider
+    ) {
+        this.jwtFilterProvider = jwtFilterProvider;
+        this.authenticationProviderProvider = authenticationProviderProvider;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> {})
+                // API REST stateless
                 .csrf(csrf -> csrf.disable())
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // Règles d'autorisation
                 .authorizeHttpRequests(auth -> auth
-                        // Preflight
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/error").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/actuator/health").permitAll()
 
-                        // Auth public
-                        .requestMatchers("/api/auth/**").permitAll()
+                        // Classement + SSE (public)
+                        .requestMatchers(HttpMethod.GET, "/api/rankings", "/api/rankings/stream").permitAll()
 
-                        // Fichiers statiques (photos uploadées)
-                        .requestMatchers(HttpMethod.GET, "/files/**").permitAll()
+                        // Profils publics + badges (public en lecture)
+                        .requestMatchers(HttpMethod.GET, "/api/users/*/public").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/users/*/badges").permitAll()
 
-                        // Profils publics
-                        .requestMatchers(HttpMethod.GET, "/api/user/*/public").permitAll()
-
-                        // Stripe
-                        .requestMatchers("/api/payments/programs/checkout").authenticated()
-                        .requestMatchers("/api/payments/programs/confirm").authenticated()
-
-                        // Tout le reste sous /api/user/** doit être authentifié (me, me/photo, update, delete, ...)
-                        .requestMatchers("/api/user/**").authenticated()
-
-                        // Autres ressources de l'app
+                        // Le reste protégé
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+                // 401 / 403 propres
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((req, res, e) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED))
+                        .accessDeniedHandler((req, res, e) -> res.sendError(HttpServletResponse.SC_FORBIDDEN))
+                )
+
+                // Headers (H2 / iframes) — API non dépréciée
+                .headers(headers -> headers
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
+                );
+
+        // Provider optionnel
+        AuthenticationProvider provider = authenticationProviderProvider.getIfAvailable();
+        if (provider != null) {
+            http.authenticationProvider(provider);
+        }
+
+        // Filtre JWT optionnel
+        var jwtFilter = jwtFilterProvider.getIfAvailable();
+        if (jwtFilter != null) {
+            http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        }
 
         return http.build();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration cfg = new CorsConfiguration();
+        cfg.setAllowedOrigins(List.of("http://localhost:4200"));
+        cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        cfg.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
+        cfg.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", cfg);
+        return source;
     }
 
-    // CORS pour Angular (localhost:4200)
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:4200")
-                        .allowedMethods("GET","POST","PUT","PATCH","DELETE","OPTIONS")
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
-            }
-        };
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
