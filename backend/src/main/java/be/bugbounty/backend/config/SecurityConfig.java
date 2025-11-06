@@ -45,18 +45,26 @@ public class SecurityConfig {
 
                 // Règles d'autorisation
                 .authorizeHttpRequests(auth -> auth
+                        // ----- PUBLIC -----
                         .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/actuator/health").permitAll()
 
+                        // Fichiers publics (exposés par WebConfig)
+                        .requestMatchers(HttpMethod.GET, "/files/profile/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/files/badges/**").permitAll()
+
+                        // (si tu places le modèle PDF côté backend/resources/static/docs)
+                        .requestMatchers(HttpMethod.GET, "/docs/**").permitAll()
+
                         // Classement + SSE (public)
                         .requestMatchers(HttpMethod.GET, "/api/rankings", "/api/rankings/stream").permitAll()
 
-                        // Profils publics + badges (public en lecture)
+                        // Profils publics + badges (lecture publique)
                         .requestMatchers(HttpMethod.GET, "/api/users/*/public").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users/*/badges").permitAll()
 
-                        // Le reste protégé
+                        // ----- PROTÉGÉ -----
                         .anyRequest().authenticated()
                 )
 
@@ -66,12 +74,10 @@ public class SecurityConfig {
                         .accessDeniedHandler((req, res, e) -> res.sendError(HttpServletResponse.SC_FORBIDDEN))
                 )
 
-                // Headers (H2 / iframes) — API non dépréciée
-                .headers(headers -> headers
-                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-                );
+                // Headers (H2 / iframes)
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 
-        // Provider optionnel
+        // AuthenticationProvider optionnel
         AuthenticationProvider provider = authenticationProviderProvider.getIfAvailable();
         if (provider != null) {
             http.authenticationProvider(provider);

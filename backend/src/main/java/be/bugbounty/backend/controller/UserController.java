@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -72,10 +73,18 @@ public class UserController {
             user.setProfilePhoto(profilePhoto);
         }
 
-        if (verificationDocument != null && !verificationDocument.isEmpty()) {
-            user.setVerificationDocument(verificationDocument.getOriginalFilename());
-            user.setVerificationStatus(User.VerificationStatus.PENDING);
-            // TODO: stockage réel si nécessaire
+        // 🔐 PDF de vérification (privé) + statut PENDING
+        if ("company".equalsIgnoreCase(user.getRole()) && verificationDocument != null && !verificationDocument.isEmpty()) {
+            try {
+                long maxPdfBytes = 20L * 1024 * 1024; // 20MB
+                String privatePath = fileStorageService.storeVerificationPdf(user.getUserId(), verificationDocument, maxPdfBytes);
+                user.setVerificationDocument(privatePath);
+                user.setVerificationStatus(User.VerificationStatus.PENDING);
+            } catch (IllegalArgumentException iae) {
+                return ResponseEntity.badRequest().body(Map.of("error", iae.getMessage()));
+            } catch (IOException ioe) {
+                return ResponseEntity.internalServerError().body(Map.of("error", "Stockage du document impossible"));
+            }
         }
 
         userRepository.save(user);
@@ -105,16 +114,26 @@ public class UserController {
         }
     }
 
-    @PostMapping("/verification-document")
+    // Endpoint dédié (optionnel) si tu utilises un flux séparé depuis le formulaire
+    @PostMapping(value = "/verification-document", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadVerificationDocument(@AuthenticationPrincipal User user,
-                                                        @RequestParam("verificationDocument") MultipartFile file) {
+                                                        @RequestPart("verificationDocument") MultipartFile file) {
         if (user == null) return ResponseEntity.status(401).body("Non authentifié");
+        if (!"company".equalsIgnoreCase(user.getRole()))
+            return ResponseEntity.status(403).body(Map.of("error","Réservé aux comptes entreprise"));
 
-        user.setVerificationDocument(file.getOriginalFilename());
-        user.setVerificationStatus(User.VerificationStatus.PENDING);
-        // TODO: stockage réel
-        userRepository.save(user);
-        return ResponseEntity.ok(Map.of("message", "📄 Document envoyé"));
+        try {
+            long maxPdfBytes = 20L * 1024 * 1024;
+            String privatePath = fileStorageService.storeVerificationPdf(user.getUserId(), file, maxPdfBytes);
+            user.setVerificationDocument(privatePath);
+            user.setVerificationStatus(User.VerificationStatus.PENDING);
+            userRepository.save(user);
+            return ResponseEntity.ok(Map.of("message", "📄 Document envoyé"));
+        } catch (IllegalArgumentException iae) {
+            return ResponseEntity.badRequest().body(Map.of("error", iae.getMessage()));
+        } catch (IOException ioe) {
+            return ResponseEntity.internalServerError().body(Map.of("error", "Stockage du document impossible"));
+        }
     }
 
     @DeleteMapping("/me")
@@ -128,7 +147,6 @@ public class UserController {
     // Section: profil public (lecture)
     // -------------------------
 
-    // GET /api/users/{id}/public
     @GetMapping("/{id}/public")
     public ResponseEntity<UserPublicDTO> getPublic(@PathVariable Long id) {
         return userRepository.findById(id)
@@ -146,8 +164,6 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // GET /api/users/{id}/badges  → pour l’instant, renvoie une liste vide (évite 404)
-    // Implémente la vraie récupération plus tard (UserBadgeRepository/Service).
     @GetMapping("/{id}/badges")
     public ResponseEntity<List<?>> getBadges(@PathVariable Long id) {
         if (!userRepository.existsById(id)) {

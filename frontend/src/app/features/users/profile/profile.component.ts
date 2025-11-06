@@ -16,6 +16,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
+const MAX_PDF_BYTES = 20 * 1024 * 1024; // 20MB
+
 @Component({
   selector: 'app-profile',
   standalone: true,
@@ -34,6 +36,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   // Entreprise
   verificationDocument: File | null = null;
+  verificationDocumentName = signal<string>('');
 
   // Photo
   photoFile: File | null = null;
@@ -82,10 +85,29 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ====== Entreprise ======
-  onFileSelected(event: Event) {
+  // ====== Entreprise : vérification (PDF only) ======
+  onVerificationSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input?.files?.length) this.verificationDocument = input.files[0];
+    if (!input?.files?.length) return;
+
+    const f = input.files[0];
+    if (f.type !== 'application/pdf') {
+      alert('Seuls les PDF sont acceptés.');
+      (event.target as HTMLInputElement).value = '';
+      this.verificationDocument = null;
+      this.verificationDocumentName.set('');
+      return;
+    }
+    if (f.size > MAX_PDF_BYTES) {
+      alert('Fichier trop volumineux (>20MB).');
+      (event.target as HTMLInputElement).value = '';
+      this.verificationDocument = null;
+      this.verificationDocumentName.set('');
+      return;
+    }
+
+    this.verificationDocument = f;
+    this.verificationDocumentName.set(f.name);
   }
 
   // ====== Photo ======

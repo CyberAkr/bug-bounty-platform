@@ -7,14 +7,20 @@
   </div>
 
   <div>
-    <label>Document justificatif :</label>
-    <input type="file" (change)="onFileSelected($event)" required class="input" />
+    <label>Document justificatif (PDF uniquement) :</label>
+    <input type="file" accept="application/pdf" (change)="onFileSelected($event)" required class="input" />
+    <p class="text-sm mt-1">
+      Besoin d’un modèle ?
+      <a href="/assets/docs/modele-verification-entreprise.pdf" target="_blank" rel="noopener">
+        Télécharger le modèle PDF
+      </a>
+    </p>
   </div>
 
   <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
     📤 Envoyer pour vérification
   </button>
 
-  <p class="text-green-600 mt-2" *ngIf="successMessage">{{ successMessage }}</p>
-  <p class="text-red-600 mt-2" *ngIf="errorMessage">{{ errorMessage }}</p>
+  <p class="text-green-600 mt-2" *ngIf="successMessage()">{{ successMessage() }}</p>
+  <p class="text-red-600 mt-2" *ngIf="errorMessage()">{{ errorMessage() }}</p>
 </form>

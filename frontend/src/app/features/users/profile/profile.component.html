@@ -92,7 +92,7 @@
                 [ngClass]="{
                   pending: u.verificationStatus === 'PENDING',
                   rejected: u.verificationStatus === 'REJECTED',
-                  verified: u.verificationStatus === 'VERIFIED'
+                  verified: u.verificationStatus === 'APPROVED'
                 }"
                 class="value"
               >
@@ -103,10 +103,25 @@
 
           <div class="form-row">
             <div class="full">
-              <label class="file-label">Document de vérification (.zip, .pdf)</label>
-              <input type="file" (change)="onFileSelected($event)" />
+              <label class="file-label">Document de vérification (PDF uniquement)</label>
+              <input
+                type="file"
+                accept="application/pdf"
+                (change)="onVerificationSelected($event)" />
+
+              <p class="hint">
+                Besoin d’un exemple ?
+                <a href="/assets/docs/modele-verification-entreprise.pdf" target="_blank" rel="noopener">
+                  Télécharger le modèle PDF
+                </a>
+              </p>
+
               <p class="hint">
                 Vous pouvez renvoyer votre document si la vérification est en attente ou rejetée.
+              </p>
+
+              <p class="selected-file" *ngIf="verificationDocumentName()">
+                Fichier sélectionné : <strong>{{ verificationDocumentName() }}</strong>
               </p>
             </div>
           </div>
