@@ -76,8 +76,8 @@ import { UserRowComponent } from './user-row/user-row.component';
           <div class="rounded-xl border overflow-x-auto">
             <table class="w-full table-fixed text-sm border-collapse">
               <colgroup>
-                <col class="w-[20%]" /><col class="w-[26%]" /><col class="w-[14%]" />
-                <col class="w-[12%]" /><col class="w-[16%]" /><col class="w-[12%]" />
+                <col class="w-[18%]" /><col class="w-[24%]" /><col class="w-[12%]" />
+                <col class="w-[12%]" /><col class="w-[12%]" /><col class="w-[10%]" /><col class="w-[12%]" />
               </colgroup>
               <thead class="bg-gray-50">
                 <tr class="text-left">
@@ -86,6 +86,7 @@ import { UserRowComponent } from './user-row/user-row.component';
                   <th class="px-4 py-2 font-medium text-gray-600 sticky top-0 bg-gray-50">Rôle</th>
                   <th class="px-4 py-2 font-medium text-gray-600 sticky top-0 bg-gray-50">Statut</th>
                   <th class="px-4 py-2 font-medium text-gray-600 sticky top-0 bg-gray-50">Vérification</th>
+                  <th class="px-4 py-2 font-medium text-gray-600 sticky top-0 bg-gray-50">Document</th>
                   <th class="px-4 py-2 font-medium text-gray-600 sticky top-0 bg-gray-50">Actions</th>
                 </tr>
               </thead>
@@ -94,7 +95,8 @@ import { UserRowComponent } from './user-row/user-row.component';
                   <tr app-user-row
                       [user]="u"
                       (update)="onUpdate($event)"
-                      (removed)="onDelete($event)">
+                      (removed)="onDelete($event)"
+                      (downloadDoc)="onDownload($event)">
                   </tr>
                 }
               </tbody>
@@ -175,6 +177,28 @@ export class UsersComponent {
     this.service.deleteUser(id).subscribe({
       next: () => this.load(),
       error: err => this.error.set(err?.error || 'Échec de la suppression'),
+    });
+  }
+
+  // Téléchargement du PDF de vérification
+  onDownload(userId: number) {
+    this.service.downloadVerification(userId).subscribe({
+      next: (blob) => {
+        if (!blob || blob.size === 0) return alert('Document introuvable ou vide.');
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `verification-${userId}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      },
+      error: (err) => {
+        if (err?.status === 404) alert('Document introuvable');
+        else if (err?.status === 401 || err?.status === 403) alert('Non autorisé');
+        else alert('Erreur lors du téléchargement');
+      }
     });
   }
 }

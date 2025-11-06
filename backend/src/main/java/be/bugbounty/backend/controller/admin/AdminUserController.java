@@ -3,8 +3,9 @@ package be.bugbounty.backend.controller.admin;
 import be.bugbounty.backend.dto.admin.AdminUserCreateRequestDTO;
 import be.bugbounty.backend.dto.admin.AdminUserUpdateRequestDTO;
 import be.bugbounty.backend.model.User;
-import be.bugbounty.backend.service.UserService;
 import be.bugbounty.backend.repository.UserRepository;
+import be.bugbounty.backend.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -12,10 +13,11 @@ import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
-import java.nio.file.*;
-import java.util.List;
-import java.util.Map;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/admin/users")
@@ -25,11 +27,39 @@ public class AdminUserController {
     @Autowired private UserService userService;
     @Autowired private UserRepository userRepository;
 
+    // === Liste brute (inchangée) ===
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.findAll());
     }
 
+    // === Liste "résumée" AVEC hasVerificationDocument ===
+    @GetMapping("/summary")
+    public ResponseEntity<List<Map<String, Object>>> getAllUsersSummary() {
+        List<User> users = userService.findAll();
+
+        List<Map<String, Object>> dto = users.stream().map(u -> {
+            boolean hasDoc = false;
+            String p = u.getVerificationDocument();
+            if (p != null && !p.isBlank()) {
+                try { hasDoc = Files.exists(Paths.get(p)); } catch (Exception ignored) {}
+            }
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("id", u.getUserId());
+            row.put("username", u.getUsername());
+            row.put("email", u.getEmail());
+            row.put("role", u.getRole());
+            row.put("verificationStatus",
+                    u.getVerificationStatus() == null ? null : u.getVerificationStatus().name());
+            row.put("hasVerificationDocument", hasDoc);
+            return row;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(dto);
+    }
+
+
+    // === PATCH user (inchangé) ===
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody AdminUserUpdateRequestDTO dto) {
         try {
@@ -39,6 +69,7 @@ public class AdminUserController {
         }
     }
 
+    // === CREATE (inchangé) ===
     @PostMapping
     public ResponseEntity<?> create(@RequestBody @Valid AdminUserCreateRequestDTO dto) {
         try {
@@ -49,6 +80,7 @@ public class AdminUserController {
         }
     }
 
+    // === DELETE (inchangé) ===
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
@@ -59,7 +91,7 @@ public class AdminUserController {
         }
     }
 
-    // ====== NOUVEAU : Télécharger/visualiser le PDF de vérification (privé) ======
+    // ====== Télécharger/visualiser le PDF de vérification (privé) ======
     @GetMapping("/{id}/verification")
     public ResponseEntity<Resource> downloadVerification(@PathVariable Long id) {
         User company = userRepository.findById(id)
@@ -85,16 +117,16 @@ public class AdminUserController {
         }
     }
 
-    // ====== NOUVEAU : Décision (APPROVED | REJECTED) ======
+    // ====== Décision (APPROVED | REJECTED) ======
     public static class VerifyDecision {
-        public String status; // "APPROVED" | "REJECTED"
-        public String adminComment; // Optionnel : à persister si tu ajoutes un champ dans User
+        public String status;          // "APPROVED" | "REJECTED"
+        public String adminComment;    // Optionnel : à persister si tu ajoutes un champ dans User
     }
 
     @PatchMapping("/{id}/verification")
     public ResponseEntity<?> decide(@PathVariable Long id, @RequestBody VerifyDecision body) {
         try {
-            User.VerificationStatus st = User.VerificationStatus.valueOf(body.status.toUpperCase());
+            User.VerificationStatus st = User.VerificationStatus.valueOf(body.status.toUpperCase(Locale.ROOT));
             AdminUserUpdateRequestDTO dto = new AdminUserUpdateRequestDTO();
             dto.setVerificationStatus(st.name());
             userService.adminUpdateUser(id, dto);
@@ -104,5 +136,18 @@ public class AdminUserController {
         } catch (RuntimeException re) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", re.getMessage()));
         }
+    }
+
+    // ====== (Optionnel) endpoint booléen simple : existe ? ======
+    @GetMapping("/{id}/verification/exists")
+    public ResponseEntity<Map<String,Boolean>> verificationExists(@PathVariable Long id) {
+        User u = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User introuvable"));
+        boolean exists = false;
+        String p = u.getVerificationDocument();
+        if (p != null && !p.isBlank()) {
+            try { exists = Files.exists(Paths.get(p)); } catch (Exception ignored) {}
+        }
+        return ResponseEntity.ok(Map.of("exists", exists));
     }
 }
