@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RewardPaymentService {
@@ -47,6 +48,9 @@ public class RewardPaymentService {
         payment.setPaymentDate(LocalDateTime.now()); // doublé par @PrePersist
 
         return rewardPaymentRepository.save(payment);
+    }
+    public Optional<RewardPayment> findByReportId(Long reportId) {
+        return rewardPaymentRepository.findByReport_ReportId(reportId);
     }
 
     /**

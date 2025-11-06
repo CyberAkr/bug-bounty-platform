@@ -36,6 +36,7 @@ import { map } from 'rxjs/operators';
         <table class="min-w-full text-sm">
           <thead>
           <tr class="text-left border-b">
+            <th class="px-4 py-2">ID</th>
             <th class="px-4 py-2">Rapport</th>
             <th class="px-4 py-2">Sévérité</th>
             <th class="px-4 py-2">Chercheur</th>

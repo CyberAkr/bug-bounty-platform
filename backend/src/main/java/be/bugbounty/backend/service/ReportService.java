@@ -249,6 +249,36 @@ public class ReportService {
         }
         return new InputStreamResource(Files.newInputStream(file));
     }
+    // Téléchargement par le CHERCHEUR propriétaire du rapport
+    public Resource getDownloadableForResearcher(User researcher, Long reportId) throws IOException {
+        Report report = reportRepository.findById(reportId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rapport introuvable"));
+
+        // 1) Ownership: le report appartient bien au chercheur connecté
+        if (report.getResearcher() == null || !Objects.equals(report.getResearcher().getUserId(), researcher.getUserId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès refusé");
+        }
+
+        // 2) Fichier: sanitized si dispo, sinon l’original
+        Path path = null;
+        if (report.isSanitized() && report.getSanitizedPath() != null) {
+            path = Paths.get(report.getSanitizedPath());
+        } else if (report.getFileUrl() != null) {
+            String web = report.getFileUrl(); // ex: /uploads/reports/quarantine/xxx.pdf
+            String relative = web.replaceFirst("^/+", "");
+            path = Paths.get(relative);
+            if (!Files.exists(path)) {
+                path = Paths.get("uploads").resolve("reports")
+                        .resolve(web.replaceFirst("^/uploads/reports/+", "")); // "quarantine/xxx.pdf"
+            }
+        }
+
+        if (path == null || !Files.exists(path)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Fichier introuvable");
+        }
+        return new InputStreamResource(Files.newInputStream(path));
+    }
+
 
     public Resource getDownloadableForCompany(User company, Long reportId) throws IOException {
         Report report = reportRepository.findById(reportId)

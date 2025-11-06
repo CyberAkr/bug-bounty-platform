@@ -10,7 +10,12 @@ import { VulnerabilityType } from '@app/features/admin/vulnerabilities/vulnerabi
   imports: [CommonModule, FormsModule],
   host: { class: 'border-b last:border-0 hover:bg-gray-50' },
   template: `
-    <!-- ⚠️ ici: UNIQUEMENT des <td>, pas de <tr> -->
+
+    <td class="px-4 py-3 align-top font-mono text-slate-600">
+      {{ report.report_id }}
+    </td>
+
+    <!-- Titre + chips statut/sévérité -->
     <td class="px-4 py-3 align-top">
       <div class="font-medium">{{ report.title || '—' }}</div>
       <div class="mt-1 inline-flex items-center gap-2 text-xs">
@@ -32,6 +37,7 @@ import { VulnerabilityType } from '@app/features/admin/vulnerabilities/vulnerabi
     </td>
 
     <td class="px-4 py-3 align-top">{{ report.severity }}</td>
+    <!-- 🔧 Suppression de l'optional chaining (NG8107) -->
     <td class="px-4 py-3 align-top">{{ report.researcher.username || '—' }}</td>
     <td class="px-4 py-3 align-top">{{ report.submitted_at | date:'short' }}</td>
 

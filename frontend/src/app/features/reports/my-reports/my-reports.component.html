@@ -1,15 +1,38 @@
-<h2>Mes rapports soumis</h2>
+<section class="p-4">
+  <h2 class="text-xl font-semibold mb-4">Mes rapports</h2>
 
-<ul *ngIf="reports().length > 0; else noReports">
-  <li *ngFor="let report of reports()" class="mb-4 border p-3 rounded">
-    <h3>{{ report.title }}</h3>
-    <p><strong>Programme :</strong> {{ report.programTitle }}</p>
-    <p><strong>Sévérité :</strong> {{ report.severity }}</p>
-    <p><strong>Status :</strong> {{ report.status }}</p>
-    <p><strong>Soumis le :</strong> {{ report.submittedAt | date:'short' }}</p>
-  </li>
-</ul>
+  <div *ngIf="loading()">Chargement…</div>
 
-<ng-template #noReports>
-  <p>Aucun rapport soumis pour l’instant.</p>
-</ng-template>
+  <div *ngIf="!loading() && reports().length === 0" class="text-sm text-slate-500">
+    Vous n'avez pas encore soumis de rapports.
+  </div>
+
+  <ul class="space-y-4" *ngIf="!loading() && reports().length > 0">
+    <li *ngFor="let r of reports()" class="rounded-lg border p-4 bg-white">
+      <div class="font-semibold text-lg mb-1">{{ r.title }}</div>
+
+      <div class="text-sm">
+        <div><b>Programme :</b> {{ r.programTitle }}</div>
+        <div><b>Sévérité :</b> {{ r.severity }}</div>
+        <div><b>Status :</b> {{ r.status }}</div>
+        <div><b>Soumis le :</b> {{ r.submittedAt | dateFormat:{ withTime: true } }}</div>
+
+        <!-- ✅ Récompense reçue -->
+        <div class="mt-1" *ngIf="rewardsMap()[r.id] as rw; else noReward">
+          <b>Récompense :</b> {{ rw.amount | number:'1.2-2' }} € (le {{ rw.paymentDate | dateFormat:{ withTime: true } }})
+        </div>
+        <ng-template #noReward>
+          <div class="mt-1 text-slate-500"><b>Récompense :</b> —</div>
+        </ng-template>
+      </div>
+
+      <!-- ✅ Télécharger mon rapport -->
+      <div class="mt-3">
+        <button class="px-3 py-1.5 rounded border hover:bg-gray-50"
+                (click)="downloadMine(r.id)">
+          ⬇️ Télécharger mon rapport
+        </button>
+      </div>
+    </li>
+  </ul>
+</section>
