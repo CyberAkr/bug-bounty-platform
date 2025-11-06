@@ -1,0 +1,44 @@
+/* Occupe toute la hauteur */
+.admin-shell {
+  height: 100dvh;
+}
+
+/* Largeur du menu latéral */
+.admin-sidenav {
+  width: 260px;
+  padding: 8px 0;
+  border-right: 1px solid rgba(0,0,0,.06);
+}
+
+/* Bandeau supérieur */
+.topbar .title {
+  font-weight: 600;
+}
+.spacer { flex: 1 1 auto; }
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* zone de contenu */
+.content {
+  padding: 16px;
+  background: #f7f7fb;
+  min-height: calc(100dvh - 64px); /* toolbar 64px */
+}
+
+/* lien actif du menu */
+a.active {
+  background: rgba(0,0,0,0.06);
+  border-left: 3px solid var(--mat-sys-primary, #1976d2);
+}
+
+/* pied du menu */
+.sidenav-footer {
+  padding: 12px 16px;
+}

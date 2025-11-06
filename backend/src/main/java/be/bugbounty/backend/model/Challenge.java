@@ -1,5 +1,7 @@
 package be.bugbounty.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,7 +19,7 @@ public class Challenge {
     private Long challengeId;
 
     @ManyToOne
-    @JoinColumn(name = "badge_id", nullable = false)
+    @JoinColumn(name = "badge_id", nullable = true)
     private Badge badge;
 
     @Column(nullable = false, length = 150)
@@ -28,6 +30,10 @@ public class Challenge {
 
     @ManyToOne
     @JoinColumn(name = "program_id", nullable = false)
+    @JsonIgnoreProperties({
+            "company", "reports", "subscribers",
+            "hibernateLazyInitializer","handler"
+    })
     private AuditProgram program;
 
     @Column(nullable = false)
@@ -36,13 +42,27 @@ public class Challenge {
     @Column(nullable = false)
     private LocalDateTime endDate;
 
-    @Column(nullable = false)
-    private String theme; // ex : OSINT, Forensic, Web...
+    @Column
+    private String theme;
 
-    @Column(nullable = false)
-    private String linkToResource; // lien vers l’énoncé ou machine à auditer
+    @Column
+    private String linkToResource;
 
-    @Column(nullable = false)
-    private String expectedFlag; // flag à trouver pour valider le défi
+    @JsonIgnore
+    @Column(name = "winning_code_hash", nullable = false)
+    private String winningCodeHash;
 
+    @ManyToOne
+    @JoinColumn(name = "winner_user_id")
+    @JsonIgnoreProperties({
+            "passwordHash","verificationDocument",
+            "emailVerificationCode","emailVerificationExpires",
+            "hibernateLazyInitializer","handler"
+    })
+    private User winner;
+
+    @JsonIgnore
+    public boolean isActiveAt(LocalDateTime t) {
+        return (t.isAfter(startDate) || t.isEqual(startDate)) && t.isBefore(endDate);
+    }
 }

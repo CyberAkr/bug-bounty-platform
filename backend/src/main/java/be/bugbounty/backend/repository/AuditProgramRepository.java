@@ -22,6 +22,6 @@ public interface AuditProgramRepository extends JpaRepository<AuditProgram, Long
     // Listes filtrées
     List<AuditProgram> findAllByIsDeletedFalse();
     List<AuditProgram> findAllByStatusAndIsDeletedFalse(ProgramStatus status);
+    Optional<AuditProgram> findByTitle(String title); // ✅ au lieu de Optional<Object>
 
-    Optional<Object> findByTitle(String défisHebdo);
 }

@@ -1,12 +1,10 @@
-
 package be.bugbounty.backend.dto.admin;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class BadgeRequestDTO {
     private String name;
     private String description;
+    private String imagePath; // URL renvoyée par l'upload (/files/badges/...)
 }

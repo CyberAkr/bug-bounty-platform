@@ -1,0 +1,9 @@
+.badge-icon {
+  width: 40px;           /* avant 24px — un peu plus grand */
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;    /* bien rond */
+  border: 2px solid rgba(0,0,0,0.15);
+  display: block;
+  box-shadow: 0 0 2px rgba(0,0,0,0.2);
+}

@@ -1,0 +1,72 @@
+<!-- frontend/src/app/features/admin/challenges/admin-challenge-form.component.html -->
+<div class="p-4 max-w-3xl mx-auto">
+  <mat-card class="rounded-2xl">
+    <mat-card-header>
+      <mat-card-title>{{ isEdit() ? 'Modifier un défi' : 'Créer un défi' }}</mat-card-title>
+      <mat-card-subtitle>Défi avec code gagnant, lié à un programme</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="space-y-4 mt-3">
+
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Titre</mat-label>
+        <input matInput [ngModel]="title()" (ngModelChange)="title.set($event)">
+      </mat-form-field>
+
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput rows="4" [ngModel]="description()" (ngModelChange)="description.set($event)"></textarea>
+      </mat-form-field>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Début</mat-label>
+          <input matInput [matDatepicker]="dp1" [ngModel]="startDate()" (ngModelChange)="startDate.set($event)">
+          <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+          <mat-datepicker #dp1></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fin</mat-label>
+          <input matInput [matDatepicker]="dp2" [ngModel]="endDate()" (ngModelChange)="endDate.set($event)">
+          <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+          <mat-datepicker #dp2></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Programme</mat-label>
+          <mat-select [ngModel]="programId()" (ngModelChange)="programId.set($event)">
+            <mat-option *ngFor="let p of programs()" [value]="p.programId">
+              {{ p.title }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Thème (optionnel)</mat-label>
+          <input matInput [ngModel]="theme()" (ngModelChange)="theme.set($event)">
+        </mat-form-field>
+      </div>
+
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Lien ressource (optionnel)</mat-label>
+        <input matInput [ngModel]="linkToResource()" (ngModelChange)="linkToResource.set($event)">
+      </mat-form-field>
+
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Code gagnant {{ isEdit() ? '(laisser vide pour conserver)' : '' }}</mat-label>
+        <input matInput [ngModel]="winningCode()" (ngModelChange)="winningCode.set($event)">
+      </mat-form-field>
+
+    </mat-card-content>
+
+    <mat-card-actions class="flex gap-2 p-4">
+      <button mat-raised-button color="primary" (click)="save()" [disabled]="loading()">
+        {{ isEdit() ? 'Enregistrer' : 'Créer' }}
+      </button>
+      <button mat-button (click)="cancel()">Annuler</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

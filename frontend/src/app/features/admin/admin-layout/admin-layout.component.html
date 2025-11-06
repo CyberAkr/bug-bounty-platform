@@ -1,18 +1,75 @@
+<mat-sidenav-container class="admin-shell">
+  <!-- MENU LATERAL -->
+  <mat-sidenav
+    #drawer
+    [mode]="isHandset() ? 'over' : 'side'"
+    [opened]="!isHandset()"
+    class="admin-sidenav"
+  >
+    <div class="brand">
+      <mat-icon>security</mat-icon>
+      <span>Admin</span>
+    </div>
 
-<div class="flex min-h-screen">
-  <aside class="w-64 bg-gray-900 text-white p-4 space-y-4">
-    <h2 class="text-xl font-bold mb-4">Admin</h2>
-    <nav class="flex flex-col space-y-2">
-      <a routerLink="/admin/reports" class="hover:bg-gray-800 px-3 py-2 rounded">📝 Rapports</a>
-      <a routerLink="/admin/users" class="hover:bg-gray-800 px-3 py-2 rounded">👤 Utilisateurs</a>
-      <a routerLink="/admin/programs" class="hover:bg-gray-800 px-3 py-2 rounded">📂 Programmes</a>
-      <a routerLink="/admin/rewards" class="hover:bg-gray-800 px-3 py-2 rounded">💰 Récompenses</a>
-      <a routerLink="/admin/badges" class="hover:bg-gray-800 px-3 py-2 rounded">🏷️ Badges</a>
-      <a routerLink="/admin/vulnerabilities" class="hover:bg-gray-800 px-3 py-2 rounded">🧬 Vulnérabilités</a>
-      <a routerLink="/admin/challenges" class="hover:bg-gray-800 px-3 py-2 rounded">🏆 Défis</a>
-    </nav>
-  </aside>
-  <main class="flex-1 p-6 bg-gray-100">
-    <router-outlet />
-  </main>
-</div>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/admin/reports" routerLinkActive="active">
+        <mat-icon matListItemIcon>description</mat-icon>
+        <span matListItemTitle>Rapports</span>
+      </a>
+      <a mat-list-item routerLink="/admin/users" routerLinkActive="active">
+        <mat-icon matListItemIcon>people</mat-icon>
+        <span matListItemTitle>Utilisateurs</span>
+      </a>
+      <a mat-list-item routerLink="/admin/programs" routerLinkActive="active">
+        <mat-icon matListItemIcon>folder</mat-icon>
+        <span matListItemTitle>Programmes</span>
+      </a>
+      <a mat-list-item routerLink="/admin/rewards" routerLinkActive="active">
+        <mat-icon matListItemIcon>emoji_events</mat-icon>
+        <span matListItemTitle>Récompenses</span>
+      </a>
+      <a mat-list-item routerLink="/admin/badges" routerLinkActive="active">
+        <mat-icon matListItemIcon>verified</mat-icon>
+        <span matListItemTitle>Badges</span>
+      </a>
+      <a mat-list-item routerLink="/admin/vulnerabilities" routerLinkActive="active">
+        <mat-icon matListItemIcon>bug_report</mat-icon>
+        <span matListItemTitle>Vulnérabilités</span>
+      </a>
+      <a mat-list-item routerLink="/admin/challenges" routerLinkActive="active">
+        <mat-icon matListItemIcon>flag</mat-icon>
+        <span matListItemTitle>Défis</span>
+      </a>
+    </mat-nav-list>
+
+    <mat-divider></mat-divider>
+
+    <div class="sidenav-footer">
+      <button mat-stroked-button color="primary" (click)="goHome()">
+        <mat-icon>home</mat-icon>
+        Accueil
+      </button>
+    </div>
+  </mat-sidenav>
+
+  <!-- CONTENU -->
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="topbar">
+      <!-- Bouton burger en mode handset -->
+      <button mat-icon-button *ngIf="isHandset()" (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <span class="title">Bug Bounty Platform — Admin</span>
+      <span class="spacer"></span>
+
+      <button mat-icon-button aria-label="Aller à l'accueil" (click)="goHome()">
+        <mat-icon>home</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

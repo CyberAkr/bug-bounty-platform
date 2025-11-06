@@ -6,11 +6,7 @@ export const adminRoutes: Routes = [
     path: '',
     component: AdminLayoutComponent,
     children: [
-      {
-        path: '',
-        redirectTo: 'reports',
-        pathMatch: 'full'
-      },
+      { path: '', redirectTo: 'reports', pathMatch: 'full' },
       {
         path: 'reports',
         loadComponent: () => import('./reports/reports.component').then(m => m.ReportsComponent),
@@ -27,18 +23,25 @@ export const adminRoutes: Routes = [
         path: 'rewards',
         loadComponent: () => import('./rewards/rewards.component').then(m => m.RewardsComponent),
       },
+
+      // ⬇️ on passe par des sous-routes pour la liste/création/édition
       {
         path: 'badges',
-        loadComponent: () => import('./badges/badges.component').then(m => m.BadgesComponent),
+        loadChildren: () =>
+          import('./badges/admin-badges.routes').then(m => m.ADMIN_BADGES_ROUTES),
       },
+
       {
         path: 'vulnerabilities',
-        loadComponent: () => import('./vulnerabilities/vulnerabilities.component').then(m => m.VulnerabilitiesComponent),
+        loadComponent: () =>
+          import('./vulnerabilities/vulnerabilities.component')
+            .then(m => m.VulnerabilitiesComponent),
       },
       {
         path: 'challenges',
-        loadComponent: () => import('./challenges/challenges.component').then(m => m.ChallengesComponent),
-      },
+        loadChildren: () =>
+          import('./challenges/admin-challenges.routes').then(m => m.adminChallengesRoutes)
+      }
     ],
   },
 ];

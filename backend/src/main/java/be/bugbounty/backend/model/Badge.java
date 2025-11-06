@@ -19,4 +19,8 @@ public class Badge {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    // URL publique vers l'image du badge (servie via /files/**)
+    @Column(name = "image_path", length = 255)
+    private String imagePath; // ex: /files/badges/20251106_...png
 }
