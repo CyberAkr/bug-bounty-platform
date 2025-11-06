@@ -78,7 +78,7 @@
         <input type="hidden" [value]="u.profilePhoto || ''" name="profilePhoto" />
 
         <!-- Entreprise -->
-        <div *ngIf="u.role === 'company'" class="company-box">
+        <div *ngIf="isCompany()" class="company-box">
           <h3>Informations entreprise</h3>
           <div class="form-row">
             <mat-form-field appearance="outline" class="full">
@@ -147,5 +147,15 @@
 
 <mat-divider class="my-6"></mat-divider>
 
-<h3 class="section-title">📄 Mes rapports</h3>
-<app-my-reports />
+<!-- 🔹 Bloc rapports : entreprise => reçus / chercheur => soumis -->
+<section class="mt-6">
+  <h3 class="section-title">📄 Mes rapports</h3>
+
+  <ng-container *ngIf="isCompany(); else researcherReports">
+    <app-company-received></app-company-received>
+  </ng-container>
+
+  <ng-template #researcherReports>
+    <app-my-reports></app-my-reports>
+  </ng-template>
+</section>

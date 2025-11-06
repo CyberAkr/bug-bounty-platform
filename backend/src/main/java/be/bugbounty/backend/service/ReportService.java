@@ -14,6 +14,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
@@ -226,6 +229,13 @@ public class ReportService {
     public void deleteReport(Long id) {
         reportRepository.deleteById(id);
     }
+    public List<ReportResponseDTO> findReceivedByCompany(User company) {
+        return reportRepository.findReceivedByCompany(company)
+                .stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
 
     public Resource getSanitizedResource(Long id) throws IOException {
         Report report = reportRepository.findById(id)
@@ -239,4 +249,46 @@ public class ReportService {
         }
         return new InputStreamResource(Files.newInputStream(file));
     }
-}
+
+    public Resource getDownloadableForCompany(User company, Long reportId) throws IOException {
+        Report report = reportRepository.findById(reportId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rapport introuvable"));
+
+        // 1) Ownership: le programme appartient bien à l’entreprise connectée
+        if (report.getProgram() == null || report.getProgram().getCompany() == null
+                || !Objects.equals(report.getProgram().getCompany().getUserId(), company.getUserId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès refusé");
+        }
+
+        // 2) Statut APPROVED obligatoire
+        if (report.getStatus() != Report.Status.APPROVED) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Téléchargement autorisé après approbation uniquement");
+        }
+
+        // 3) Choix du fichier: sanitized si dispo, sinon l’original
+        Path path = null;
+        if (report.isSanitized() && report.getSanitizedPath() != null) {
+            path = Paths.get(report.getSanitizedPath());
+        } else if (report.getFileUrl() != null) {
+            // report.getFileUrl() est du style "/uploads/reports/quarantine/xxx.pdf"
+            // On recompose un chemin filesystem relatif au projet backend: "uploads/reports/quarantine/xxx.pdf"
+            String web = report.getFileUrl();
+            String relative = web.replaceFirst("^/+", ""); // "uploads/reports/quarantine/xxx.pdf"
+            path = Paths.get(relative);
+            // si jamais le cwd n'est pas la racine du backend, on force depuis la racine projet:
+            if (!Files.exists(path)) {
+                path = Paths.get("uploads").resolve("reports")
+                        .resolve(web.replaceFirst("^/uploads/reports/+", "")); // "quarantine/xxx.pdf"
+            }
+        }
+
+        if (path == null || !Files.exists(path)) {
+            System.err.println("⚠️ Download: fichier introuvable pour reportId=" + reportId +
+                    " sanitized=" + report.isSanitized() + " sanitizedPath=" + report.getSanitizedPath() +
+                    " fileUrl=" + report.getFileUrl() + " resolved=" + (path == null ? "null" : path.toAbsolutePath()));
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Fichier introuvable");
+        }
+
+        return new InputStreamResource(Files.newInputStream(path));
+    }}
+

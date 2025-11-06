@@ -25,6 +25,15 @@ hasSubmitted(programId: number): Observable<boolean> {
     .pipe(map(res => res.submitted));
 }
 
+  getCompanyReceivedReports() {
+    return this.http.get<ReportResponse[]>('/api/reports/received');
+  }
+  downloadReport(id: number) {
+    return this.http.get(`/api/reports/${id}/download`, {
+      responseType: 'blob',
+      observe: 'response'
+    });
+  }
 
 
 }

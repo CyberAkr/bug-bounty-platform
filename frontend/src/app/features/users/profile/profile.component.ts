@@ -6,6 +6,9 @@ import { UserResponse } from '@app/models/user.model';
 import { MyReportsComponent } from '@app/features/reports/my-reports/my-reports.component';
 import { HttpErrorResponse } from '@angular/common/http';
 
+// 🔹 Ajout: rapports reçus (entreprise)
+import { CompanyReceivedReportsComponent } from '@app/features/reports/company-received/company-received.component';
+
 // Angular Material
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,7 +25,9 @@ const MAX_PDF_BYTES = 20 * 1024 * 1024; // 20MB
   selector: 'app-profile',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, MyReportsComponent,
+    CommonModule, FormsModule,
+
+    MyReportsComponent, CompanyReceivedReportsComponent,
     MatCardModule, MatButtonModule, MatIconModule,
     MatFormFieldModule, MatInputModule, MatSelectModule,
     MatDividerModule, MatTooltipModule
@@ -49,6 +54,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.userService.getMe().subscribe((data) => this.user.set(data));
   }
   ngOnDestroy(): void { this.revokePreview(); }
+
+  // ====== Helpers rôle ======
+  isCompany(): boolean {
+    return (this.user()?.role ?? '').toLowerCase() === 'company';
+  }
 
   // ====== Update texte ======
   update(): void {
