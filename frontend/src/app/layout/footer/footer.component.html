@@ -1,1 +1,9 @@
-<p>footer works!</p>
+<footer class="border-t bg-white">
+  <div class="max-w-7xl mx-auto p-6 text-sm text-gray-600 flex items-center justify-between">
+    <span>&copy; {{ year }} Bug Bounty — All rights reserved.</span>
+    <nav class="flex items-center gap-4">
+      <a routerLink="/legal" class="hover:underline">{{ 'navbar.legal' | translate }}</a>
+      <a routerLink="/contact" class="hover:underline">{{ 'navbar.contact' | translate }}</a>
+    </nav>
+  </div>
+</footer>

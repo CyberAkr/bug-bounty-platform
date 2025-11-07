@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -25,50 +25,42 @@ type Role = 'admin' | 'company' | 'user' | undefined;
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
+  mobileOpen = signal(false);
+  toggleMobile() {
+    this.mobileOpen.update(v => !v);
+  }
+
+  closeMobile() {
+    this.mobileOpen.set(false);
+  }
   private auth = inject(AuthService);
   private router = inject(Router);
   lang = inject(LanguageService);
 
-  // on garde un signal pour réagir au changement de token si besoin
   private token = signal<string | null>(null);
 
   ngOnInit() {
-    // récupère le token au chargement
     this.token.set(this.auth.getToken?.() ?? null);
-
-    // si ton AuthService expose un event/subject pour le login/logout, abonne-toi ici
-    // ex: this.auth.tokenChanges$.subscribe(t => this.token.set(t));
-    console.log('✅ HeaderComponent chargé');
+    // this.auth.tokenChanges$?.subscribe(t => this.token.set(t));
   }
 
   get isLoggedIn() { return !!this.token(); }
 
-  // --- helpers JWT pour lire le rôle sans dépendre d’un modèle précis ---
   private decodeRoleFromToken(): Role {
     const t = this.token();
     if (!t) return undefined;
     try {
-      const payload = JSON.parse(atob(t.split('.')[1] ?? ''));
-      // cas les plus courants selon backend:
-      //  - Spring Security: "roles" ou "authorities"
-      //  - custom: "role"
+      const payload = JSON.parse(atob((t.split('.')[1] ?? '').replace(/-/g, '+').replace(/_/g, '/')));
       const roles: string[] =
-        payload?.roles ??
-        payload?.authorities ??
-        (payload?.role ? [payload.role] : []);
+        payload?.roles ?? payload?.authorities ?? (payload?.role ? [payload.role] : []);
       if (!Array.isArray(roles)) return undefined;
-
       if (roles.includes('ROLE_ADMIN') || roles.includes('admin')) return 'admin';
       if (roles.includes('ROLE_COMPANY') || roles.includes('company')) return 'company';
       return 'user';
-    } catch {
-      return undefined;
-    }
+    } catch { return undefined; }
   }
 
-  // on expose des computed pour le template
   private role = computed<Role>(() => this.decodeRoleFromToken());
-
   isCompany() { return this.role() === 'company'; }
   isAdmin()   { return this.role() === 'admin'; }
 

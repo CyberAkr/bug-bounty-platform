@@ -1,72 +1,122 @@
-/* Global reset minimal */
-*,
-*::before,
-*::after { box-sizing: border-box; }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* ====== DESIGN TOKENS (Palette “Cyber” par défaut) ====== */
+:root{
+  --color-primary: #0B2545;
+  --color-primary-2:#193E66;
+  --color-primary-3:#005F73;
+  --color-on-primary:#ffffff;
+  --accent:         #17BEBB;  /* CTA */
+  --accent-strong:  #14A1A0;  /* hover CTA */
+  --accent-glow:    #E6FF00;  /* highlight */
 
-/* Conteneur */
-:root {
-  --container-max: 1200px;
-  --gutter: 16px;
-}
-.container { max-width: var(--container-max); margin: 0 auto; padding: 0 var(--gutter); }
-
-.input {
-  width: 100%;
-  border: 1px solid #ccc;
-  padding: 8px 12px;
-  border-radius: 6px;
-  outline: none;
-}
-.input:focus {
-  border-color: #2196f3;
-  box-shadow: 0 0 0 2px rgba(33, 150, 243, .2);
+  --surface: #F7F9FC;
+  --surface-2:#ffffff;
+  --text:    #0B1220;
+  --muted:   #6B7280;
+  --ring:    rgba(23,190,187,.35);
 }
 
-/* Sidenav Material full height */
-mat-sidenav-container { height: 100dvh; }
-
-/* === Images de profil / avatars === */
-.avatar {
-  width: 120px;               /* taille standard pour tous les avatars */
-  height: 120px;
-  border-radius: 10px;        /* coins arrondis (ou 50% pour rond) */
-  overflow: hidden;
-  border: 2px solid #e0e0e0;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-  margin: 0 auto;             /* centre dans son conteneur */
+/* Thèmes alternatifs (change classe sur <body>) */
+.theme-belgium {
+  --color-primary:#2D2926; --color-primary-2:#2D2926; --color-primary-3:#C8102E;
+  --accent:#FFCD00; --accent-strong:#F2C300; --accent-glow:#FFE56B; --color-on-primary:#fff;
+}
+.theme-blue-pro {
+  --color-primary:#1F6FEB; --color-primary-2:#1D63D3; --color-primary-3:#1557B0;
+  --accent:#FFCD00; --accent-strong:#F2C300; --accent-glow:#FFE56B; --color-on-primary:#fff;
 }
 
-.avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;          /* garde le cadrage, sans déformer */
-  display: block;
+/* ====== COMPOSANTS RÉUTILISABLES ====== */
+@layer components {
+  /* Header */
+  .app-header {
+    @apply text-white shadow-lg sticky top-0 z-40;
+    background-image: linear-gradient(90deg,
+    var(--color-primary), var(--color-primary-2), var(--color-primary-3));
+  }
+  .app-header__container { @apply max-w-7xl mx-auto px-4 sm:px-6; }
+  .app-header__bar { @apply h-16 flex items-center justify-between gap-3; }
+
+  /* Liens sur fond sombre */
+  .link-accent { color: var(--color-on-primary); }
+  .link-accent:hover { color: var(--accent-glow); }
+  .lang-on-dark select {
+    /* cas <select> natif */
+    background-color: rgba(255,255,255,.10);
+    color: var(--color-on-primary);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: .5rem;
+    padding: .375rem .75rem;
+    min-width: 140px;
+  }
+  .lang-on-dark select:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+  .lang-on-dark option { color: #0B1220; background: #fff; }
+
+  /* ---- Cas Angular Material (mat-select dans ton LanguageSelector) ---- */
+  .lang-on-dark .mat-mdc-form-field-infix,
+  .lang-on-dark .mat-mdc-select-value,
+  .lang-on-dark .mat-mdc-select-arrow,
+  .lang-on-dark .mdc-text-field__input {
+    color: var(--color-on-primary) !important;
+  }
+
+  .lang-on-dark .mdc-text-field--filled,
+  .lang-on-dark .mat-mdc-form-field-focus-overlay {
+    background-color: rgba(255,255,255,.10) !important;
+  }
+
+  .lang-on-dark .mdc-line-ripple::before,
+  .lang-on-dark .mdc-line-ripple::after {
+    border-bottom-color: rgba(255,255,255,.35) !important;
+  }
+
+  /* bordure/arrondi compacts pour le header */
+  .lang-on-dark .mat-mdc-form-field {
+    --_h: 36px;
+    height: var(--_h);
+    min-height: var(--_h);
+    border-radius: .5rem;
+  }
+
+  .lang-on-dark .mat-mdc-text-field-wrapper {
+    border-radius: .5rem !important;
+    padding-inline: .5rem !important;
+  }
+
+  /* le panneau déroulant reste lisible (fond clair, texte sombre) */
+  .mat-mdc-select-panel {
+    background: #fff !important;
+    color: #0B1220 !important;
+  }
+  /* Boutons */
+  .btn-ghost {
+    @apply px-3 py-1 rounded-md transition;
+    background-color: rgba(255,255,255,.10); color: var(--color-on-primary);
+  }
+  .btn-ghost:hover { background-color: rgba(255,255,255,.20); }
+
+  .btn-primary {
+    @apply px-3 py-1 rounded-md font-semibold transition;
+    background: var(--accent); color: var(--color-primary);
+  }
+  .btn-primary:hover { background: var(--accent-strong); }
+
+  /* Form patterns Material */
+  .form-grid { @apply grid grid-cols-1 md:grid-cols-2 gap-4; }
+
+  /* Cards / surfaces */
+  .card {
+    @apply rounded-xl border;
+    background: var(--surface-2);
+    border-color: rgba(2,6,23,.06);
+    box-shadow: 0 6px 20px rgba(2,6,23,.06);
+  }
+
+  .container-page { @apply max-w-7xl mx-auto p-6 md:p-10; }
+  .focus-ring:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
 }
 
-/* Variante ronde (pour header, mini-avatar, etc.) */
-.avatar--round {
-  border-radius: 50%;
-}
-
-/* Petits avatars (ex: navbar, classement, etc.) */
-.avatar--small {
-  width: 40px;
-  height: 40px;
-}
-
-/* Moyen (ex: fiche profil compacte) */
-.avatar--medium {
-  width: 80px;
-  height: 80px;
-}
-
-/* Grand (fiche profil principale) */
-.avatar--large {
-  width: 120px;
-  height: 120px;
-}
-
+html, body { height: 100%; background: var(--surface); color: var(--text); }

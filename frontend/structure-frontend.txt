@@ -52,6 +52,7 @@ C:\Users\MAMAN\IdeaProjects\bug-bounty-platform\frontend\src\app\features\admin\
 C:\Users\MAMAN\IdeaProjects\bug-bounty-platform\frontend\src\app\features\admin\reports\report-row\report-row.component...
 C:\Users\MAMAN\IdeaProjects\bug-bounty-platform\frontend\src\app\features\admin\reports\report-row\report-row.component...
 C:\Users\MAMAN\IdeaProjects\bug-bounty-platform\frontend\src\app\features\admin\reports\report-row\report-row.component.ts
+C:\Users\MAMAN\IdeaProjects\bug-bounty-platform\frontend\src\app\features\admin\rewards\rewards-admin.service.ts          
 C:\Users\MAMAN\IdeaProjects\bug-bounty-platform\frontend\src\app\features\admin\rewards\rewards.component.css             
 C:\Users\MAMAN\IdeaProjects\bug-bounty-platform\frontend\src\app\features\admin\rewards\rewards.component.html            
 C:\Users\MAMAN\IdeaProjects\bug-bounty-platform\frontend\src\app\features\admin\rewards\rewards.component.ts              
@@ -192,6 +193,7 @@ C:\Users\MAMAN\IdeaProjects\bug-bounty-platform\frontend\src\app\models\notifica
 C:\Users\MAMAN\IdeaProjects\bug-bounty-platform\frontend\src\app\models\payment.model.ts                                  
 C:\Users\MAMAN\IdeaProjects\bug-bounty-platform\frontend\src\app\models\program.model.ts                                  
 C:\Users\MAMAN\IdeaProjects\bug-bounty-platform\frontend\src\app\models\report.model.ts                                   
+C:\Users\MAMAN\IdeaProjects\bug-bounty-platform\frontend\src\app\models\reward.model.ts                                   
 C:\Users\MAMAN\IdeaProjects\bug-bounty-platform\frontend\src\app\models\user.model.ts                                     
 C:\Users\MAMAN\IdeaProjects\bug-bounty-platform\frontend\src\app\shared\pipes\date-format.pipe.ts                         
 C:\Users\MAMAN\IdeaProjects\bug-bounty-platform\frontend\src\app\shared\pipes\status-color.pipe.ts                        
