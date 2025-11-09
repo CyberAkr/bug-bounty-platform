@@ -175,5 +175,78 @@
         "generic": "Erreur lors de la confirmation."
       }
     }
+  }, "home": {
+  "hero": {
+    "title": "Plateforme de bug bounty pour les PME belges",
+    "lede": "La cybercriminalité augmente. Passez d’une posture réactive à une démarche proactive : un cadre légal, des règles claires et une communauté de chercheurs éthiques pour tester vos systèmes en continu.",
+    "ctaCompany": "Je suis une entreprise",
+    "ctaResearcher": "Je suis un chercheur",
+    "compliance": "Responsible disclosure et safe-harbor encadrés"
+  },
+  "advantages": {
+    "title": "Pourquoi choisir la plateforme",
+    "subtitle": "Un modèle responsable pour réduire le risque et renforcer la confiance.",
+    "secure": {
+      "title": "Sécurité prioritaire",
+      "text": "Programmes cadrés, périmètres définis, et revues méthodiques des vulnérabilités."
+    },
+    "disclosure": {
+      "title": "Responsible disclosure",
+      "text": "Processus de divulgation responsable pour un traitement rapide et sécurisé."
+    },
+    "safeHarbor": {
+      "title": "Safe-harbor",
+      "text": "Protection contractuelle des chercheurs agissant de bonne foi dans le périmètre."
+    },
+    "fairRewards": {
+      "title": "Récompenses adaptées",
+      "text": "Barèmes progressifs et budgets maîtrisés, alignés sur la sévérité et l’impact."
+    },
+    "community": {
+      "title": "Communauté éthique",
+      "text": "Sélection et accompagnement de profils, feedback et amélioration continue."
+    },
+    "belgium": {
+      "title": "Ancrage local",
+      "text": "Approche conforme au cadre légal belge et européen."
+    }
+  },
+  "how": {
+    "title": "Comment ça fonctionne",
+    "subtitle": "Un cycle continu d’amélioration de la sécurité.",
+    "step1": {
+      "title": "Définition du périmètre",
+      "text": "Actifs autorisés, règles d’engagement et contraintes opérationnelles."
+    },
+    "step2": {
+      "title": "Recherche encadrée",
+      "text": "Tests par des chercheurs éthiques, respect du périmètre et des délais."
+    },
+    "step3": {
+      "title": "Rapports exploitables",
+      "text": "Preuves, reproduction, sévérité, recommandations priorisées."
+    },
+    "step4": {
+      "title": "Correction & validation",
+      "text": "Remédiation, re-tests, puis récompense selon l’impact."
+    }
+  },
+  "assurance": {
+    "title": "Confiance, conformité et support",
+    "subtitle": "Une plateforme conçue pour réduire le risque et accélérer la remédiation.",
+    "policy": {
+      "title": "Politique claire",
+      "text": "Règles d’usage, respect de la vie privée, interdictions explicites."
+    },
+    "privacy": {
+      "title": "Protection des données",
+      "text": "Procédures pour éviter les données personnelles et sécuriser les échanges."
+    },
+    "response": {
+      "title": "SLA de réponse",
+      "text": "Accusé de réception, tri initial, et suivi jusqu’à la fermeture."
+    }
   }
+}
+
 }

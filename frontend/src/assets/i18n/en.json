@@ -175,5 +175,79 @@
         "generic": "Error while confirming."
       }
     }
+  },
+
+  "home": {
+    "hero": {
+      "title": "Bug bounty platform for Belgian SMEs",
+      "lede": "Cybercrime is rising. Move from reactive to proactive security: clear rules, legal framing and an ethical research community continuously testing your systems.",
+      "ctaCompany": "I am a company",
+      "ctaResearcher": "I am a researcher",
+      "compliance": "Responsible disclosure and safe-harbor, by design"
+    },
+    "advantages": {
+      "title": "Why choose the platform",
+      "subtitle": "A responsible model to reduce risk and build trust.",
+      "secure": {
+        "title": "Security first",
+        "text": "Framed programs, defined scope, and methodical vulnerability reviews."
+      },
+      "disclosure": {
+        "title": "Responsible disclosure",
+        "text": "A clear process for safe and timely handling of reports."
+      },
+      "safeHarbor": {
+        "title": "Safe-harbor",
+        "text": "Contractual protection for good-faith researchers within scope."
+      },
+      "fairRewards": {
+        "title": "Fair rewards",
+        "text": "Progressive bounties aligned with severity and impact."
+      },
+      "community": {
+        "title": "Ethical community",
+        "text": "Curated profiles, feedback loops and continuous improvement."
+      },
+      "belgium": {
+        "title": "Local footprint",
+        "text": "Aligned with Belgian and EU legal frameworks."
+      }
+    },
+    "how": {
+      "title": "How it works",
+      "subtitle": "A continuous cycle to improve security.",
+      "step1": {
+        "title": "Scope definition",
+        "text": "Authorized assets, rules of engagement and operational constraints."
+      },
+      "step2": {
+        "title": "Guided research",
+        "text": "Ethical testing within scope and timelines."
+      },
+      "step3": {
+        "title": "Actionable reporting",
+        "text": "Evidence, reproduction steps, severity and prioritized fixes."
+      },
+      "step4": {
+        "title": "Fix & validation",
+        "text": "Remediation, re-tests, then reward based on impact."
+      }
+    },
+    "assurance": {
+      "title": "Trust, compliance and support",
+      "subtitle": "A platform built to reduce risk and accelerate remediation.",
+      "policy": {
+        "title": "Clear policy",
+        "text": "Usage rules, privacy safeguards and explicit prohibitions."
+      },
+      "privacy": {
+        "title": "Data protection",
+        "text": "Procedures to avoid personal data and secure exchanges."
+      },
+      "response": {
+        "title": "Response SLAs",
+        "text": "Receipt, triage and follow-up until closure."
+      }
+    }
   }
 }

@@ -1,14 +1,26 @@
-<section class="text-center py-16 px-4 bg-gray-100 rounded">
-  <h1 class="text-3xl font-bold mb-4">🇧🇪 Bug Bounty citoyen pour les PME belges</h1>
-  <p class="mb-6 text-gray-700 max-w-xl mx-auto">
-    Rejoignez une communauté pour sécuriser le web belge, à budget accessible.
-  </p>
-  <div class="flex justify-center gap-4">
-    <button (click)="goToRegister('company')" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-      👨‍💼 Je suis une entreprise
-    </button>
-    <button (click)="goToRegister('researcher')" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
-      👨‍💻 Je suis un chercheur
-    </button>
+<section class="home-hero">
+  <div class="home-hero__inner">
+    <h1 class="home-hero__title">
+      {{ 'home.hero.title' | translate }}
+    </h1>
+    <p class="home-hero__subtitle">
+      {{ 'home.hero.lede' | translate }}
+    </p>
+
+    <div class="home-hero__actions">
+      <button mat-raised-button class="btn-primary"
+              (click)="goToRegister('company')">
+        {{ 'home.hero.ctaCompany' | translate }}
+      </button>
+      <button mat-stroked-button class="btn-ghost"
+              (click)="goToRegister('researcher')">
+        {{ 'home.hero.ctaResearcher' | translate }}
+      </button>
+    </div>
+
+    <div class="home-hero__trust">
+      <mat-icon aria-hidden="true">verified_user</mat-icon>
+      <span>{{ 'home.hero.compliance' | translate }}</span>
+    </div>
   </div>
 </section>

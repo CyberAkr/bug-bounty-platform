@@ -509,7 +509,80 @@ html, body {
     border-color: var(--accent);
     box-shadow: 0 0 0 2px var(--accent);
   }
+  /* === HOME === */
 
+  .container-default { @apply max-w-7xl mx-auto px-4; }
+
+  /* HERO */
+  .home-hero {
+    @apply py-16;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-2));
+    color: var(--color-on-primary);
+  }
+  .home-hero__inner { @apply container-default text-center; }
+  .home-hero__title { @apply text-3xl md:text-4xl font-bold; }
+  .home-hero__subtitle { @apply mt-3 text-sm md:text-base opacity-90 max-w-2xl mx-auto; }
+  .home-hero__actions { @apply mt-6 flex items-center justify-center gap-3; }
+  .home-hero__trust {
+    @apply mt-4 inline-flex items-center gap-2 text-sm opacity-90 justify-center;
+  }
+
+  /* Sections */
+  .home-section { @apply py-12; background: var(--surface); color: var(--text); }
+  .home-section--alt { background: var(--surface-2); }
+  .home-section__head { @apply text-center mb-8; }
+  .home-section__title { @apply text-xl md:text-2xl font-semibold; }
+  .home-section__subtitle { @apply text-sm text-gray-600 max-w-2xl mx-auto; }
+
+  /* Advantages */
+  .adv-card {
+    @apply rounded-xl border p-5;
+    background: var(--surface-2);
+    border-color: rgba(2,6,23,.06);
+    box-shadow: 0 6px 18px rgba(2,6,23,.06);
+  }
+  .adv-icon { @apply mb-2; }
+  .adv-title { @apply font-semibold mb-1; }
+  .adv-text { @apply text-sm text-gray-700; }
+
+  /* Steps */
+  .home-steps { @apply grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4; }
+  .step-card {
+    @apply rounded-xl border p-5;
+    background: var(--surface-2);
+    border-color: rgba(2,6,23,.06);
+  }
+  .step-number {
+    @apply w-8 h-8 rounded-full flex items-center justify-center font-semibold mb-2;
+    background: var(--accent);
+    color: var(--color-primary);
+  }
+  .step-title { @apply font-semibold mb-1; }
+  .step-text { @apply text-sm text-gray-700; }
+
+  /* Assurance */
+  .assure-card {
+    @apply rounded-xl border p-5 flex flex-col gap-2;
+    background: var(--surface-2);
+    border-color: rgba(2,6,23,.06);
+  }
+  .assure-title { @apply font-semibold; }
+  .assure-text { @apply text-sm text-gray-700; }
+
+  /* Boutons */
+  .btn-primary {
+    @apply px-4 py-2 rounded-md font-semibold;
+    background: var(--accent);
+    color: var(--color-primary);
+  }
+  .btn-primary:hover { background: var(--accent-strong); }
+  .btn-ghost {
+    @apply px-4 py-2 rounded-md border;
+    background: transparent;
+    color: var(--color-on-primary);
+    border-color: rgba(255,255,255,.35);
+  }
+  .btn-ghost:hover { @apply opacity-90; }
 
 
   /* === INPUTS MATERIAL EN BLANC PUR === */

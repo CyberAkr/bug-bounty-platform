@@ -4,9 +4,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-advantages',
+  selector: 'app-assurance',
   standalone: true,
   imports: [CommonModule, TranslateModule, MatIconModule],
-  templateUrl: './advantages.component.html'
+  templateUrl: './assurance.component.html'
 })
-export class AdvantagesComponent {}
+export class AssuranceComponent {}
