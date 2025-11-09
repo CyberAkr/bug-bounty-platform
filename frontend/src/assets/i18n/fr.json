@@ -16,8 +16,6 @@
     "langFr": "🇫🇷 FR",
     "langEn": "🇬🇧 EN"
   },
-
-
   "footer": {
     "aboutTitle": "À propos",
     "aboutText": "Plateforme belge de bug bounty dédiée aux PME et chercheurs en cybersécurité. Signalez, collaborez et renforcez la sécurité du numérique.",
@@ -42,9 +40,7 @@
       "register": "Créer un compte",
       "forgot": "Mot de passe oublié ?"
     },
-    "errors": {
-      "invalid": "Identifiants invalides."
-    },
+    "errors": { "invalid": "Identifiants invalides." },
     "register": {
       "title": "Créer un compte",
       "subtitle": "Choisissez votre profil et complétez vos informations",
@@ -69,7 +65,6 @@
       "signIn": "Se connecter"
     }
   },
-
   "verify": {
     "title": "Vérification de votre e-mail",
     "subtitle": "Nous avons envoyé un code à {{email}}.",
@@ -84,26 +79,101 @@
       "invalidCode": "Code invalide ou expiré.",
       "resendFail": "Impossible de renvoyer le code pour le moment.",
       "missingEmail": "Email manquant."
-    }},
-    "challenges": {
-      "weekly": {
-        "title": "Défi de la semaine",
-        "counter": "Défi {{current}} / {{total}}",
-        "empty": "Aucun défi actif actuellement.",
-        "openResource": "Accéder à la ressource du défi",
-        "enterCode": "Entre ton code",
-        "submit": "Soumettre",
-        "prev": "Précédent",
-        "next": "Suivant",
-        "status": { "ongoing": "En cours", "upcoming": "A venir", "ended": "Terminé" },
-        "snackbar": {
-          "valid": "Code validé !",
-          "invalid": "Code invalide ou déjà gagné."
-        },
-        "msg": {
-          "valid": "Ton code a bien été validé.",
-          "invalid": "Code invalide ou déjà utilisé."
-        }
+    }
+  },
+  "challenges": {
+    "weekly": {
+      "title": "Défi de la semaine",
+      "counter": "Défi {{current}} / {{total}}",
+      "empty": "Aucun défi actif actuellement.",
+      "openResource": "Accéder à la ressource du défi",
+      "enterCode": "Entre ton code",
+      "submit": "Soumettre",
+      "prev": "Précédent",
+      "next": "Suivant",
+      "status": {
+        "ongoing": "En cours",
+        "upcoming": "A venir",
+        "ended": "Terminé"
+      },
+      "snackbar": {
+        "valid": "Code validé !",
+        "invalid": "Code invalide ou déjà gagné."
+      },
+      "msg": {
+        "valid": "Ton code a bien été validé.",
+        "invalid": "Code invalide ou déjà utilisé."
+      }
+    }
+  },
+  "ranking": {
+    "title": "🏆 Classement des chercheurs",
+    "total": "{{count}} profils",
+    "points": "{{value}} pts",
+    "col": { "score": "Score", "earnings": "Gains", "paid": "Rapports payés", "last": "Dernière activité" },
+    "detail": { "stats": "Statistiques", "topPrograms": "Top programmes", "bio": "Bio" },
+    "expand": "Voir les détails",
+    "na": "N/A"
+  },
+  "programs": {
+    "list": {
+      "title": "Programmes d’audit disponibles",
+      "available": "programmes disponibles",
+      "empty": "Aucun programme disponible pour le moment.",
+      "details": "Voir le détail",
+      "noDesc": "Aucune description fournie.",
+      "na": "N/A",
+      "more": "Affichage de {{shown}} sur {{total}} programmes."
+    },
+    "create": {
+      "title": "Créer un programme",
+      "back": "Retour aux programmes",
+      "pricing": "Tarif : 100 € – paiement sécurisé via Stripe.",
+      "publish": "Publier (100 €)",
+      "hasActive": {
+        "title": "Un programme est déjà en cours ou actif pour votre entreprise.",
+        "desc": "Vous ne pouvez pas en créer un nouveau pour le moment.",
+        "link": "Voir mon programme"
+      },
+      "fields": {
+        "title": "Titre du programme",
+        "titleHint": "Exemple : Audit applicatif e-commerce",
+        "desc": "Description (texte riche)",
+        "descHint": "Mettez le périmètre, les règles, les exclusions, etc.",
+        "goal": "Objectif (optionnel)",
+        "goalHint": "Ex. : Priorité sur les injections et auth bypass."
+      },
+      "errors": {
+        "alreadyActive": "Un programme est déjà en cours/actif pour votre entreprise.",
+        "noStripeUrl": "Pas d'URL de redirection Stripe.",
+        "conflict": "Un programme de votre entreprise existe déjà (en cours/actif).",
+        "generic": "Erreur lors de la redirection vers Stripe."
+      }
+    },
+    "detail": {
+      "title": "Détail du programme",
+      "subtitle": "Consultez les informations et soumettez un rapport",
+      "back": "Retour à la liste",
+      "company": "Entreprise",
+      "status": "Statut",
+      "submitTitle": "Soumettre un rapport",
+      "publishTitle": "Publier le programme",
+      "publishDesc": "Activez votre programme en procédant au paiement sécurisé Stripe.",
+      "publishBtn": "Publier (100 €)",
+      "notFound": "Programme introuvable."
+    }
+  },
+  "payments": {
+    "return": {
+      "title": "Confirmation du paiement",
+      "checking": "Vérification du paiement…",
+      "success": "Paiement confirmé, votre programme est publié !",
+      "back": "Retour aux programmes",
+      "errors": {
+        "missingSession": "Session Stripe manquante.",
+        "missingId": "ID du programme manquant.",
+        "generic": "Erreur lors de la confirmation."
       }
     }
   }
+}

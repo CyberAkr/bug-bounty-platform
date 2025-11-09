@@ -105,5 +105,75 @@
         "invalid": "Invalid or already used code."
       }
     }
+  },
+  "ranking": {
+    "title": "🏆 Researchers ranking",
+    "total": "{{count}} profiles",
+    "points": "{{value}} pts",
+    "col": { "score": "Score", "earnings": "Earnings", "paid": "Paid reports", "last": "Last active" },
+    "detail": { "stats": "Statistics", "topPrograms": "Top programs", "bio": "Bio" },
+    "expand": "See details",
+    "na": "N/A"
+  },
+  "programs": {
+    "list": {
+      "title": "Available audit programs",
+      "available": "programs available",
+      "empty": "No program available at the moment.",
+      "details": "View details",
+      "noDesc": "No description provided.",
+      "na": "N/A",
+      "more": "Showing {{shown}} of {{total}} programs."
+    },
+    "create": {
+      "title": "Create a program",
+      "back": "Back to programs",
+      "pricing": "Price: €100 – secured by Stripe.",
+      "publish": "Publish (€100)",
+      "hasActive": {
+        "title": "A program is already pending or active for your company.",
+        "desc": "You cannot create a new one for now.",
+        "link": "View my program"
+      },
+      "fields": {
+        "title": "Program title",
+        "titleHint": "e.g., E-commerce app security audit",
+        "desc": "Description (rich text)",
+        "descHint": "Provide scope, rules of engagement, exclusions, etc.",
+        "goal": "Goal (optional)",
+        "goalHint": "e.g., Focus on injections and auth bypass."
+      },
+      "errors": {
+        "alreadyActive": "A program is already pending/active for your company.",
+        "noStripeUrl": "Missing Stripe redirect URL.",
+        "conflict": "A company program already exists (pending/active).",
+        "generic": "Error while redirecting to Stripe."
+      }
+    },
+    "detail": {
+      "title": "Program details",
+      "subtitle": "View program information and submit a report",
+      "back": "Back to list",
+      "company": "Company",
+      "status": "Status",
+      "submitTitle": "Submit a report",
+      "publishTitle": "Publish program",
+      "publishDesc": "Activate your program by completing the secure Stripe payment.",
+      "publishBtn": "Publish (€100)",
+      "notFound": "Program not found."
+    }
+  },
+  "payments": {
+    "return": {
+      "title": "Payment confirmation",
+      "checking": "Checking payment…",
+      "success": "Payment confirmed, your program is now published!",
+      "back": "Back to programs",
+      "errors": {
+        "missingSession": "Missing Stripe session.",
+        "missingId": "Missing program ID.",
+        "generic": "Error while confirming."
+      }
+    }
   }
 }

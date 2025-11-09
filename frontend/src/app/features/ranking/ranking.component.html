@@ -1,48 +1,89 @@
-<h2 class="rank-wrap">🏆 Classement des chercheurs</h2>
-
-<div class="actions rank-wrap">
-  <button mat-stroked-button color="primary" (click)="toggleView()">
-    {{ showingAll() ? 'Afficher le top 10' : 'Afficher tout' }}
-  </button>
-
-</div>
-
-<div class="rank-wrap" *ngIf="!loading(); else skeletons">
-  <mat-nav-list>
-    <button mat-list-item
-            *ngFor="let user of users(); let i = index; trackBy: trackUser"
-            type="button"
-            (click)="openProfile(user.userId)"
-            (keydown.enter)="openProfile(user.userId)">
-      <div class="row">
-        <div>
-          <img *ngIf="user.profilePhoto; else initial"
-               class="avatar"
-               [src]="user.profilePhoto"
-               alt="avatar {{user.username}}"
-               (error)="user.profilePhoto = null">
-          <ng-template #initial>
-            <div class="initials">{{ (user.username || '?').slice(0,2).toUpperCase() }}</div>
-          </ng-template>
-        </div>
-
-        <div class="username">
-          <span>{{ i + 1 }}.</span>
-          <span>{{ user.username }}</span>
-        </div>
-
-        <div class="rank-badge">
-          {{ user.point }} pts
-        </div>
+<div class="ranking-wrapper">
+  <div class="ranking-card">
+    <header class="mb-4 flex items-center justify-between">
+      <h2 class="text-xl font-semibold">{{ 'ranking.title' | translate }}</h2>
+      <div class="text-xs text-gray-500">
+        {{ 'ranking.total' | translate:{ count: users().length } }}
       </div>
-    </button>
-  </mat-nav-list>
-</div>
+    </header>
 
-<ng-template #skeletons>
-  <div class="rank-wrap" style="display:grid; gap:10px;">
-    <div class="skeleton"></div>
-    <div class="skeleton"></div>
-    <div class="skeleton"></div>
+    <!-- Loading -->
+    <div class="flex justify-center py-8" *ngIf="loading()">
+      <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
+    </div>
+
+    <!-- Liste -->
+    <div class="rank-list" *ngIf="!loading()">
+      <div *ngFor="let r of rows(); let i = index; trackBy: trackUser"
+           class="rank-item"
+           [class.rank-open]="expandedId() === r.userId"
+           (click)="toggle(r.userId)">
+
+        <!-- Ligne compacte -->
+        <div class="rank-line">
+          <div class="rank-pos" [class.rank-top]="i < 3">{{ i + 1 }}</div>
+
+          <div class="rank-user">
+            <img *ngIf="r.profilePhoto; else initials"
+                 [src]="r.profilePhoto"
+                 class="rank-avatar"
+                 (error)="r.profilePhoto=null"
+                 alt="avatar" />
+            <ng-template #initials>
+              <div class="rank-initials">{{ (r.username || '?').slice(0,2).toUpperCase() }}</div>
+            </ng-template>
+
+            <div class="leading-tight">
+              <div class="rank-username">{{ r.username }}</div>
+
+              <!-- Bio courte sûre -->
+              <ng-container *ngIf="r.bio as b; else noBio">
+                <div class="rank-bio-short text-xs opacity-70 truncate">
+                  {{ b.length > 100 ? (b | slice:0:100) + '…' : b }}
+                </div>
+              </ng-container>
+              <ng-template #noBio>
+                <div class="rank-bio-short text-xs opacity-60 truncate">
+                  {{ 'ranking.na' | translate }}
+                </div>
+              </ng-template>
+            </div>
+          </div>
+
+          <div class="rank-pill">
+            {{ 'ranking.points' | translate:{ value: r.point } }}
+          </div>
+
+          <button mat-icon-button class="ml-2"
+                  (click)="$event.stopPropagation(); toggle(r.userId)"
+                  [attr.aria-label]="'ranking.expand' | translate">
+            <mat-icon>{{ expandedId() === r.userId ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </button>
+        </div>
+
+        <!-- Détails -->
+        <div class="rank-extra" *ngIf="expandedId() === r.userId">
+          <div class="grid gap-4 md:grid-cols-2">
+            <div>
+              <h4 class="extra-title">{{ 'ranking.detail.stats' | translate }}</h4>
+              <ul class="extra-list">
+                <li>{{ 'ranking.col.score'    | translate }}: <b>{{ r.score }}</b></li>
+                <li>{{ 'ranking.col.earnings' | translate }}: <b>{{ r.earnings | number:'1.0-0' }} $</b></li>
+                <li>{{ 'ranking.col.paid'     | translate }}: <b>{{ r.paidReports }}</b></li>
+                <li>{{ 'ranking.col.last'     | translate }}: <b>{{ r.lastActive | date:'mediumDate' }}</b></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 class="extra-title">{{ 'ranking.detail.bio' | translate }}</h4>
+              <p class="text-sm opacity-80 whitespace-pre-wrap">
+                {{ r.bio || ('ranking.na' | translate) }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
-</ng-template>
+</div>

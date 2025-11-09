@@ -1,15 +1,42 @@
-<section class="p-6 max-w-xl mx-auto text-center">
-  <ng-container *ngIf="loading; else loaded">
-    <p class="text-gray-500">⏳ Vérification du paiement...</p>
-  </ng-container>
+<div class="auth-wrapper">
+  <div class="auth-card auth-card--compact w-full max-w-xl text-center">
 
-  <ng-template #loaded>
-    <div *ngIf="success" class="text-green-600 font-semibold text-xl">
-      ✅ Paiement confirmé, votre programme est publié !
+    <header class="mb-3">
+      <h2 class="text-xl font-semibold">
+        {{ 'payments.return.title' | translate }}
+      </h2>
+    </header>
+
+    <!-- Loading -->
+    <div class="py-8 flex flex-col items-center gap-3" *ngIf="loading(); else loaded">
+      <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+      <p class="text-gray-500">
+        {{ 'payments.return.checking' | translate }}
+      </p>
     </div>
-    <div *ngIf="error" class="text-red-600">
-      ❌ {{ error }}
-    </div>
-    <a routerLink="/programs" class="btn mt-4 inline-block">Retour aux programmes</a>
-  </ng-template>
-</section>
+
+    <ng-template #loaded>
+      <!-- Succès -->
+      <div *ngIf="success()" class="return-ok">
+        <mat-icon>check_circle</mat-icon>
+        <p class="mt-2 font-semibold">
+          {{ 'payments.return.success' | translate }}
+        </p>
+      </div>
+
+      <!-- Erreur -->
+      <div *ngIf="error()" class="return-ko">
+        <mat-icon>error</mat-icon>
+        <p class="mt-2">
+          {{ error() }}
+        </p>
+      </div>
+
+      <a mat-stroked-button class="btn-ghost mt-4" routerLink="/programs">
+        <mat-icon class="mr-2">arrow_back</mat-icon>
+        {{ 'payments.return.back' | translate }}
+      </a>
+    </ng-template>
+
+  </div>
+</div>

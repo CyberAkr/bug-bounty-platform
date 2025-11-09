@@ -4,30 +4,41 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import DOMPurify from 'dompurify';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule }      from '@angular/material/input';
+import { MatButtonModule }     from '@angular/material/button';
+import { MatIconModule }       from '@angular/material/icon';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 import { ProgramService } from '../../program.service';
 import { environment } from '../../../../../environments/environments';
 
 @Component({
   selector: 'app-program-create',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, EditorModule],
+  imports: [
+    CommonModule, FormsModule, RouterLink, EditorModule,
+    TranslateModule,
+    MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule
+  ],
   templateUrl: './program-create.component.html'
 })
 export class ProgramCreateComponent {
   private programs = inject(ProgramService);
+  private i18n = inject(TranslateService);
 
   title = '';
   descriptionHtml = '';
   goal = '';
 
   loading = signal(false);
-  error = signal<string | null>(null);
+  error   = signal<string | null>(null);
 
-  hasActive = signal<boolean>(false);
-  myProgramId = signal<number | null>(null);
-  myProgramTitle = signal<string | null>(null);
+  hasActive     = signal<boolean>(false);
+  myProgramId   = signal<number | null>(null);
+  myProgramTitle= signal<string | null>(null);
 
-  // expose la clé pour le template (utilisée via [apiKey])
   apiKey = environment.tinymceApiKey;
 
   tinyInit = {
@@ -53,7 +64,7 @@ export class ProgramCreateComponent {
   };
 
   constructor() {
-    // vérifie si l'utilisateur a déjà un programme (empêche double création)
+    // Vérifie si un programme de l'entreprise est déjà actif
     this.programs.getMine().subscribe({
       next: (list) => {
         const p = Array.isArray(list) && list.length ? list[0] : null;
@@ -69,30 +80,32 @@ export class ProgramCreateComponent {
 
   publish(): void {
     if (this.hasActive()) {
-      this.error.set('Un programme est déjà en cours/actif pour votre entreprise.');
+      this.error.set(this.i18n.instant('programs.create.errors.alreadyActive'));
       return;
     }
+
     const title = this.title.trim();
-    // sanitize HTML riche
     const cleanHtml = DOMPurify.sanitize(this.descriptionHtml, { USE_PROFILES: { html: true } });
+
     if (!title || !cleanHtml || this.loading()) return;
 
     this.loading.set(true);
     this.error.set(null);
 
+    // Création + checkout Stripe (flux "before create")
     this.programs.checkoutBeforeCreate(title, cleanHtml).subscribe({
       next: (res) => {
         if (res?.url) {
           window.location.href = res.url;
         } else {
-          this.error.set('Pas de redirection Stripe.');
+          this.error.set(this.i18n.instant('programs.create.errors.noStripeUrl'));
           this.loading.set(false);
         }
       },
       error: (err) => {
         const msg = (err?.status === 409)
-          ? 'Un programme de votre entreprise existe déjà (en cours/actif).'
-          : (err?.error || 'Erreur lors de la redirection vers Stripe.');
+          ? this.i18n.instant('programs.create.errors.conflict')
+          : (err?.error || this.i18n.instant('programs.create.errors.generic'));
         this.error.set(msg);
         this.loading.set(false);
       }

@@ -1,43 +1,80 @@
-<section class="p-6 max-w-2xl mx-auto">
-  <h2 class="text-2xl font-semibold mb-4">➕ Créer un programme</h2>
+<div class="auth-wrapper">
+  <div class="auth-card w-full max-w-3xl">
 
-  <div *ngIf="hasActive()" class="rounded border border-amber-300 bg-amber-50 text-amber-800 p-3 mb-4">
-    <p class="font-medium">Un programme est déjà en cours / actif pour votre entreprise.</p>
-    <p class="text-sm mt-1">
-      Vous ne pouvez pas en créer un nouveau pour le moment.
-      <a *ngIf="myProgramId()" class="underline" [routerLink]="['/programs', myProgramId()]">
-        Voir mon programme
+    <header class="mb-4 flex items-center justify-between">
+      <h2 class="text-2xl font-semibold">{{ 'programs.create.title' | translate }}</h2>
+      <a routerLink="/programs" mat-stroked-button class="btn-ghost">
+        <mat-icon class="mr-2">arrow_back</mat-icon>
+        {{ 'programs.create.back' | translate }}
       </a>
-    </p>
+    </header>
+
+    <!-- Bannières -->
+    <div *ngIf="hasActive()" class="banner-warn mb-4">
+      <div class="font-medium">
+        {{ 'programs.create.hasActive.title' | translate }}
+      </div>
+      <div class="text-sm opacity-90">
+        {{ 'programs.create.hasActive.desc' | translate }}
+        <a *ngIf="myProgramId()" class="underline"
+           [routerLink]="['/programs', myProgramId()]">
+          {{ 'programs.create.hasActive.link' | translate }}
+        </a>
+      </div>
+    </div>
+
+    <div *ngIf="error()" class="banner-error mb-4">
+      {{ error() }}
+    </div>
+
+    <!-- Form -->
+    <form (ngSubmit)="publish()" class="space-y-5" *ngIf="!hasActive()">
+
+      <!-- Titre -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>{{ 'programs.create.fields.title' | translate }}</mat-label>
+        <input matInput [(ngModel)]="title" name="title" required />
+        <mat-hint>{{ 'programs.create.fields.titleHint' | translate }}</mat-hint>
+      </mat-form-field>
+
+      <!-- Description (TinyMCE) -->
+      <div>
+        <label class="block text-sm font-medium mb-2">
+          {{ 'programs.create.fields.desc' | translate }}
+        </label>
+        <editor
+          class="editor-surface"
+          [apiKey]="apiKey"
+          [(ngModel)]="descriptionHtml"
+          name="descriptionHtml"
+          [init]="tinyInit">
+        </editor>
+        <p class="text-xs text-gray-600 mt-1">
+          {{ 'programs.create.fields.descHint' | translate }}
+        </p>
+      </div>
+
+      <!-- Objectif -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>{{ 'programs.create.fields.goal' | translate }}</mat-label>
+        <textarea matInput rows="3" [(ngModel)]="goal" name="goal"></textarea>
+        <mat-hint>{{ 'programs.create.fields.goalHint' | translate }}</mat-hint>
+      </mat-form-field>
+
+      <!-- Actions -->
+      <div class="flex items-center justify-between pt-2">
+        <div class="text-sm text-gray-600">
+          {{ 'programs.create.pricing' | translate }}
+        </div>
+
+        <button mat-raised-button class="btn-primary"
+                type="submit"
+                [disabled]="loading() || !title.trim()">
+          <mat-icon class="mr-2">payments</mat-icon>
+          {{ 'programs.create.publish' | translate }}
+        </button>
+      </div>
+    </form>
+
   </div>
-
-  <form (ngSubmit)="publish()" class="space-y-4" *ngIf="!hasActive()">
-    <div *ngIf="error()" class="rounded border border-red-300 bg-red-50 text-red-700 p-2">{{ error() }}</div>
-
-    <div>
-      <label class="block font-medium">Titre du programme</label>
-      <input [(ngModel)]="title" name="title" required class="input w-full" />
-    </div>
-
-    <div>
-      <label class="block font-medium">Description (texte riche)</label>
-      <editor
-        [apiKey]="apiKey"
-        [(ngModel)]="descriptionHtml"
-        name="descriptionHtml"
-        [init]="tinyInit">
-      </editor>
-    </div>
-
-    <div>
-      <label class="block font-medium">Objectif (optionnel)</label>
-      <textarea [(ngModel)]="goal" name="goal" rows="2" class="input w-full"></textarea>
-    </div>
-
-    <button type="submit"
-            class="bg-blue-600 text-white px-4 py-2 rounded"
-            [disabled]="loading() || !title.trim()">
-      💳 Publier (100 €)
-    </button>
-  </form>
-</section>
+</div>
