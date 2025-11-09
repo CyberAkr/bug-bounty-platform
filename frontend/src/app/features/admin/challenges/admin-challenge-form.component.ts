@@ -13,6 +13,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 
 import { ChallengesAdminService, ChallengeAdminDTO, Program } from './challenges-admin.service';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admin-challenge-form',
@@ -21,7 +22,7 @@ import { ChallengesAdminService, ChallengeAdminDTO, Program } from './challenges
     CommonModule, RouterModule, FormsModule,
     MatFormFieldModule, MatInputModule, MatSelectModule,
     MatDatepickerModule, MatNativeDateModule,
-    MatButtonModule, MatSnackBarModule, MatCardModule
+    MatButtonModule, MatSnackBarModule, MatCardModule, TranslatePipe
   ],
   templateUrl: './admin-challenge-form.component.html'
 })

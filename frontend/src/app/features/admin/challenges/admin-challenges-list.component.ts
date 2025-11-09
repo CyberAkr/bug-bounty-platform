@@ -7,13 +7,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ChallengesAdminService, ChallengeView } from './challenges-admin.service';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admin-challenges-list',
   standalone: true,
   imports: [
     CommonModule, RouterModule,
-    MatTableModule, MatButtonModule, MatIconModule, MatSnackBarModule, MatProgressSpinnerModule
+    MatTableModule, MatButtonModule, MatIconModule, MatSnackBarModule, MatProgressSpinnerModule, TranslatePipe
   ],
   templateUrl: './admin-challenges-list.component.html'
 })

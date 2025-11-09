@@ -578,7 +578,10 @@
 
     "programs": {
       "title": "Programmes",
-      "filter": "Filtre de statut :",
+      "filter": {
+        "label": "Filtrer",
+        "all": "Tous"
+      },
       "filterLabel": "Filtrer :",
       "filterAll": "Tous",
       "createTitle": "Créer un programme",
@@ -589,12 +592,15 @@
         "status": "Statut"
       },
       "table": {
-        "title": "Titre",
-        "description": "Description",
-        "company": "Entreprise",
-        "status": "Statut",
-        "actions": "Actions"
+        "col": {
+          "title": "Titre",
+          "description": "Description courte",
+          "company": "Entreprise",
+          "status": "Statut",
+          "actions": "Actions"
+        }
       },
+
       "row": {
         "edit": "Modifier",
         "approve": "Approuver",

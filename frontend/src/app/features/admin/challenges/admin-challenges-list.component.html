@@ -1,9 +1,11 @@
+<!-- frontend/src/app/features/admin/challenges/admin-challenges-list.component.html -->
 <div class="p-4">
   <div class="flex items-center justify-between mb-3">
-    <h2 class="text-xl font-semibold">Défis</h2>
+    <h2 class="text-xl font-semibold">{{ 'admin.challenges.list.title' | translate }}</h2>
 
     <button mat-raised-button color="primary" [routerLink]="['./create']">
-      <mat-icon class="mr-1">add</mat-icon> Nouveau défi
+      <mat-icon class="mr-1">add</mat-icon>
+      {{ 'admin.challenges.list.create' | translate }}
     </button>
   </div>
 
@@ -12,31 +14,30 @@
   </div>
 
   <table mat-table [dataSource]="data()" class="w-full mat-elevation-z2" *ngIf="!loading() && data().length">
-
     <ng-container matColumnDef="title">
-      <th mat-header-cell *matHeaderCellDef> Titre </th>
-      <td mat-cell *matCellDef="let c"> {{ c.title }} </td>
+      <th mat-header-cell *matHeaderCellDef>{{ 'admin.challenges.list.table.title' | translate }}</th>
+      <td mat-cell *matCellDef="let c">{{ c.title }}</td>
     </ng-container>
 
     <ng-container matColumnDef="period">
-      <th mat-header-cell *matHeaderCellDef> Période </th>
+      <th mat-header-cell *matHeaderCellDef>{{ 'admin.challenges.list.table.period' | translate }}</th>
       <td mat-cell *matCellDef="let c">
         {{ c.startDate | date:'short' }} → {{ c.endDate | date:'short' }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="program">
-      <th mat-header-cell *matHeaderCellDef> Programme </th>
-      <td mat-cell *matCellDef="let c"> {{ c.program?.title || '—' }} </td>
+      <th mat-header-cell *matHeaderCellDef>{{ 'admin.challenges.list.table.program' | translate }}</th>
+      <td mat-cell *matCellDef="let c">{{ c.program?.title || '—' }}</td>
     </ng-container>
 
     <ng-container matColumnDef="winner">
-      <th mat-header-cell *matHeaderCellDef> Gagnant </th>
-      <td mat-cell *matCellDef="let c"> {{ c.winner?.email || '—' }} </td>
+      <th mat-header-cell *matHeaderCellDef>{{ 'admin.challenges.list.table.winner' | translate }}</th>
+      <td mat-cell *matCellDef="let c">{{ c.winner?.email || '—' }}</td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef class="text-right"> Actions </th>
+      <th mat-header-cell *matHeaderCellDef class="text-right">{{ 'admin.challenges.list.table.actions' | translate }}</th>
       <td mat-cell *matCellDef="let c" class="text-right">
         <button mat-icon-button color="primary" [routerLink]="['./edit', c.challengeId]">
           <mat-icon>edit</mat-icon>
@@ -52,6 +53,6 @@
   </table>
 
   <p class="text-gray-500 mt-4" *ngIf="!loading() && !data().length">
-    Aucun défi pour l’instant.
+    {{ 'admin.challenges.list.empty' | translate }}
   </p>
 </div>

@@ -2,32 +2,33 @@
 <div class="p-4 max-w-3xl mx-auto">
   <mat-card class="rounded-2xl">
     <mat-card-header>
-      <mat-card-title>{{ isEdit() ? 'Modifier un défi' : 'Créer un défi' }}</mat-card-title>
-      <mat-card-subtitle>Défi avec code gagnant, lié à un programme</mat-card-subtitle>
+      <mat-card-title>
+        {{ isEdit() ? ('admin.challenges.form.editTitle' | translate) : ('admin.challenges.form.createTitle' | translate) }}
+      </mat-card-title>
+      <mat-card-subtitle>{{ 'admin.challenges.form.subtitle' | translate }}</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content class="space-y-4 mt-3">
-
       <mat-form-field class="w-full" appearance="outline">
-        <mat-label>Titre</mat-label>
+        <mat-label>{{ 'admin.challenges.form.fields.title' | translate }}</mat-label>
         <input matInput [ngModel]="title()" (ngModelChange)="title.set($event)">
       </mat-form-field>
 
       <mat-form-field class="w-full" appearance="outline">
-        <mat-label>Description</mat-label>
+        <mat-label>{{ 'admin.challenges.form.fields.description' | translate }}</mat-label>
         <textarea matInput rows="4" [ngModel]="description()" (ngModelChange)="description.set($event)"></textarea>
       </mat-form-field>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
         <mat-form-field appearance="outline">
-          <mat-label>Début</mat-label>
+          <mat-label>{{ 'admin.challenges.form.fields.start' | translate }}</mat-label>
           <input matInput [matDatepicker]="dp1" [ngModel]="startDate()" (ngModelChange)="startDate.set($event)">
           <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
           <mat-datepicker #dp1></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Fin</mat-label>
+          <mat-label>{{ 'admin.challenges.form.fields.end' | translate }}</mat-label>
           <input matInput [matDatepicker]="dp2" [ngModel]="endDate()" (ngModelChange)="endDate.set($event)">
           <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
           <mat-datepicker #dp2></mat-datepicker>
@@ -36,7 +37,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
         <mat-form-field appearance="outline">
-          <mat-label>Programme</mat-label>
+          <mat-label>{{ 'admin.challenges.form.fields.program' | translate }}</mat-label>
           <mat-select [ngModel]="programId()" (ngModelChange)="programId.set($event)">
             <mat-option *ngFor="let p of programs()" [value]="p.programId">
               {{ p.title }}
@@ -45,28 +46,32 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Thème (optionnel)</mat-label>
+          <mat-label>{{ 'admin.challenges.form.fields.theme' | translate }}</mat-label>
           <input matInput [ngModel]="theme()" (ngModelChange)="theme.set($event)">
         </mat-form-field>
       </div>
 
       <mat-form-field class="w-full" appearance="outline">
-        <mat-label>Lien ressource (optionnel)</mat-label>
+        <mat-label>{{ 'admin.challenges.form.fields.resource' | translate }}</mat-label>
         <input matInput [ngModel]="linkToResource()" (ngModelChange)="linkToResource.set($event)">
       </mat-form-field>
 
       <mat-form-field class="w-full" appearance="outline">
-        <mat-label>Code gagnant {{ isEdit() ? '(laisser vide pour conserver)' : '' }}</mat-label>
+        <mat-label>
+          {{ 'admin.challenges.form.fields.winningCode' | translate }}
+          {{ isEdit() ? ('admin.challenges.form.keepHint' | translate) : '' }}
+        </mat-label>
         <input matInput [ngModel]="winningCode()" (ngModelChange)="winningCode.set($event)">
       </mat-form-field>
-
     </mat-card-content>
 
     <mat-card-actions class="flex gap-2 p-4">
       <button mat-raised-button color="primary" (click)="save()" [disabled]="loading()">
-        {{ isEdit() ? 'Enregistrer' : 'Créer' }}
+        {{ isEdit() ? ('admin.challenges.form.buttons.save' | translate) : ('admin.challenges.form.buttons.create' | translate) }}
       </button>
-      <button mat-button (click)="cancel()">Annuler</button>
+      <button mat-button (click)="cancel()">
+        {{ 'admin.challenges.form.buttons.cancel' | translate }}
+      </button>
     </mat-card-actions>
   </mat-card>
 </div>

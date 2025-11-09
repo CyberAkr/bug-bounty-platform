@@ -578,7 +578,11 @@
 
     "programs": {
       "title": "Programs",
-      "filter": "Status filter:",
+      "filter": {
+        "label": "Filter",
+        "all": "All"
+      },
+
       "filterLabel": "Filter:",
       "filterAll": "All",
       "createTitle": "Create a program",
@@ -589,11 +593,13 @@
         "status": "Status"
       },
       "table": {
-        "title": "Title",
-        "description": "Description",
-        "company": "Company",
-        "status": "Status",
-        "actions": "Actions"
+        "col": {
+          "title": "Title",
+          "description": "Description (max {{ max }})",
+          "company": "Company",
+          "status": "Status",
+          "actions": "Actions"
+        }
       },
       "row": {
         "edit": "Edit",
