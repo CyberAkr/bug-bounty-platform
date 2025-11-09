@@ -16,6 +16,7 @@
     "langFr": "🇫🇷 FR",
     "langEn": "🇬🇧 EN"
   },
+
   "footer": {
     "aboutTitle": "About",
     "aboutText": "Belgian bug bounty platform for SMEs and security researchers. Report, collaborate and strengthen digital security together.",
@@ -28,6 +29,7 @@
     "followTitle": "Follow us",
     "copyright": "© {{year}} Bug Bounty — All rights reserved."
   },
+
   "auth": {
     "login": {
       "title": "Sign in",
@@ -40,7 +42,9 @@
       "register": "Create one",
       "forgot": "Forgot password?"
     },
-    "errors": { "invalid": "Invalid credentials." },
+    "errors": {
+      "invalid": "Invalid credentials."
+    },
     "register": {
       "title": "Create an account",
       "subtitle": "Choose your profile and fill in your details",
@@ -65,6 +69,7 @@
       "signIn": "Sign in"
     }
   },
+
   "verify": {
     "title": "Verify your email",
     "subtitle": "We sent a code to {{email}}.",
@@ -81,6 +86,7 @@
       "missingEmail": "Missing email."
     }
   },
+
   "challenges": {
     "weekly": {
       "title": "Weekly challenge",
@@ -106,15 +112,26 @@
       }
     }
   },
+
   "ranking": {
     "title": "🏆 Researchers ranking",
     "total": "{{count}} profiles",
     "points": "{{value}} pts",
-    "col": { "score": "Score", "earnings": "Earnings", "paid": "Paid reports", "last": "Last active" },
-    "detail": { "stats": "Statistics", "topPrograms": "Top programs", "bio": "Bio" },
+    "col": {
+      "score": "Score",
+      "earnings": "Earnings",
+      "paid": "Paid reports",
+      "last": "Last active"
+    },
+    "detail": {
+      "stats": "Statistics",
+      "topPrograms": "Top programs",
+      "bio": "Bio"
+    },
     "expand": "See details",
     "na": "N/A"
   },
+
   "programs": {
     "list": {
       "title": "Available audit programs",
@@ -163,6 +180,7 @@
       "notFound": "Program not found."
     }
   },
+
   "payments": {
     "return": {
       "title": "Payment confirmation",
@@ -250,9 +268,7 @@
       }
     }
   },
-  "common": {
-    "loading": "Loading…"
-  },
+
   "reports": {
     "labels": {
       "program": "Program",
@@ -298,6 +314,7 @@
       "alreadySubmitted": "A report has already been submitted for this program."
     }
   },
+
   "profile": {
     "title": "My profile",
     "subtitle": "Manage your information and photo",
@@ -326,8 +343,11 @@
       "save": "Save",
       "delete": "Delete my account"
     },
-    "reports": { "title": "My reports" }
+    "reports": {
+      "title": "My reports"
+    }
   },
+
   "legal": {
     "title": "Legal notice",
     "back": "Back",
@@ -352,6 +372,7 @@
       "body": "Published content (texts, logos, graphics) is protected. Any unauthorised reproduction is prohibited."
     }
   },
+
   "contact": {
     "title": "Contact",
     "subtitle": "Questions, feedback or support request? Drop us a line.",
@@ -365,5 +386,395 @@
     "submit": "Send",
     "sending": "Sending…",
     "success": "Message sent. Thanks for reaching out!"
+  },
+
+  "common": {
+    "save": "Save",
+    "create": "Create",
+    "edit": "Edit",
+    "update": "Update",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "download": "Download",
+    "back": "Back",
+    "apply": "Apply",
+    "actions": "Actions",
+    "status": "Status",
+    "loading": "Loading…",
+    "none": "None",
+    "yes": "Yes",
+    "no": "No",
+    "filters": "Filters",
+    "all": "All",
+    "required": "Required field",
+    "success": "Operation completed",
+    "error": "Unexpected error",
+    "refresh": "Refresh",
+    "creating": "Creating...",
+    "reset": "Reset",
+    "uploading": "Uploading..."
+  },
+
+  "admin": {
+    "layout": {
+      "title": "Bug Bounty Platform — Admin",
+      "home": "Home",
+      "brand": "Admin"
+    },
+    "topbar": {
+      "homeAria": "Go to home"
+    },
+    "nav": {
+      "reports": "Reports",
+      "users": "Users",
+      "programs": "Programs",
+      "rewards": "Rewards",
+      "badges": "Badges",
+      "vulns": "Vulnerabilities",
+      "challenges": "Challenges",
+      "home": "Home"
+    },
+
+    "statuses": {
+      "PENDING": "PENDING",
+      "APPROVED": "APPROVED",
+      "REJECTED": "REJECTED",
+      "ARCHIVED": "ARCHIVED",
+      "LOW": "LOW",
+      "MEDIUM": "MEDIUM",
+      "HIGH": "HIGH"
+    },
+
+    "badges": {
+      "title": "Badges",
+      "empty": "No badges yet.",
+      "form": {
+        "back": "Back",
+        "titleEdit": "Edit a badge",
+        "titleCreate": "Create a badge",
+        "name": "Name",
+        "description": "Description",
+        "importImage": "Import image",
+        "imageHint": "PNG or JPEG recommended (square).",
+        "currentImage": "Current image",
+        "save": "Save",
+        "create": "Create",
+        "cancel": "Cancel"
+      },
+      "table": {
+        "name": "Name",
+        "description": "Description"
+      },
+      "row": {
+        "edit": "Save",
+        "delete": "Delete"
+      }
+    },
+
+    "rewards": {
+      "title": "Rewards",
+      "empty": "No rewards yet",
+      "create": {
+        "title": "Create a reward",
+        "reportId": "Report ID",
+        "amount": "Amount",
+        "dateInfo": "<strong>Date:</strong> the payment date is stored when the reward is saved.",
+        "proofInfo": "You can attach a proof later (PDF/PNG/JPEG)."
+      },
+      "list": {
+        "title": "Rewards list",
+        "empty": "No rewards yet."
+      },
+      "table": {
+        "id": "Payment ID",
+        "reportId": "Report ID",
+        "amount": "Amount",
+        "paidAt": "Paid at",
+        "proof": "Proof",
+        "actions": "Actions"
+      },
+      "proof": {
+        "present": "Proof available",
+        "missing": "No proof"
+      },
+      "actions": {
+        "replaceProof": "Replace proof",
+        "addProof": "Add proof"
+      }
+    },
+
+    "users": {
+      "title": "User management",
+      "createTitle": "Create a user",
+      "create": {
+        "title": "Create a user",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "companyNumber": "Company number",
+        "verificationDoc": "Verification document (link or ref)"
+      },
+      "form": {
+        "firstName": "First name",
+        "lastName": "Last name",
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "role": "Role",
+        "companyNumber": "Company number",
+        "verificationDocument": "Verification document (link or ref)",
+        "banned": "Banned",
+        "verificationStatus": "Verification"
+      },
+      "roles": {
+        "admin": "admin",
+        "researcher": "researcher",
+        "company": "company"
+      },
+      "verification": {
+        "PENDING": "PENDING",
+        "APPROVED": "APPROVED",
+        "REJECTED": "REJECTED"
+      },
+      "role": {
+        "researcher": "Researcher",
+        "company": "Company",
+        "admin": "Admin"
+      },
+      "verif": {
+        "PENDING": "Pending",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      },
+      "banned": "Banned",
+      "table": {
+        "roleStatus": "Role & status",
+        "verification": "Verification",
+        "document": "Document",
+        "actions": "Actions"
+      },
+      "doc": {
+        "available": "Available",
+        "none": "None"
+      },
+      "row": {
+        "save": "Save",
+        "remove": "Delete",
+        "download": "Download"
+      },
+      "empty": "No users",
+      "toasts": {
+        "created": "User created",
+        "updated": "User updated",
+        "deleted": "User deleted",
+        "download404": "Document not found",
+        "unauthorized": "Unauthorized",
+        "downloadError": "Download failed"
+      }
+    },
+
+    "programs": {
+      "title": "Programs",
+      "filter": "Status filter:",
+      "filterLabel": "Filter:",
+      "filterAll": "All",
+      "createTitle": "Create a program",
+      "form": {
+        "title": "Title",
+        "description": "Description",
+        "companyId": "Company ID",
+        "status": "Status"
+      },
+      "table": {
+        "title": "Title",
+        "description": "Description",
+        "company": "Company",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "row": {
+        "edit": "Edit",
+        "approve": "Approve",
+        "save": "Save",
+        "cancel": "Cancel",
+        "remove": "Delete"
+      },
+      "empty": "No programs",
+      "toasts": {
+        "created": "Program created",
+        "updated": "Program updated",
+        "deleted": "Program deleted",
+        "errorLoad": "Failed to load programs",
+        "errorCreate": "Creation failed",
+        "errorUpdate": "Update failed",
+        "errorDelete": "Deletion failed"
+      },
+      "filterAlt": {
+        "label": "Filter",
+        "all": "All"
+      },
+      "status": {
+        "PENDING": "Pending",
+        "APPROVED": "Approved",
+        "ARCHIVED": "Archived"
+      },
+      "create": {
+        "title": "Create a program",
+        "placeholders": {
+          "title": "Title",
+          "description": "Description",
+          "companyId": "Company ID"
+        },
+        "defaults": {
+          "pending": "Pending (default)"
+        },
+        "submit": "Create program"
+      },
+      "tableAlt": {
+        "col": {
+          "title": "Title",
+          "description": "Description (max {{ max }})",
+          "company": "Company",
+          "status": "Status",
+          "actions": "Actions"
+        }
+      },
+      "actions": {
+        "edit": "Edit",
+        "approve": "Approve",
+        "delete": "Delete",
+        "save": "Save",
+        "cancel": "Cancel"
+      }
+    },
+
+    "reports": {
+      "title": "Reports",
+      "filterLabel": "Filter:",
+      "filterAll": "All",
+      "filter": {
+        "label": "Filter",
+        "all": "All"
+      },
+      "status": {
+        "PENDING": "Pending",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      },
+      "severity": {
+        "LOW": "Low",
+        "MEDIUM": "Medium",
+        "HIGH": "High"
+      },
+      "vulnType": "Vulnerability type",
+      "commentPlaceholder": "Admin comment (optional)",
+      "actions": {
+        "preview": "Preview",
+        "approve": "Approve",
+        "reject": "Reject"
+      },
+      "table": {
+        "id": "ID",
+        "report": "Report",
+        "severity": "Severity",
+        "researcher": "Researcher",
+        "submitted": "Submitted",
+        "vulnType": "Vuln. type",
+        "adminComment": "Admin comment",
+        "comment": "Comment",
+        "actions": "Actions"
+      },
+      "row": {
+        "preview": "Preview",
+        "approve": "Approve",
+        "reject": "Reject",
+        "saveVuln": "Save"
+      },
+      "messages": {
+        "empty": "No reports.",
+        "saved": "Report updated",
+        "errorLoad": "Failed to load reports",
+        "errorUpdate": "Failed to update report"
+      },
+      "empty": "No reports yet."
+    },
+
+    "vulns": {
+      "title": "Vulnerability types",
+      "addPlaceholder": "Add a type",
+      "addBtn": "Add",
+      "name": "Name",
+      "actions": "Actions",
+      "edit": "Update",
+      "remove": "Delete",
+      "empty": "No vulnerability types",
+      "errors": {
+        "load": "Failed to load vulnerability types",
+        "create": "Creation failed",
+        "update": "Update failed",
+        "delete": "Deletion failed"
+      }
+    },
+
+    "vuln": {
+      "title": "Vulnerability types",
+      "placeholder": "Add a type (e.g., XSS, SQLi...)",
+      "ariaNewType": "New vulnerability type",
+      "col": {
+        "name": "Name",
+        "actions": "Actions"
+      },
+      "empty": "No types yet."
+    },
+
+    "challenges": {
+      "list": {
+        "title": "Challenges",
+        "create": "New challenge",
+        "table": {
+          "title": "Title",
+          "period": "Period",
+          "program": "Program",
+          "winner": "Winner",
+          "actions": "Actions"
+        },
+        "empty": "No challenge yet",
+        "deleted": "Challenge deleted",
+        "deleteError": "Deletion failed",
+        "loadError": "Failed to load challenges"
+      },
+      "form": {
+        "createTitle": "Create a challenge",
+        "editTitle": "Edit challenge",
+        "subtitle": "Winning code challenge, linked to a program",
+        "fields": {
+          "title": "Title",
+          "description": "Description",
+          "start": "Start",
+          "end": "End",
+          "program": "Program",
+          "theme": "Theme (optional)",
+          "resource": "Resource link (optional)",
+          "winningCode": "Winning code"
+        },
+        "buttons": {
+          "save": "Save",
+          "create": "Create",
+          "cancel": "Cancel"
+        },
+        "validation": {
+          "required": "Title, period and program are required.",
+          "codeRequired": "Winning code is required on creation."
+        },
+        "toast": {
+          "saved": "Challenge saved",
+          "created": "Challenge created",
+          "error": "Save failed"
+        }
+      }
+    }
   }
 }

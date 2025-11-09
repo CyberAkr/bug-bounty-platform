@@ -1,0 +1,54 @@
+<mat-card class="p-4 max-w-3xl mx-auto">
+  <button mat-button color="primary" (click)="back()">
+    <mat-icon>arrow_back</mat-icon>
+    {{ 'admin.badges.form.back' | translate }}
+  </button>
+
+  <h2 class="text-xl font-semibold mb-4">
+    {{ isEdit() ? ('admin.badges.form.titleEdit' | translate) : ('admin.badges.form.titleCreate' | translate) }}
+  </h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="grid gap-4">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'admin.badges.form.name' | translate }}</mat-label>
+      <input matInput formControlName="name" required/>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'admin.badges.form.description' | translate }}</mat-label>
+      <textarea matInput rows="3" formControlName="description"></textarea>
+    </mat-form-field>
+
+    <div>
+      <div class="flex items-center gap-3 mb-2">
+        <button mat-stroked-button type="button" (click)="pickFile.click()">
+          <mat-icon>upload</mat-icon>
+          {{ 'admin.badges.form.importImage' | translate }}
+        </button>
+        <span class="text-sm text-gray-500">
+          {{ 'admin.badges.form.imageHint' | translate }}
+        </span>
+      </div>
+
+      <input #pickFile hidden type="file" accept="image/*" (change)="onFile($event)"/>
+
+      <div *ngIf="preview()" class="mt-2">
+        <img [src]="preview()" alt="preview" class="h-24 w-24 object-cover rounded border"/>
+      </div>
+
+      <p *ngIf="form.value.imagePath && !preview()" class="mt-2">
+        {{ 'admin.badges.form.currentImage' | translate }}:
+        <a [href]="form.value.imagePath" target="_blank">{{ form.value.imagePath }}</a>
+      </p>
+    </div>
+
+    <div class="flex gap-2">
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || saving()">
+        {{ isEdit() ? ('admin.badges.form.save' | translate) : ('admin.badges.form.create' | translate) }}
+      </button>
+      <button mat-stroked-button type="button" (click)="back()">
+        {{ 'admin.badges.form.cancel' | translate }}
+      </button>
+    </div>
+  </form>
+</mat-card>

@@ -812,7 +812,52 @@ html, body {
     border-color: rgba(2,6,23,.06);
     box-shadow: 0 6px 20px rgba(2,6,23,.06);
   }
+  /* === ADMIN === */
+  /* === vulné === */
+  .auth-wrapper {
+    @apply max-w-6xl mx-auto p-6;
+  }
 
+  .auth-card {
+    @apply bg-white rounded-2xl shadow-md p-6 border border-gray-100;
+  }
+
+  /* Boutons Material */
+  button[mat-raised-button] {
+    @apply normal-case tracking-normal font-medium;
+  }
+
+  /* Champs Material */
+  mat-form-field {
+    @apply text-sm;
+  }
+
+  /* Tableau */
+  table {
+    @apply text-sm;
+  }
+
+  th.mat-header-cell {
+    @apply font-semibold text-gray-700 bg-gray-50;
+  }
+
+  td.mat-cell {
+    @apply py-3 px-4;
+  }
+
+  tr.mat-row:hover {
+    @apply bg-gray-50;
+  }
+
+  /* Barre outils */
+  mat-paginator {
+    @apply bg-white border-t border-gray-100;
+  }
+
+  /* Snackbar feedback */
+  ::ng-deep .mat-mdc-snack-bar-container {
+    @apply rounded-lg shadow-lg !important;
+  }
   /* ---------- DIVERS ---------- */
   .container-page { @apply max-w-7xl mx-auto p-6 md:p-10; }
   .focus-ring:focus { outline: 2px solid var(--ring); outline-offset: 2px; }

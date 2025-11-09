@@ -1,1 +1,52 @@
-<p>reports works!</p>
+<section class="p-4">
+  <header class="flex items-center justify-between mb-4">
+    <h1 class="text-xl font-semibold">{{ 'admin.reports.title' | translate }}</h1>
+    <div class="flex items-center gap-2">
+      <label class="text-sm">{{ 'admin.reports.filter.label' | translate }}</label>
+      <select [ngModel]="filter()" (ngModelChange)="onFilterChange($event)"
+              class="border rounded px-2 py-1 text-sm">
+        <option value="">{{ 'admin.reports.filter.all' | translate }}</option>
+        <option value="PENDING">{{ 'admin.reports.status.PENDING' | translate }}</option>
+        <option value="APPROVED">{{ 'admin.reports.status.APPROVED' | translate }}</option>
+        <option value="REJECTED">{{ 'admin.reports.status.REJECTED' | translate }}</option>
+      </select>
+      <button class="border rounded px-3 py-1 text-sm"
+              (click)="reload()">{{ 'common.refresh' | translate }}</button>
+    </div>
+  </header>
+
+  <div *ngIf="loading()" class="text-sm text-slate-600">
+    {{ 'common.loading' | translate }}
+  </div>
+
+  <div *ngIf="!loading() && reports().length === 0" class="text-sm text-slate-500">
+    {{ 'admin.reports.empty' | translate }}
+  </div>
+
+  <div class="overflow-auto" *ngIf="!loading() && reports().length > 0">
+    <table class="min-w-full text-sm border-collapse">
+      <thead>
+      <tr class="text-left border-b">
+        <th class="px-4 py-2">{{ 'admin.reports.table.id' | translate }}</th>
+        <th class="px-4 py-2">{{ 'admin.reports.table.report' | translate }}</th>
+        <th class="px-4 py-2">{{ 'admin.reports.table.researcher' | translate }}</th>
+        <th class="px-4 py-2">{{ 'admin.reports.table.submitted' | translate }}</th>
+        <th class="px-4 py-2">{{ 'admin.reports.table.vulnType' | translate }}</th>
+        <th class="px-4 py-2">{{ 'admin.reports.table.comment' | translate }}</th>
+        <th class="px-4 py-2">{{ 'admin.reports.table.actions' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr app-report-row
+          *ngFor="let r of reports(); trackBy: track"
+          [report]="r"
+          [vulnerabilities]="vulns()"
+          (preview)="onPreview($event)"
+          (approve)="onApprove($event.id, $event.comment)"
+          (reject)="onReject($event.id, $event.comment)"
+          (saveVulnerability)="onSaveVuln($event.reportId, $event.vulnerabilityId)">
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

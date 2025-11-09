@@ -1,80 +1,96 @@
-
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 import { BadgesService, Badge } from './badges.service';
-import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-badges',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  template: `
-    <h1 class="text-2xl font-semibold mb-4">Gestion des badges</h1>
-
-    <div class="flex gap-2 mb-4">
-      <input [(ngModel)]="newName" placeholder="Nom" class="border p-2 rounded w-1/3" />
-      <input [(ngModel)]="newDesc" placeholder="Description" class="border p-2 rounded w-1/2" />
-      <button (click)="addBadge()" class="bg-green-600 text-white px-4 py-2 rounded">➕ Ajouter</button>
-    </div>
-
-    <table class="w-full text-sm border bg-white rounded">
-      <thead class="bg-gray-100 text-left">
-        <tr>
-          <th class="px-4 py-2">Nom</th>
-          <th class="px-4 py-2">Description</th>
-          <th class="px-4 py-2">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let badge of badges()" class="border-b">
-          <td class="px-4 py-2">
-            <input [(ngModel)]="badge.name" class="text-sm border p-1 rounded w-full" />
-          </td>
-          <td class="px-4 py-2">
-            <input [(ngModel)]="badge.description" class="text-sm border p-1 rounded w-full" />
-          </td>
-          <td class="px-4 py-2 space-x-1">
-            <button (click)="updateBadge(badge)"
-                    class="bg-blue-500 text-white px-2 py-1 rounded text-sm">🖊 Modifier</button>
-            <button (click)="deleteBadge(badge.badge_id)"
-                    class="bg-red-500 text-white px-2 py-1 rounded text-sm">🗑 Supprimer</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  `,
+  imports: [
+    CommonModule,
+    FormsModule,
+    TranslateModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTableModule,
+    MatSnackBarModule,
+  ],
+  templateUrl: './badges.component.html',
 })
 export class BadgesComponent {
   private service = inject(BadgesService);
+  private snack = inject(MatSnackBar);
+  private i18n = inject(TranslateService);
+
   badges = signal<Badge[]>([]);
-  newName = '';
-  newDesc = '';
+  newName = signal<string>('');
+  newDesc = signal<string>('');
+
+  displayedColumns: string[] = ['name', 'description', 'actions'];
 
   constructor() {
     this.load();
   }
 
-  load() {
-    this.service.getAll().subscribe(data => this.badges.set(data));
-  }
-
-  addBadge() {
-    if (!this.newName.trim()) return;
-    this.service.create({ name: this.newName, description: this.newDesc }).subscribe(() => {
-      this.newName = '';
-      this.newDesc = '';
-      this.load();
+  load(): void {
+    this.service.getAll().subscribe({
+      next: (data) => this.badges.set(data),
+      error: () => this.toast('admin.badges.msg.loadError'),
     });
   }
 
-  updateBadge(badge: Badge) {
-    this.service.update(badge.badge_id, {
-      name: badge.name,
-      description: badge.description
-    }).subscribe(() => this.load());
+  addBadge(): void {
+    const name = this.newName().trim();
+    const description = this.newDesc().trim();
+    if (!name) return;
+
+    this.service.create({ name, description }).subscribe({
+      next: () => {
+        this.newName.set('');
+        this.newDesc.set('');
+        this.load();
+        this.toast('admin.badges.msg.created');
+      },
+      error: () => this.toast('admin.badges.msg.saveError'),
+    });
   }
 
-  deleteBadge(id: number) {
-    this.service.delete(id).subscribe(() => this.load());
+  updateBadge(badge: Badge): void {
+    this.service
+      .update(badge.badge_id, { name: badge.name, description: badge.description })
+      .subscribe({
+        next: () => {
+          this.toast('admin.badges.msg.updated');
+          this.load();
+        },
+        error: () => this.toast('admin.badges.msg.saveError'),
+      });
+  }
+
+  deleteBadge(id: number): void {
+    this.service.delete(id).subscribe({
+      next: () => {
+        this.toast('admin.badges.msg.deleted');
+        this.load();
+      },
+      error: () => this.toast('admin.badges.msg.deleteError'),
+    });
+  }
+
+  private toast(key: string): void {
+    const msg = this.i18n.instant(key); // traduit la clé immédiatement
+    this.snack.open(msg, undefined, { duration: 2200 });
   }
 }

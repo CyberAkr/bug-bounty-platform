@@ -1,1 +1,66 @@
-<p>user-row works!</p>
+<!-- Ligne d'utilisateur pour le tableau admin -->
+<td class="px-4 py-2 truncate align-middle">
+  {{ user.username }}
+</td>
+
+<td class="px-4 py-2 truncate align-middle">
+  {{ user.email }}
+</td>
+
+<td class="px-4 py-2 align-middle">
+  <div class="flex items-center gap-3">
+    <select class="border rounded p-1 text-xs"
+            [ngModel]="user.role"
+            (ngModelChange)="onRole($event)">
+      <option value="researcher">{{ 'admin.users.role.researcher' | translate }}</option>
+      <option value="company">{{ 'admin.users.role.company' | translate }}</option>
+      <option value="admin">{{ 'admin.users.role.admin' | translate }}</option>
+    </select>
+
+    <label class="inline-flex items-center gap-1 text-xs">
+      <input type="checkbox"
+             [ngModel]="user.is_banned"
+             (ngModelChange)="onBanned($event)">
+      <span>{{ 'admin.users.banned' | translate }}</span>
+    </label>
+  </div>
+</td>
+
+<td class="px-4 py-2 align-middle">
+  <select class="border rounded p-1 text-xs"
+          [ngModel]="user.verification_status"
+          (ngModelChange)="onVerification($event)">
+    <option value="PENDING">{{ 'admin.users.verif.PENDING' | translate }}</option>
+    <option value="APPROVED">{{ 'admin.users.verif.APPROVED' | translate }}</option>
+    <option value="REJECTED">{{ 'admin.users.verif.REJECTED' | translate }}</option>
+  </select>
+</td>
+
+<td class="px-4 py-2 align-middle">
+  <span class="text-xs"
+        [class.text-emerald-600]="user.hasVerificationDocument"
+        [class.text-gray-400]="!user.hasVerificationDocument">
+    {{ user.hasVerificationDocument ? ('admin.users.doc.available' | translate) : ('admin.users.doc.none' | translate) }}
+  </span>
+</td>
+
+<td class="px-4 py-2 align-middle">
+  <div class="flex items-center gap-2">
+    <button class="border rounded px-2 py-1 text-xs"
+            (click)="emitUpdate()"
+            [disabled]="!hasPending()">
+      {{ 'common.save' | translate }}
+    </button>
+
+    <button class="border rounded px-2 py-1 text-xs text-red-600"
+            (click)="removed.emit(user.user_id)">
+      {{ 'common.delete' | translate }}
+    </button>
+
+    <button class="border rounded px-2 py-1 text-xs"
+            [disabled]="!user.hasVerificationDocument"
+            (click)="download()">
+      {{ 'common.download' | translate }}
+    </button>
+  </div>
+</td>

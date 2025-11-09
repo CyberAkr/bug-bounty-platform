@@ -8,37 +8,37 @@
   >
     <div class="brand">
       <mat-icon>security</mat-icon>
-      <span>Admin</span>
+      <span>{{ 'admin.layout.brand' | translate }}</span>
     </div>
 
     <mat-nav-list>
       <a mat-list-item routerLink="/admin/reports" routerLinkActive="active">
         <mat-icon matListItemIcon>description</mat-icon>
-        <span matListItemTitle>Rapports</span>
+        <span matListItemTitle>{{ 'admin.nav.reports' | translate }}</span>
       </a>
       <a mat-list-item routerLink="/admin/users" routerLinkActive="active">
         <mat-icon matListItemIcon>people</mat-icon>
-        <span matListItemTitle>Utilisateurs</span>
+        <span matListItemTitle>{{ 'admin.nav.users' | translate }}</span>
       </a>
       <a mat-list-item routerLink="/admin/programs" routerLinkActive="active">
         <mat-icon matListItemIcon>folder</mat-icon>
-        <span matListItemTitle>Programmes</span>
+        <span matListItemTitle>{{ 'admin.nav.programs' | translate }}</span>
       </a>
       <a mat-list-item routerLink="/admin/rewards" routerLinkActive="active">
         <mat-icon matListItemIcon>emoji_events</mat-icon>
-        <span matListItemTitle>Récompenses</span>
+        <span matListItemTitle>{{ 'admin.nav.rewards' | translate }}</span>
       </a>
       <a mat-list-item routerLink="/admin/badges" routerLinkActive="active">
         <mat-icon matListItemIcon>verified</mat-icon>
-        <span matListItemTitle>Badges</span>
+        <span matListItemTitle>{{ 'admin.nav.badges' | translate }}</span>
       </a>
       <a mat-list-item routerLink="/admin/vulnerabilities" routerLinkActive="active">
         <mat-icon matListItemIcon>bug_report</mat-icon>
-        <span matListItemTitle>Vulnérabilités</span>
+        <span matListItemTitle>{{ 'admin.nav.vulns' | translate }}</span>
       </a>
       <a mat-list-item routerLink="/admin/challenges" routerLinkActive="active">
         <mat-icon matListItemIcon>flag</mat-icon>
-        <span matListItemTitle>Défis</span>
+        <span matListItemTitle>{{ 'admin.nav.challenges' | translate }}</span>
       </a>
     </mat-nav-list>
 
@@ -47,7 +47,7 @@
     <div class="sidenav-footer">
       <button mat-stroked-button color="primary" (click)="goHome()">
         <mat-icon>home</mat-icon>
-        Accueil
+        {{ 'admin.nav.home' | translate }}
       </button>
     </div>
   </mat-sidenav>
@@ -60,10 +60,13 @@
         <mat-icon>menu</mat-icon>
       </button>
 
-      <span class="title">Bug Bounty Platform — Admin</span>
+      <span class="title">{{ 'admin.layout.title' | translate }}</span>
       <span class="spacer"></span>
 
-      <button mat-icon-button aria-label="Aller à l'accueil" (click)="goHome()">
+      <button
+        mat-icon-button
+        [attr.aria-label]="'admin.topbar.homeAria' | translate"
+        (click)="goHome()">
         <mat-icon>home</mat-icon>
       </button>
     </mat-toolbar>

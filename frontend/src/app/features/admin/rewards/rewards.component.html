@@ -1,1 +1,119 @@
-<p>rewards works!</p>
+<!-- rewards.component.html -->
+<div class="mx-auto max-w-6xl p-4 space-y-6">
+  <header class="flex items-center justify-between">
+    <h1 class="text-2xl font-semibold">{{ 'admin.rewards.title' | translate }}</h1>
+  </header>
+
+  <!-- Création d'une récompense -->
+  <section class="rounded-xl border p-4 space-y-3 bg-white">
+    <h2 class="font-medium">{{ 'admin.rewards.create.title' | translate }}</h2>
+
+    <form (ngSubmit)="create()" class="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
+      <div>
+        <label class="block text-sm mb-1">{{ 'admin.rewards.create.reportId' | translate }}</label>
+        <input type="number" class="w-full border rounded px-3 py-2"
+               [(ngModel)]="reportId" name="reportId" required />
+      </div>
+
+      <div>
+        <label class="block text-sm mb-1">{{ 'admin.rewards.create.amount' | translate }}</label>
+        <input type="number" min="0" step="0.01" class="w-full border rounded px-3 py-2"
+               [(ngModel)]="amount" name="amount" required />
+      </div>
+
+      <div class="text-sm text-gray-600">
+        <div class="mb-1" [innerHTML]="'admin.rewards.create.dateInfo' | translate"></div>
+        <div>{{ 'admin.rewards.create.proofInfo' | translate }}</div>
+      </div>
+
+      <div class="flex gap-2">
+        <button type="submit"
+                [disabled]="svc.creating() || !reportId || !isAmountValid()"
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50">
+          {{ svc.creating() ? ('common.creating' | translate) : ('common.create' | translate) }}
+        </button>
+
+        <button type="button" class="px-4 py-2 rounded border"
+                (click)="resetForm()" [disabled]="svc.creating()">
+          {{ 'common.reset' | translate }}
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Liste des récompenses -->
+  <section class="rounded-xl border p-0 overflow-hidden">
+    <div class="px-4 py-3 bg-gray-50 flex items-center justify-between">
+      <h2 class="font-medium">{{ 'admin.rewards.list.title' | translate }}</h2>
+      <button class="text-sm px-3 py-1 rounded border"
+              (click)="reload()" [disabled]="svc.loading()">
+        {{ 'common.refresh' | translate }}
+      </button>
+    </div>
+
+    <div *ngIf="svc.loading()" class="p-4 text-sm text-gray-500">
+      {{ 'common.loading' | translate }}
+    </div>
+
+    <div *ngIf="!svc.loading() && rows().length === 0" class="p-4 text-sm text-gray-500">
+      {{ 'admin.rewards.list.empty' | translate }}
+    </div>
+
+    <table *ngIf="rows().length > 0" class="min-w-full text-sm">
+      <thead class="bg-gray-100 text-left">
+      <tr>
+        <th class="px-4 py-2">{{ 'admin.rewards.table.id' | translate }}</th>
+        <th class="px-4 py-2">{{ 'admin.rewards.table.reportId' | translate }}</th>
+        <th class="px-4 py-2">{{ 'admin.rewards.table.amount' | translate }}</th>
+        <th class="px-4 py-2">{{ 'admin.rewards.table.paidAt' | translate }}</th>
+        <th class="px-4 py-2">{{ 'admin.rewards.table.proof' | translate }}</th>
+        <th class="px-4 py-2">{{ 'admin.rewards.table.actions' | translate }}</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let r of rows()" class="border-t">
+        <td class="px-4 py-2">{{ r.paymentId }}</td>
+        <td class="px-4 py-2">{{ r.report?.reportId ?? '—' }}</td>
+        <td class="px-4 py-2">{{ r.amount | number:'1.2-2' }} €</td>
+        <td class="px-4 py-2">{{ r.paymentDate | dateFormat:{ withTime: true } }}</td>
+
+        <td class="px-4 py-2">
+          <span class="inline-flex items-center gap-1"
+                [class.text-green-700]="!!r.proofUrl"
+                [class.text-red-700]="!r.proofUrl">
+            <span class="text-lg">{{ r.proofUrl ? '✓' : '✗' }}</span>
+            <span>
+              {{ r.proofUrl ? ('admin.rewards.proof.present' | translate)
+              : ('admin.rewards.proof.missing' | translate) }}
+            </span>
+          </span>
+        </td>
+
+        <td class="px-4 py-2 flex gap-2">
+          <label class="inline-flex items-center gap-2 cursor-pointer">
+            <input type="file" class="hidden"
+                   (change)="onFilePicked($event, r.paymentId)"
+                   accept="application/pdf,image/png,image/jpeg" />
+            <span class="px-3 py-1 rounded border">
+              {{
+                svc.uploading() === r.paymentId
+                  ? ('common.uploading' | translate)
+                  : (r.proofUrl
+                    ? ('admin.rewards.actions.replaceProof' | translate)
+                    : ('admin.rewards.actions.addProof' | translate))
+              }}
+            </span>
+          </label>
+
+          <button class="px-3 py-1 rounded border"
+                  *ngIf="r.proofUrl"
+                  (click)="svc.downloadProof(r.paymentId)">
+            {{ 'common.download' | translate }}
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+</div>
