@@ -15,5 +15,95 @@
     "logout": "Déconnexion",
     "langFr": "🇫🇷 FR",
     "langEn": "🇬🇧 EN"
+  },
+
+
+  "footer": {
+    "aboutTitle": "À propos",
+    "aboutText": "Plateforme belge de bug bounty dédiée aux PME et chercheurs en cybersécurité. Signalez, collaborez et renforcez la sécurité du numérique.",
+    "linksTitle": "Navigation",
+    "programs": "Programmes",
+    "ranking": "Classement",
+    "forum": "Forum",
+    "contact": "Contact",
+    "legal": "Mentions légales",
+    "followTitle": "Nous suivre",
+    "copyright": "© {{year}} Bug Bounty — Tous droits réservés."
+  },
+  "auth": {
+    "login": {
+      "title": "Connexion",
+      "subtitle": "Accédez à votre espace en toute sécurité",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "submit": "Se connecter",
+      "loading": "Connexion...",
+      "noAccount": "Pas encore de compte ?",
+      "register": "Créer un compte",
+      "forgot": "Mot de passe oublié ?"
+    },
+    "errors": {
+      "invalid": "Identifiants invalides."
+    },
+    "register": {
+      "title": "Créer un compte",
+      "subtitle": "Choisissez votre profil et complétez vos informations",
+      "asResearcher": "Je suis un chercheur",
+      "asCompany": "Je suis une entreprise",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "username": "Nom d’utilisateur",
+      "lang": "Langue préférée",
+      "bio": "Bio",
+      "companyNumber": "Numéro d’entreprise",
+      "submit": "S’inscrire",
+      "loading": "Inscription…",
+      "haveAccount": "Déjà un compte ? Se connecter",
+      "success": "Inscription réussie ! Vérifiez votre e-mail.",
+      "emailInUse": "Cet e-mail est déjà utilisé.",
+      "savedButEmailIssue": "Inscription enregistrée. Problème d’envoi de mail : entrez le code ou renvoyez-le.",
+      "error": "Erreur lors de l’inscription.",
+      "already": "Vous êtes déjà inscrit ?",
+      "signIn": "Se connecter"
+    }
+  },
+
+  "verify": {
+    "title": "Vérification de votre e-mail",
+    "subtitle": "Nous avons envoyé un code à {{email}}.",
+    "codeLabel": "Code à 6 chiffres",
+    "help": "Entrez le code reçu par e-mail. Le lien « renvoyer le code » vous en renvoie un nouveau.",
+    "resend": "Renvoyer le code",
+    "submit": "Valider",
+    "loading": "Vérification…",
+    "resent": "Code renvoyé. Vérifiez votre boîte mail.",
+    "success": "Adresse vérifiée ! Vous pouvez vous connecter.",
+    "errors": {
+      "invalidCode": "Code invalide ou expiré.",
+      "resendFail": "Impossible de renvoyer le code pour le moment.",
+      "missingEmail": "Email manquant."
+    }},
+    "challenges": {
+      "weekly": {
+        "title": "Défi de la semaine",
+        "counter": "Défi {{current}} / {{total}}",
+        "empty": "Aucun défi actif actuellement.",
+        "openResource": "Accéder à la ressource du défi",
+        "enterCode": "Entre ton code",
+        "submit": "Soumettre",
+        "prev": "Précédent",
+        "next": "Suivant",
+        "status": { "ongoing": "En cours", "upcoming": "A venir", "ended": "Terminé" },
+        "snackbar": {
+          "valid": "Code validé !",
+          "invalid": "Code invalide ou déjà gagné."
+        },
+        "msg": {
+          "valid": "Ton code a bien été validé.",
+          "invalid": "Code invalide ou déjà utilisé."
+        }
+      }
+    }
   }
-}

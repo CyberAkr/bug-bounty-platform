@@ -2,49 +2,450 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ====== DESIGN TOKENS (Palette “Cyber” par défaut) ====== */
+/* =========================
+   DESIGN TOKENS (par défaut)
+   ========================= */
 :root{
-  --color-primary: #0B2545;
-  --color-primary-2:#193E66;
-  --color-primary-3:#005F73;
+  --color-primary:   #0B2545;
+  --color-primary-2: #193E66;
+  --color-primary-3: #005F73;
   --color-on-primary:#ffffff;
-  --accent:         #17BEBB;  /* CTA */
-  --accent-strong:  #14A1A0;  /* hover CTA */
-  --accent-glow:    #E6FF00;  /* highlight */
 
-  --surface: #F7F9FC;
-  --surface-2:#ffffff;
-  --text:    #0B1220;
-  --muted:   #6B7280;
-  --ring:    rgba(23,190,187,.35);
+  --accent:        #17BEBB;  /* CTA */
+  --accent-strong: #14A1A0;  /* hover CTA */
+  --accent-glow:   #E6FF00;  /* highlight */
+
+  --surface:   #F7F9FC;
+  --surface-2: #ffffff;
+  --text:      #0B1220;
+  --muted:     #6B7280;
+  --ring:      rgba(23,190,187,.35);
 }
 
-/* Thèmes alternatifs (change classe sur <body>) */
+/* =========================
+   THEMES (classe sur <body>)
+   ========================= */
 .theme-belgium {
-  --color-primary:#2D2926; --color-primary-2:#2D2926; --color-primary-3:#C8102E;
-  --accent:#FFCD00; --accent-strong:#F2C300; --accent-glow:#FFE56B; --color-on-primary:#fff;
+  --color-primary:#2D2926;
+  --color-primary-2:#2D2926;
+  --color-primary-3:#C8102E;
+  --accent:#FFCD00;
+  --accent-strong:#F2C300;
+  --accent-glow:#FFE56B;
+  --color-on-primary:#fff;
 }
 .theme-blue-pro {
-  --color-primary:#1F6FEB; --color-primary-2:#1D63D3; --color-primary-3:#1557B0;
-  --accent:#FFCD00; --accent-strong:#F2C300; --accent-glow:#FFE56B; --color-on-primary:#fff;
+  --color-primary:#1F6FEB;
+  --color-primary-2:#1D63D3;
+  --color-primary-3:#1557B0;
+  --accent:#FFCD00;
+  --accent-strong:#F2C300;
+  --accent-glow:#FFE56B;
+  --color-on-primary:#fff;
 }
 
-/* ====== COMPOSANTS RÉUTILISABLES ====== */
+/* =========================
+   BASE
+   ========================= */
+html, body {
+  height: 100%;
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* =========================
+   COMPOSANTS / UTILITAIRES
+   ========================= */
 @layer components {
-  /* Header */
+  /* ---------- HEADER ---------- */
   .app-header {
     @apply text-white shadow-lg sticky top-0 z-40;
-    background-image: linear-gradient(90deg,
-    var(--color-primary), var(--color-primary-2), var(--color-primary-3));
+    background-image: linear-gradient(
+      90deg, var(--color-primary), var(--color-primary-2), var(--color-primary-3)
+    );
   }
   .app-header__container { @apply max-w-7xl mx-auto px-4 sm:px-6; }
-  .app-header__bar { @apply h-16 flex items-center justify-between gap-3; }
+  .app-header__bar       { @apply h-16 flex items-center justify-between gap-3; }
 
-  /* Liens sur fond sombre */
-  .link-accent { color: var(--color-on-primary); }
-  .link-accent:hover { color: var(--accent-glow); }
+  /* ---------- LAYOUT ---------- */
+  .app-shell { @apply min-h-screen flex flex-col; }          /* wrapper global */
+  .app-main  { @apply flex-1 py-6 md:py-8; }                 /* zone principale (compact) */
+  .container-default { @apply max-w-7xl mx-auto px-4; }      /* conteneur */
+
+  /* ---------- FOOTER ---------- */
+  .app-footer {
+    @apply mt-auto border-t text-sm bg-[var(--surface-2)] text-[var(--text)];
+    @apply py-4 md:py-5; /* réduit la hauteur */
+  }
+  /*.footer-bottom { @apply border-t mt-6 pt-3 text-center text-xs opacity-70; }*/
+  /* Espace entre les colonnes moins grand */
+  .app-footer .container-default {
+    @apply grid gap-4 md:gap-6 md:grid-cols-3;
+  }
+
+  /* Espacements internes */
+  .app-footer h3 {
+    @apply mb-1 text-sm font-semibold;
+  }
+  .app-footer ul li {
+    @apply leading-tight;
+  }
+
+  /* Ligne du bas plus fine */
+  .footer-bottom {
+    @apply border-t mt-4 pt-2 text-center text-xs opacity-70;
+  }
+  /* ---------- login ---------- */
+  /* wrapper centré plein écran */
+  .login-wrapper {
+    @apply min-h-[85vh] flex items-center justify-center bg-[var(--surface)];
+    padding: 2rem 1rem; /* léger espace latéral sur mobile */
+  }
+
+  /* carte d'auth plus grande (~+20 %) */
+  .login-card {
+    @apply w-full p-10 md:p-12 rounded-2xl shadow-xl bg-[var(--surface-2)] border;
+    border-color: rgba(0,0,0,.05);
+    max-width: 540px;   /* au lieu de 384px (max-w-sm) → +20 % env. */
+    min-height: 520px;  /* donne plus de présence verticale */
+  }
+
+  .error-text {
+    @apply text-red-600 text-sm;
+  }
+
+  /* Champs Material à fond blanc pur */
+  .mat-mdc-form-field-appearance-fill .mat-mdc-text-field-wrapper {
+    border-radius: 0.75rem !important;
+    background: #ffffff !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  /* effet au survol */
+  .mat-mdc-form-field-appearance-fill .mat-mdc-text-field-wrapper:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+
+  /* effet focus (halo accent léger) */
+  .mat-mdc-form-field-appearance-fill .mat-mdc-text-field-wrapper.mdc-text-field--focused {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+
+  /* icône à gauche */
+  .mat-mdc-form-field .mat-mdc-form-field-icon-prefix {
+    color: var(--muted);
+    margin-right: 0.35rem !important;
+  }
+
+  /* padding vertical du champ */
+  .mat-mdc-form-field-appearance-fill .mat-mdc-form-field-infix {
+    padding-block: 0.55rem !important;
+  }
+
+  /* ---------- register  ---------- */
+  /* Carte générique d'auth (déjà utilisée côté login) */
+  .auth-card { @apply card p-6 md:p-8; }
+
+  /* Switch de rôle en chips */
+  .role-switch { @apply flex items-center gap-3; }
+  .role-chip {
+    @apply inline-flex items-center px-4 py-2 rounded-full border transition;
+    border-color: rgba(0,0,0,.08);
+    background: var(--surface-2);
+  }
+  .role-chip:hover { @apply shadow-sm; }
+  .role-chip--active {
+    background: var(--accent);
+    color: var(--color-primary);
+    border-color: transparent;
+  }
+
+  /* Grille de formulaire (existe déjà : .form-grid) → on ajoute la variante 2 colonnes */
+  .form-grid { @apply grid grid-cols-1 md:grid-cols-2 gap-4; }
+
+  /* Actions bas formulaire */
+  .form-actions { @apply mt-2 flex items-center justify-between; }
+
+  /* === demande code mail  === */
+  @layer components {
+    .muted { @apply opacity-80; }
+    .success-text { @apply text-green-600 text-sm; }
+  }
+  .auth-card--compact {
+    max-width: 440px !important; /* au lieu de 540px */
+    min-height: 420px !important; /* au lieu de 520px */
+    padding: 2.5rem !important;   /* réduit un peu le padding */
+  }
+
+  /* === THEME "INTEGRITY CYBER PRO" === */
+  .challenge-wrapper {
+    @apply min-h-[85vh] flex items-center justify-center;
+    background: radial-gradient(circle at top, #0d1b2a 0%, #000814 100%);
+    color: #e0f2ff;
+    padding: 2rem 1rem;
+  }
+
+  .challenge-card {
+    @apply w-full rounded-2xl border p-8 shadow-2xl backdrop-blur-xl;
+    max-width: 48rem;
+    background: rgba(13, 27, 42, 0.75);
+    border-color: rgba(0, 190, 255, 0.25);
+    box-shadow: 0 0 40px rgba(0, 170, 255, 0.15);
+    transition: all 0.4s ease;
+  }
+
+  .challenge-card:hover {
+    box-shadow: 0 0 60px rgba(0, 200, 255, 0.25);
+    border-color: rgba(0, 200, 255, 0.5);
+    transform: translateY(-2px);
+  }
+
+  /* Titres */
+  .challenge-card h1,
+  .challenge-card h2,
+  .challenge-card h3 {
+    @apply font-semibold tracking-wide;
+    color: #00baff;
+    text-shadow: 0 0 8px rgba(0, 200, 255, 0.3);
+  }
+
+  /* Paragraphes */
+  .challenge-card p {
+    color: #d1e6f9;
+  }
+
+  /* === Intérieur du mat-card === */
+  .challenge-card .mat-mdc-card {
+    background: rgba(15, 25, 40, 0.85) !important;
+    border: 1px solid rgba(0, 200, 255, 0.25);
+    box-shadow: 0 0 25px rgba(0, 180, 255, 0.15);
+    color: #dcefff !important;
+    backdrop-filter: blur(12px);
+  }
+
+  .challenge-card .mat-mdc-card-header,
+  .challenge-card .mat-mdc-card-content {
+    background: transparent !important;
+  }
+
+  .challenge-card .mat-mdc-card-title {
+    color: #00c8ff !important;
+  }
+
+  .challenge-card .mat-mdc-card-subtitle {
+    color: #9cdfff !important;
+  }
+
+  /* Inputs Angular Material */
+  .mat-mdc-form-field-appearance-fill {
+    --mdc-filled-text-field-container-color: rgba(255, 255, 255, 0.05);
+    --mdc-filled-text-field-container-opacity: 1;
+    --mdc-filled-text-field-container-shape: 12px;
+    --mdc-filled-text-field-active-indicator-color: transparent;
+    --mdc-filled-text-field-focus-active-indicator-color: transparent;
+  }
+
+  .mat-mdc-form-field-appearance-fill .mat-mdc-text-field-wrapper {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(0, 200, 255, 0.3);
+    border-radius: 0.75rem !important;
+    box-shadow: 0 1px 3px rgba(0, 200, 255, 0.15);
+    color: #e0f7ff !important;
+    backdrop-filter: blur(6px);
+  }
+
+  .mat-mdc-form-field-appearance-fill .mat-mdc-text-field-wrapper:hover {
+    border-color: #00d4ff;
+    box-shadow: 0 0 0 1px #00d4ff;
+  }
+
+  .mat-mdc-form-field-appearance-fill .mat-mdc-text-field-wrapper.mdc-text-field--focused {
+    border-color: #00e0ff;
+    box-shadow: 0 0 0 2px #00e0ff;
+  }
+
+  input.mat-mdc-input-element {
+    color: #e0f2ff !important;
+  }
+
+  /* === Boutons === */
+  .btn-primary {
+    @apply px-4 py-2 rounded-md font-semibold transition;
+    background: linear-gradient(90deg, #00baff, #0070ff);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(0, 170, 255, 0.4);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(90deg, #00d5ff, #0080ff);
+    box-shadow: 0 0 20px rgba(0, 200, 255, 0.6);
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    @apply px-3 py-1 rounded-md transition;
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #7fdfff;
+  }
+
+  .btn-ghost:hover {
+    background-color: rgba(0, 200, 255, 0.25);
+    color: #fff;
+  }
+
+  /* Chips de statut */
+  .mat-mdc-chip {
+    background: rgba(0, 25, 50, 0.5) !important;
+    color: #00baff !important;
+    border: 1px solid rgba(0, 200, 255, 0.4);
+    backdrop-filter: blur(4px);
+  }
+
+  .mat-mdc-chip:hover {
+    background: #00baff !important;
+    color: #001219 !important;
+  }
+
+  /* Indicateurs du carrousel */
+  .challenge-wrapper button.w-2\.5 {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .challenge-wrapper button.bg-gray-900 {
+    background-color: #00baff !important;
+  }
+
+  /* Icônes */
+  .mat-icon {
+    color: #00baff !important;
+  }
+
+  /* Lien vers ressource */
+  .link-accent {
+    color: #00c8ff !important;
+  }
+
+  .link-accent:hover {
+    color: #ffffff !important;
+    text-decoration: underline;
+  }
+
+  /* Bulle inline (dans la carte) */
+  .inline-bubble {
+    @apply absolute bottom-3 right-3 flex items-center text-sm px-3 py-2 rounded-lg;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #eaf6ff;
+    box-shadow: 0 10px 25px rgba(0,0,0,.25);
+    animation: bubble-in .18s ease-out;
+    backdrop-filter: blur(6px);
+  }
+  .bubble-success {
+    border-color: rgba(16, 185, 129, .35); /* teal-ish */
+    box-shadow: 0 0 20px rgba(16,185,129,.25);
+  }
+  .bubble-error {
+    border-color: rgba(239, 68, 68, .35); /* red */
+    box-shadow: 0 0 20px rgba(239,68,68,.25);
+  }
+  .inline-bubble .mat-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+  }
+  .close-bubble {
+    @apply ml-2 rounded-md px-1;
+    background: transparent;
+    color: inherit;
+    border: 1px solid transparent;
+  }
+  .close-bubble:hover {
+    border-color: rgba(255,255,255,.2);
+  }
+  @keyframes bubble-in {
+    from { opacity: 0; transform: translateY(6px) scale(.98); }
+    to   { opacity: 1; transform: translateY(0)   scale(1); }
+  }
+
+  /* === INPUTS MATERIAL EN BLANC PUR === */
+  /* Force les variables MDC utilisées par Angular Material (appearance="fill") */
+  .mat-mdc-form-field-appearance-fill {
+    --mdc-filled-text-field-container-color: #ffffff;   /* fond du champ */
+    --mdc-filled-text-field-container-opacity: 1;
+    --mdc-filled-text-field-container-shape: 12px;
+    --mdc-filled-text-field-active-indicator-color: transparent;
+    --mdc-filled-text-field-focus-active-indicator-color: transparent;
+  }
+
+  /* Wrapper du champ */
+  .mat-mdc-form-field-appearance-fill .mat-mdc-text-field-wrapper {
+    background: #ffffff !important;            /* fond blanc */
+    border: 1px solid rgba(0,0,0,0.10);        /* léger contour */
+    border-radius: .75rem !important;          /* arrondi doux */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  /* Pas d’overlay sombre ni de ligne ripple en bas */
+  .mat-mdc-form-field-appearance-fill .mat-mdc-form-field-focus-overlay { background: transparent !important; }
+  .mat-mdc-form-field-appearance-fill .mdc-line-ripple::before,
+  .mat-mdc-form-field-appearance-fill .mdc-line-ripple::after { border-bottom: none !important; }
+
+  /* L’input lui-même reste blanc (cas thèmes sombres) */
+  .mdc-text-field__input,
+  input.mat-mdc-input-element,
+  textarea.mat-mdc-input-element {
+    background-color: #ffffff !important;
+  }
+
+  /* Icône prefix grisée légère, sans trait séparateur */
+  .mat-mdc-form-field .mat-mdc-form-field-icon-prefix {
+    color: var(--muted);
+    margin-right: .35rem !important;
+    border-right: none !important;
+  }
+
+  /* Effets survol / focus */
+  .mat-mdc-form-field-appearance-fill .mat-mdc-text-field-wrapper:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+  .mat-mdc-form-field-appearance-fill .mat-mdc-text-field-wrapper.mdc-text-field--focused {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+
+  /* Chrome/Edge autofill : supprime le voile gris/bleu */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
+    -webkit-text-fill-color: var(--text) !important;
+    caret-color: var(--text) !important;
+  }
+
+  /* Si thème sombre actif, on garde quand même les inputs en blanc */
+  .theme-cyber .mat-mdc-form-field-appearance-fill,
+  .theme-belgium .mat-mdc-form-field-appearance-fill,
+  .theme-blue-pro .mat-mdc-form-field-appearance-fill {
+    --mdc-filled-text-field-container-color: #ffffff;
+  }
+
+
+  /* ---------- LIENS ---------- */
+  /* Liens neutres (héritent la couleur du contexte) */
+  .link-accent { @apply hover:underline underline-offset-4; color: inherit; }
+
+  /* Liens sur fond sombre (ex: header) */
+  .link-on-dark { color: var(--color-on-primary); }
+  .link-on-dark:hover { color: var(--accent-glow); }
+
+  /* ---------- LANGUAGE SELECTOR + MATERIAL ---------- */
   .lang-on-dark select {
-    /* cas <select> natif */
     background-color: rgba(255,255,255,.10);
     color: var(--color-on-primary);
     border: 1px solid rgba(255,255,255,.25);
@@ -55,59 +456,56 @@
   .lang-on-dark select:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
   .lang-on-dark option { color: #0B1220; background: #fff; }
 
-  /* ---- Cas Angular Material (mat-select dans ton LanguageSelector) ---- */
+  /* mat-select / mat-form-field sur fond sombre */
   .lang-on-dark .mat-mdc-form-field-infix,
   .lang-on-dark .mat-mdc-select-value,
   .lang-on-dark .mat-mdc-select-arrow,
   .lang-on-dark .mdc-text-field__input {
     color: var(--color-on-primary) !important;
   }
-
   .lang-on-dark .mdc-text-field--filled,
   .lang-on-dark .mat-mdc-form-field-focus-overlay {
     background-color: rgba(255,255,255,.10) !important;
   }
-
   .lang-on-dark .mdc-line-ripple::before,
   .lang-on-dark .mdc-line-ripple::after {
     border-bottom-color: rgba(255,255,255,.35) !important;
   }
-
-  /* bordure/arrondi compacts pour le header */
   .lang-on-dark .mat-mdc-form-field {
     --_h: 36px;
     height: var(--_h);
     min-height: var(--_h);
     border-radius: .5rem;
   }
-
   .lang-on-dark .mat-mdc-text-field-wrapper {
     border-radius: .5rem !important;
     padding-inline: .5rem !important;
   }
-
-  /* le panneau déroulant reste lisible (fond clair, texte sombre) */
+  /* panneau déroulant (thème clair pour la lisibilité) */
   .mat-mdc-select-panel {
     background: #fff !important;
     color: #0B1220 !important;
   }
-  /* Boutons */
+
+  /* ---------- BOUTONS ---------- */
   .btn-ghost {
     @apply px-3 py-1 rounded-md transition;
-    background-color: rgba(255,255,255,.10); color: var(--color-on-primary);
+    background-color: rgba(255,255,255,.10);
+    color: var(--color-on-primary);
   }
   .btn-ghost:hover { background-color: rgba(255,255,255,.20); }
 
   .btn-primary {
     @apply px-3 py-1 rounded-md font-semibold transition;
-    background: var(--accent); color: var(--color-primary);
+    background: var(--accent);
+    color: var(--color-primary);
   }
   .btn-primary:hover { background: var(--accent-strong); }
 
-  /* Form patterns Material */
+  /* ---------- FORM PATTERNS ---------- */
   .form-grid { @apply grid grid-cols-1 md:grid-cols-2 gap-4; }
 
-  /* Cards / surfaces */
+  /* ---------- CARDS / SURFACES ---------- */
   .card {
     @apply rounded-xl border;
     background: var(--surface-2);
@@ -115,8 +513,7 @@
     box-shadow: 0 6px 20px rgba(2,6,23,.06);
   }
 
+  /* ---------- DIVERS ---------- */
   .container-page { @apply max-w-7xl mx-auto p-6 md:p-10; }
   .focus-ring:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
 }
-
-html, body { height: 100%; background: var(--surface); color: var(--text); }

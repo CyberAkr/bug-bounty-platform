@@ -1,87 +1,83 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {AuthService} from '@app/core/auth/auth.service';
+import { TranslateModule } from '@ngx-translate/core';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule }      from '@angular/material/input';
+import { MatButtonModule }     from '@angular/material/button';
+import { MatIconModule }       from '@angular/material/icon';
+
+import { AuthService } from '@app/core/auth/auth.service';
 
 @Component({
   standalone: true,
   selector: 'app-verify-email',
-  imports: [CommonModule, FormsModule],
-  template: `
-    <div class="container" style="max-width:480px;margin:2rem auto;">
-      <h2>Vérification de votre e-mail</h2>
-      <p>Nous avons envoyé un code à <strong>{{ email() }}</strong>.</p>
-
-      <form (ngSubmit)="onSubmit()">
-        <label for="code">Code à 6 chiffres</label>
-        <input id="code" name="code" [(ngModel)]="codeValue" maxlength="6" required
-               pattern="\\d{6}" class="w-full" />
-
-        <div style="display:flex; gap:.5rem; margin-top:1rem;">
-          <button type="submit" [disabled]="loading()">Valider</button>
-          <button type="button" (click)="onResend()" [disabled]="loading()">Renvoyer le code</button>
-        </div>
-      </form>
-
-      <p *ngIf="error()" style="color:#c00;margin-top:1rem;">{{ error() }}</p>
-      <p *ngIf="success()" style="color:#080;margin-top:1rem;">{{ success() }}</p>
-    </div>
-  `
+  imports: [
+    CommonModule, FormsModule, TranslateModule,
+    MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule
+  ],
+  templateUrl: './verify-email.component.html',
 })
 export default class VerifyEmailComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private auth = inject(AuthService);
 
-  email = signal<string>('');
+  email   = signal<string>('');
+  code    = signal<string>('');
   loading = signal(false);
-  error = signal<string | null>(null);
+  error   = signal<string | null>(null);
   success = signal<string | null>(null);
-
-  codeValue = '';
 
   constructor() {
     const fromQuery = this.route.snapshot.queryParamMap.get('email');
-    const fromState = this.auth.emailPendingVerification();
+    const fromState = this.auth.emailPendingVerification?.();
     this.email.set(fromQuery || fromState || '');
   }
 
-  onSubmit() {
-    if (!this.email()) { this.error.set('Email manquant.'); return; }
+  onSubmit(f: NgForm) {
+    if (f.invalid || !this.email()) {
+      this.error.set('verify.errors.missingEmail');
+      return;
+    }
     this.loading.set(true);
     this.error.set(null); this.success.set(null);
 
-    this.auth.verifyEmail(this.email(), this.codeValue).subscribe({
-      next: res => {
-        if (res.status === 'verified') {
-          this.success.set('Adresse vérifiée ! Vous pouvez vous connecter.');
+    this.auth.verifyEmail(this.email(), this.code()).subscribe({
+      next: (res) => {
+        if (res?.status === 'verified') {
+          this.success.set('verify.success');
           this.loading.set(false);
           this.router.navigate(['/login']);
         } else {
-          this.error.set('Code invalide ou expiré.');
+          this.error.set('verify.errors.invalidCode');
           this.loading.set(false);
         }
       },
       error: () => {
-        this.error.set('Code invalide ou expiré.');
+        this.error.set('verify.errors.invalidCode');
         this.loading.set(false);
       }
     });
   }
 
   onResend() {
-    if (!this.email()) { this.error.set('Email manquant.'); return; }
+    if (!this.email()) {
+      this.error.set('verify.errors.missingEmail');
+      return;
+    }
     this.loading.set(true);
     this.error.set(null); this.success.set(null);
 
     this.auth.resendCode(this.email()).subscribe({
       next: () => {
-        this.success.set('Code renvoyé. Vérifiez votre boîte mail.');
+        this.success.set('verify.resent');
         this.loading.set(false);
       },
       error: () => {
-        this.error.set('Impossible de renvoyer le code pour le moment.');
+        this.error.set('verify.errors.resendFail');
         this.loading.set(false);
       }
     });

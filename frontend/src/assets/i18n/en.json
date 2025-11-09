@@ -15,5 +15,95 @@
     "logout": "Logout",
     "langFr": "🇫🇷 FR",
     "langEn": "🇬🇧 EN"
+  },
+  "footer": {
+    "aboutTitle": "About",
+    "aboutText": "Belgian bug bounty platform for SMEs and security researchers. Report, collaborate and strengthen digital security together.",
+    "linksTitle": "Navigation",
+    "programs": "Programs",
+    "ranking": "Ranking",
+    "forum": "Forum",
+    "contact": "Contact",
+    "legal": "Legal notice",
+    "followTitle": "Follow us",
+    "copyright": "© {{year}} Bug Bounty — All rights reserved."
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Access your account securely",
+      "email": "Email address",
+      "password": "Password",
+      "submit": "Sign in",
+      "loading": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "register": "Create one",
+      "forgot": "Forgot password?"
+    },
+    "errors": { "invalid": "Invalid credentials." },
+    "register": {
+      "title": "Create an account",
+      "subtitle": "Choose your profile and fill in your details",
+      "asResearcher": "I am a researcher",
+      "asCompany": "I am a company",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email address",
+      "password": "Password",
+      "username": "Username",
+      "lang": "Preferred language",
+      "bio": "Bio",
+      "companyNumber": "Company number",
+      "submit": "Sign up",
+      "loading": "Signing up…",
+      "haveAccount": "Already have an account? Sign in",
+      "success": "Registration successful! Check your email.",
+      "emailInUse": "This email is already in use.",
+      "savedButEmailIssue": "Registration saved. Email issue: enter the code or resend it.",
+      "error": "Error during registration.",
+      "already": "Already registered?",
+      "signIn": "Sign in"
+    }
+  },
+  "verify": {
+    "title": "Verify your email",
+    "subtitle": "We sent a code to {{email}}.",
+    "codeLabel": "6-digit code",
+    "help": "Enter the code you received by email. Use \"resend code\" to get a new one.",
+    "resend": "Resend code",
+    "submit": "Confirm",
+    "loading": "Verifying…",
+    "resent": "Code resent. Check your inbox.",
+    "success": "Email verified! You can sign in.",
+    "errors": {
+      "invalidCode": "Invalid or expired code.",
+      "resendFail": "Unable to resend the code right now.",
+      "missingEmail": "Missing email."
+    }
+  },
+  "challenges": {
+    "weekly": {
+      "title": "Weekly challenge",
+      "counter": "Challenge {{current}} / {{total}}",
+      "empty": "No active challenge at the moment.",
+      "openResource": "Open challenge resource",
+      "enterCode": "Enter your code",
+      "submit": "Submit",
+      "prev": "Previous",
+      "next": "Next",
+      "status": {
+        "ongoing": "Ongoing",
+        "upcoming": "Upcoming",
+        "ended": "Ended"
+      },
+      "snackbar": {
+        "valid": "Code verified!",
+        "invalid": "Invalid code or already claimed."
+      },
+      "msg": {
+        "valid": "Your code has been verified.",
+        "invalid": "Invalid or already used code."
+      }
+    }
   }
 }

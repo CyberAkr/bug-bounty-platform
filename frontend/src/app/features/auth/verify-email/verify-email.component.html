@@ -1,0 +1,47 @@
+<div class="auth-wrapper">
+  <div class="auth-card mx-auto">
+    <div class="text-center mb-6">
+      <span class="material-icons text-[var(--accent)] text-4xl mb-2">mark_email_unread</span>
+      <h2 class="text-xl font-semibold">{{ 'verify.title' | translate }}</h2>
+      <p class="text-sm opacity-80">
+        {{ 'verify.subtitle' | translate:{ email: email() } }}
+      </p>
+    </div>
+
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)" class="space-y-4">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>{{ 'verify.codeLabel' | translate }}</mat-label>
+        <mat-icon matPrefix>pin</mat-icon>
+        <input
+          matInput
+          name="code"
+          [ngModel]="code()" (ngModelChange)="code.set($event)"
+          required inputmode="numeric" pattern="\\d{6}" maxlength="6"
+          placeholder="••••••"
+        />
+      </mat-form-field>
+
+      <p class="text-xs opacity-80">
+        {{ 'verify.help' | translate }}
+      </p>
+
+      <div class="form-actions">
+        <button type="button" class="btn-ghost" (click)="onResend()" [disabled]="loading()">
+          {{ 'verify.resend' | translate }}
+        </button>
+
+        <button
+          mat-flat-button color="primary"
+          class="btn-primary flex items-center gap-2"
+          type="submit" [disabled]="loading()"
+        >
+          <mat-icon *ngIf="loading()" class="animate-spin">hourglass_top</mat-icon>
+          {{ loading() ? ('verify.loading' | translate) : ('verify.submit' | translate) }}
+        </button>
+      </div>
+    </form>
+
+    <p class="error-text text-center mt-4" *ngIf="error()">{{ error() | translate }}</p>
+    <p class="success-text text-center mt-2" *ngIf="success()">{{ success() | translate }}</p>
+  </div>
+</div>

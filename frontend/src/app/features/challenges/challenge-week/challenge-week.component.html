@@ -1,100 +1,98 @@
-<div class="container mx-auto max-w-3xl px-4 py-6">
+<div class="challenge-wrapper">
+  <div class="challenge-card">
+    <header class="flex items-center justify-between mb-4">
+      <h1 class="text-xl font-semibold">{{ 'challenges.weekly.title' | translate }}</h1>
+      <div class="text-xs text-gray-600" *ngIf="!loading() && challenges().length">
+        {{ 'challenges.weekly.counter' | translate:{ current: (idx()+1), total: challenges().length } }}
+      </div>
+    </header>
 
-  <!-- Loading -->
-  <div class="flex justify-center py-10" *ngIf="loading()">
-    <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
-  </div>
+    <div class="flex justify-center py-8" *ngIf="loading()">
+      <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
+    </div>
 
-  <!-- Erreur / pas de défis -->
-  <div class="text-center text-gray-500" *ngIf="!loading() && (!challenges().length || error())">
-    <mat-icon>hourglass_empty</mat-icon>
-    <p class="mt-2">{{ error() || "Aucun défi actif actuellement." }}</p>
-  </div>
+    <div class="text-center text-gray-500" *ngIf="!loading() && (!challenges().length || error())">
+      <mat-icon aria-hidden="true">hourglass_empty</mat-icon>
+      <p class="mt-2">
+        {{ error() ? (error() | translate) : ('challenges.weekly.empty' | translate) }}
+      </p>
+    </div>
 
-  <!-- Carousel -->
-  <ng-container *ngIf="!loading() && challenges().length">
-    <div class="flex items-center justify-between mb-3">
-      <button mat-icon-button (click)="prev()" aria-label="Précédent">
-        <mat-icon>chevron_left</mat-icon>
-      </button>
-
-      <div class="text-sm text-gray-600">
-        Défi {{ idx() + 1 }} / {{ challenges().length }}
+    <ng-container *ngIf="!loading() && challenges().length">
+      <div class="flex items-center justify-between mb-2">
+        <button mat-icon-button class="btn-ghost" (click)="prev()" [attr.aria-label]="'challenges.weekly.prev' | translate">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <div class="text-xs text-gray-600">
+          {{ 'challenges.weekly.counter' | translate:{ current: (idx()+1), total: challenges().length } }}
+        </div>
+        <button mat-icon-button class="btn-ghost" (click)="next()" [attr.aria-label]="'challenges.weekly.next' | translate">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
       </div>
 
-      <button mat-icon-button (click)="next()" aria-label="Suivant">
-        <mat-icon>chevron_right</mat-icon>
-      </button>
-    </div>
+      <mat-card *ngIf="current() as c" class="card rounded-2xl relative overflow-hidden">
+        <mat-card-header>
+          <div mat-card-avatar class="bg-gray-200 rounded-full"></div>
+          <mat-card-title class="text-lg font-semibold">{{ c.title }}</mat-card-title>
+          <mat-card-subtitle class="text-xs flex flex-wrap items-center gap-2">
+            <span class="mr-1">{{ c.startDate | date:'mediumDate' }} → {{ c.endDate | date:'mediumDate' }}</span>
+            <mat-chip-set>
+              <mat-chip [ngClass]="{
+                'bg-green-100 text-green-800': (c.startDate | challengeStatus:c.endDate) === ('challenges.weekly.status.ongoing' | translate),
+                'bg-blue-100 text-blue-800'  : (c.startDate | challengeStatus:c.endDate) === ('challenges.weekly.status.upcoming' | translate),
+                'bg-gray-200 text-gray-700'  : (c.startDate | challengeStatus:c.endDate) === ('challenges.weekly.status.ended' | translate)
+              }">
+                {{ c.startDate | challengeStatus:c.endDate }}
+              </mat-chip>
 
-    <mat-card *ngIf="current() as c" class="rounded-2xl shadow-md">
-      <mat-card-header>
-        <div mat-card-avatar class="bg-gray-200 rounded-full"></div>
-        <mat-card-title class="text-lg font-semibold">{{ c.title }}</mat-card-title>
-        <mat-card-subtitle class="text-xs">
-          <span class="mr-2">{{ c.startDate | date:'mediumDate' }} → {{ c.endDate | date:'mediumDate' }}</span>
-          <mat-chip-set class="ml-2">
-            <mat-chip [ngClass]="{
-              'bg-green-100 text-green-800': (c.startDate | challengeStatus:c.endDate) === 'En cours',
-              'bg-blue-100 text-blue-800': (c.startDate | challengeStatus:c.endDate) === 'A venir',
-              'bg-gray-200 text-gray-700': (c.startDate | challengeStatus:c.endDate) === 'Terminé'
-            }">
-              {{ c.startDate | challengeStatus:c.endDate }}
-            </mat-chip>
-            <mat-chip *ngIf="c.endDate" class="ml-2">
-              ⏳ {{ c.endDate | timeLeft }}
-            </mat-chip>
-          </mat-chip-set>
-        </mat-card-subtitle>
-      </mat-card-header>
+              <mat-chip *ngIf="c.endDate">⏳ {{ c.endDate | timeLeft }}</mat-chip>
+            </mat-chip-set>
+          </mat-card-subtitle>
+        </mat-card-header>
 
-      <mat-card-content class="space-y-3">
-        <p class="whitespace-pre-line">{{ c.description }}</p>
+        <mat-card-content class="space-y-3 pb-10">
+          <p class="whitespace-pre-line">{{ c.description }}</p>
 
-        <a *ngIf="c.linkToResource"
-           [href]="c.linkToResource"
-           target="_blank"
-           rel="noopener"
-           class="inline-flex items-center underline">
-          <mat-icon class="mr-1" aria-hidden="true">open_in_new</mat-icon>
-          Accéder à la ressource du défi
-        </a>
+          <a *ngIf="c.linkToResource" [href]="c.linkToResource" target="_blank" rel="noopener" class="inline-flex items-center link-accent">
+            <mat-icon class="mr-1" aria-hidden="true">open_in_new</mat-icon>
+            {{ 'challenges.weekly.openResource' | translate }}
+          </a>
 
-        <div class="pt-2">
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Entre ton code</mat-label>
-            <input matInput
-                   [ngModel]="flag()"
-                   (ngModelChange)="flag.set($event)"
-                   [disabled]="submitting() || (c.startDate | challengeStatus:c.endDate) !== 'En cours'">
-          </mat-form-field>
+          <div class="pt-2">
+            <mat-form-field appearance="fill" class="w-full">
+              <mat-label>{{ 'challenges.weekly.enterCode' | translate }}</mat-label>
+              <input matInput [ngModel]="flag()" (ngModelChange)="flag.set($event)"
+                     [disabled]="submitting() || (c.startDate | challengeStatus:c.endDate) !== ('challenges.weekly.status.ongoing' | translate)">
+            </mat-form-field>
 
-          <button mat-raised-button color="primary"
-                  (click)="submit()"
-                  [disabled]="submitting() || !flag() || (c.startDate | challengeStatus:c.endDate) !== 'En cours'">
-            <mat-icon class="mr-1" aria-hidden="true">flag</mat-icon>
-            Soumettre
-          </button>
-        </div>
+            <button mat-raised-button class="btn-primary mt-2"
+                    (click)="submit()"
+                    [disabled]="submitting() || !flag() || (c.startDate | challengeStatus:c.endDate) !== ('challenges.weekly.status.ongoing' | translate)">
+              <mat-icon class="mr-1" aria-hidden="true">flag</mat-icon>
+              {{ 'challenges.weekly.submit' | translate }}
+            </button>
+          </div>
 
-        <p class="mt-2"
-           *ngIf="message()"
-           [ngClass]="{
-             'text-green-600': status() === 'success',
-             'text-red-500': status() === 'error'
-           }">
-          {{ message() }}
-        </p>
-      </mat-card-content>
-    </mat-card>
+          <!-- Bulle inline -->
+          <div *ngIf="bubble() as b"
+               class="inline-bubble"
+               [ngClass]="{ 'bubble-success': b.type==='success', 'bubble-error': b.type==='error' }"
+               role="status" aria-live="polite">
+            <mat-icon class="mr-1" aria-hidden="true">{{ b.type==='success' ? 'check_circle' : 'error' }}</mat-icon>
+            <span>{{ b.key | translate }}</span>
+            <button type="button" class="ml-3 close-bubble" (click)="bubble.set(null)" aria-label="Close">✕</button>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
-    <!-- petits indicateurs -->
-    <div class="flex justify-center gap-2 mt-4">
-      <button *ngFor="let _ of challenges(); let i = index"
-              class="w-2.5 h-2.5 rounded-full"
-              [ngClass]="{ 'bg-gray-400': idx()!==i, 'bg-gray-900': idx()===i }"
-              (click)="idx.set(i)">
-      </button>
-    </div>
-  </ng-container>
+      <div class="flex justify-center gap-2 mt-4">
+        <button *ngFor="let _ of challenges(); let i = index"
+                class="w-2.5 h-2.5 rounded-full"
+                [ngClass]="{ 'bg-gray-400': idx()!==i, 'bg-gray-900': idx()===i }"
+                (click)="idx.set(i)">
+        </button>
+      </div>
+    </ng-container>
+  </div>
 </div>

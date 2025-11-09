@@ -1,65 +1,126 @@
-<h2 class="text-2xl font-semibold mb-4">
-  Inscription {{ role() === 'company' ? 'Entreprise' : 'Chercheur' }}
-</h2>
-<h2 class="text-2xl font-semibold mb-4">Créer un compte</h2>
+<div class="container-page">
+  <div class="auth-card max-w-3xl mx-auto">
+    <div class="mb-6 text-center">
+      <h2 class="text-2xl font-semibold">
+        {{ 'auth.register.title' | translate }}
+      </h2>
+      <p class="text-sm opacity-80">
+        {{ 'auth.register.subtitle' | translate }}
+      </p>
+    </div>
 
-<div class="flex gap-4 mb-6">
-  <button type="button"
-          [class.bg-blue-600]="role() === 'researcher'"
-          [class.bg-gray-300]="role() !== 'researcher'"
-          class="px-4 py-2 text-white rounded"
-          (click)="role.set('researcher')">
-    Je suis un chercheur
-  </button>
+    <!-- Switch rôle -->
+    <div class="role-switch" role="tablist" aria-label="role switch">
+      <button type="button"
+              class="role-chip"
+              [class.role-chip--active]="role() === 'researcher'"
+              (click)="switchRole('researcher')">
+        <mat-icon class="mr-1">psychology</mat-icon>
+        {{ 'auth.register.asResearcher' | translate }}
+      </button>
 
-  <button type="button"
-          [class.bg-green-600]="role() === 'company'"
-          [class.bg-gray-300]="role() !== 'company'"
-          class="px-4 py-2 text-white rounded"
-          (click)="role.set('company')">
-    Je suis une entreprise
-  </button>
-</div>
+      <button type="button"
+              class="role-chip"
+              [class.role-chip--active]="role() === 'company'"
+              (click)="switchRole('company')">
+        <mat-icon class="mr-1">business</mat-icon>
+        {{ 'auth.register.asCompany' | translate }}
+      </button>
+    </div>
 
-<h3 class="text-lg font-semibold mb-2">Inscription {{ role() === 'company' ? 'Entreprise' : 'Chercheur' }}</h3>
+    <form #f="ngForm" (ngSubmit)="register(f)" class="space-y-6 mt-4">
+      <!-- grille 2 colonnes -->
+      <div class="form-grid">
+        <!-- first / last name -->
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>{{ 'auth.register.firstName' | translate }}</mat-label>
+          <input matInput name="firstName" required
+                 [ngModel]="firstName()" (ngModelChange)="firstName.set($event)" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>{{ 'auth.register.lastName' | translate }}</mat-label>
+          <input matInput name="lastName" required
+                 [ngModel]="lastName()" (ngModelChange)="lastName.set($event)" />
+        </mat-form-field>
+
+        <!-- email -->
+        <mat-form-field appearance="fill" class="w-full md:col-span-1">
+          <mat-label>{{ 'auth.register.email' | translate }}</mat-label>
+          <mat-icon matPrefix>mail</mat-icon>
+          <input matInput type="email" name="email" required email autocomplete="email"
+                 [ngModel]="email()" (ngModelChange)="email.set($event)" />
+        </mat-form-field>
+
+        <!-- username -->
+        <mat-form-field appearance="fill" class="w-full md:col-span-1">
+          <mat-label>{{ 'auth.register.username' | translate }}</mat-label>
+          <mat-icon matPrefix>account_circle</mat-icon>
+          <input matInput name="username" required
+                 [ngModel]="username()" (ngModelChange)="username.set($event)" />
+        </mat-form-field>
+
+        <!-- password -->
+        <mat-form-field appearance="fill" class="w-full md:col-span-1">
+          <mat-label>{{ 'auth.register.password' | translate }}</mat-label>
+          <mat-icon matPrefix>lock</mat-icon>
+          <input matInput type="password" name="password" required minlength="6" autocomplete="new-password"
+                 [ngModel]="password()" (ngModelChange)="password.set($event)" />
+        </mat-form-field>
+
+        <!-- language -->
+        <mat-form-field appearance="fill" class="w-full md:col-span-1">
+          <mat-label>{{ 'auth.register.lang' | translate }}</mat-label>
+          <mat-select name="preferredLanguage"
+                      [ngModel]="preferredLanguage()"
+                      (ngModelChange)="preferredLanguage.set($event)">
+            <mat-option value="fr">Français</mat-option>
+            <mat-option value="en">English</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- bio (col 1-2) -->
+        <mat-form-field appearance="fill" class="w-full md:col-span-2">
+          <mat-label>{{ 'auth.register.bio' | translate }}</mat-label>
+          <textarea matInput rows="3" name="bio"
+                    [ngModel]="bio()" (ngModelChange)="bio.set($event)"></textarea>
+        </mat-form-field>
+
+        <!-- companyNumber si company -->
+        <ng-container *ngIf="role() === 'company'">
+          <mat-form-field appearance="fill" class="w-full md:col-span-2">
+            <mat-label>{{ 'auth.register.companyNumber' | translate }}</mat-label>
+            <mat-icon matPrefix>badge</mat-icon>
+            <input matInput name="companyNumber" required
+                   [ngModel]="companyNumber()" (ngModelChange)="companyNumber.set($event)" />
+          </mat-form-field>
+        </ng-container>
+      </div>
+
+      <!-- feedback -->
+      <p class="error-text text-center" *ngIf="errorMsg()">{{ errorMsg() | translate }}</p>
+      <p class="text-green-600 text-center text-sm" *ngIf="successMsg()">{{ successMsg() | translate }}</p>
+
+      <div class="form-actions">
+  <span class="text-sm">
+    {{ 'auth.register.already' | translate }}
+    <a [routerLink]="'/login'" class="text-[var(--accent)] font-medium hover:underline">
+      {{ 'auth.register.signIn' | translate }}
+    </a>
+  </span>
+
+        <button
+          mat-flat-button color="primary"
+          class="btn-primary flex items-center gap-2"
+          type="submit" [disabled]="!canSubmit()"
+        >
+          <mat-icon *ngIf="loading()" class="animate-spin">hourglass_top</mat-icon>
+          {{ loading() ? ('auth.register.loading' | translate) : ('auth.register.submit' | translate) }}
+        </button>
+      </div>
 
 
-<form (ngSubmit)="register()" class="space-y-4">
 
-  <label>Prénom :</label>
-  <input [(ngModel)]="firstName" name="firstName" required class="input" />
-
-  <label>Nom :</label>
-  <input [(ngModel)]="lastName" name="lastName" required class="input" />
-
-  <label>Email :</label>
-  <input type="email" [(ngModel)]="email" name="email" required class="input" />
-
-  <label>Mot de passe :</label>
-  <input type="password" [(ngModel)]="password" name="password" required class="input" />
-
-  <label>Nom d’utilisateur :</label>
-  <input [(ngModel)]="username" name="username" required class="input" />
-
-  <label>Langue préférée :</label>
-  <select [(ngModel)]="preferredLanguage" name="preferredLanguage" class="input">
-    <option value="fr">Français</option>
-    <option value="en">English</option>
-  </select>
-
-  <label>Bio :</label>
-  <textarea [(ngModel)]="bio" name="bio" class="input"></textarea>
-
-  <!-- Spécifique entreprise -->
-  <div *ngIf="role() === 'company'">
-    <label>Numéro d’entreprise :</label>
-    <input [(ngModel)]="companyNumber" name="companyNumber" required class="input" />
+    </form>
   </div>
-
-  <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-    S'inscrire
-  </button>
-</form>
-
-<p class="success text-green-600 mt-4" *ngIf="successMessage">{{ successMessage }}</p>
-<p class="error text-red-600 mt-2" *ngIf="errorMessage">{{ errorMessage }}</p>
+</div>

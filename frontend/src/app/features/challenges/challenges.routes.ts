@@ -3,4 +3,5 @@ import { ChallengeWeekComponent } from './challenge-week/challenge-week.componen
 
 export const challengesRoutes: Routes = [
   { path: 'semaine', component: ChallengeWeekComponent }
+
 ];

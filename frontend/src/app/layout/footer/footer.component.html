@@ -1,9 +1,42 @@
-<footer class="border-t bg-white">
-  <div class="max-w-7xl mx-auto p-6 text-sm text-gray-600 flex items-center justify-between">
-    <span>&copy; {{ year }} Bug Bounty — All rights reserved.</span>
-    <nav class="flex items-center gap-4">
-      <a routerLink="/legal" class="hover:underline">{{ 'navbar.legal' | translate }}</a>
-      <a routerLink="/contact" class="hover:underline">{{ 'navbar.contact' | translate }}</a>
-    </nav>
+<footer class="app-footer bg-[var(--surface-2)] text-[var(--text)]">
+  <div class="container-default grid gap-8 md:grid-cols-3 text-sm">
+
+    <!-- Colonne 1 : présentation -->
+    <div>
+      <h3 class="font-semibold text-base mb-2">{{ 'footer.aboutTitle' | translate }}</h3>
+      <p class="opacity-80 leading-relaxed">
+        {{ 'footer.aboutText' | translate }}
+      </p>
+    </div>
+
+    <!-- Colonne 2 : navigation -->
+    <div>
+      <h3 class="font-semibold text-base mb-2">{{ 'footer.linksTitle' | translate }}</h3>
+      <ul class="space-y-2">
+        <li><a routerLink="/programs" class="link-accent">{{ 'footer.programs' | translate }}</a></li>
+        <li><a routerLink="/classement" class="link-accent">{{ 'footer.ranking' | translate }}</a></li>
+        <li><a routerLink="/forum" class="link-accent">{{ 'footer.forum' | translate }}</a></li>
+        <li><a routerLink="/contact" class="link-accent">{{ 'footer.contact' | translate }}</a></li>
+        <li><a routerLink="/legal" class="link-accent">{{ 'footer.legal' | translate }}</a></li>
+      </ul>
+    </div>
+
+    <!-- Colonne 3 : réseaux sociaux -->
+    <div>
+      <h3 class="font-semibold text-base mb-2">{{ 'footer.followTitle' | translate }}</h3>
+      <div class="flex gap-3">
+        <a href="#" aria-label="Twitter" class="hover:text-[var(--accent)] transition">
+          <span class="material-icons">alternate_email</span>
+        </a>
+        <a href="#" aria-label="LinkedIn" class="hover:text-[var(--accent)] transition">
+          <span class="material-icons">business</span>
+        </a>
+        <a href="#" aria-label="GitHub" class="hover:text-[var(--accent)] transition">
+          <span class="material-icons">code</span>
+        </a>
+      </div>
+    </div>
   </div>
+
+
 </footer>

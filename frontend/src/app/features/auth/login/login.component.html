@@ -1,14 +1,82 @@
-<div class="login-container">
-  <h2>Connexion</h2>
-  <form (ngSubmit)="login()">
-    <label>Email :</label>
-    <input type="email" [(ngModel)]="email" name="email" required>
+<div class="login-wrapper">
+  <div class="login-card card mx-auto">
+    <div class="text-center mb-6">
+      <span class="material-icons text-[var(--accent)] text-4xl mb-2">lock</span>
+      <h2 class="text-xl font-semibold">{{ 'auth.login.title' | translate }}</h2>
+      <p class="text-sm opacity-80">{{ 'auth.login.subtitle' | translate }}</p>
+    </div>
 
-    <label>Mot de passe :</label>
-    <input type="password" [(ngModel)]="password" name="password" required>
+    <form #f="ngForm" (ngSubmit)="login(f)" class="space-y-4">
+      <!-- Email -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>{{ 'auth.login.email' | translate }}</mat-label>
+        <mat-icon matPrefix>mail</mat-icon>
+        <input
+          matInput
+          type="email"
+          name="email"
+          [ngModel]="email()"
+          (ngModelChange)="email.set($event)"
+          required
+          email
+          autocomplete="email"
+        />
+      </mat-form-field>
 
-    <button type="submit">Se connecter</button>
-  </form>
+      <!-- Password -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>{{ 'auth.login.password' | translate }}</mat-label>
+        <mat-icon matPrefix>lock</mat-icon>
+        <input
+          matInput
+          type="password"
+          name="password"
+          [ngModel]="password()"
+          (ngModelChange)="password.set($event)"
+          required
+          minlength="6"
+          autocomplete="current-password"
+        />
+      </mat-form-field>
 
-  <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <p class="error-text text-center" *ngIf="errorMsg()">
+        {{ errorMsg() | translate }}
+      </p>
+
+      <button
+        mat-flat-button
+        color="primary"
+        class="btn-primary w-full flex justify-center items-center gap-2"
+        type="submit"
+        [disabled]="!canSubmit()"
+      >
+        <mat-icon *ngIf="loading()" class="animate-spin">hourglass_top</mat-icon>
+        {{
+          loading()
+            ? ('auth.login.loading' | translate)
+            : ('auth.login.submit' | translate)
+        }}
+      </button>
+    </form>
+
+    <!-- ligne bas : créer compte + mdp oublié -->
+    <p class="mt-6 text-center text-sm flex flex-col md:flex-row items-center justify-center gap-2">
+      <span>
+        {{ 'auth.login.noAccount' | translate }}
+        <a
+          routerLink="/register"
+          class="text-[var(--accent)] font-medium hover:underline"
+        >
+          {{ 'auth.login.register' | translate }}
+        </a>
+      </span>
+
+      <a
+        routerLink="/forgot-password"
+        class="text-[var(--accent)] font-medium hover:underline"
+      >
+        {{ 'auth.login.forgot' | translate }}
+      </a>
+    </p>
+  </div>
 </div>
