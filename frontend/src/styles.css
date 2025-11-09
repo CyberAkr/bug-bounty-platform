@@ -583,6 +583,46 @@ html, body {
     border-color: rgba(255,255,255,.35);
   }
   .btn-ghost:hover { @apply opacity-90; }
+  /* === users === */
+  .auth-wrapper { @apply max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-6; }
+  .auth-card { @apply rounded-2xl border bg-white shadow-sm; }
+
+  .panel { @apply rounded-2xl border bg-white p-5; }
+  .panel-title { @apply text-sm font-semibold text-gray-700 mb-4; }
+
+  .form-grid { @apply grid grid-cols-1 md:grid-cols-2 gap-4; }
+
+  /* Avatar */
+  .avatar-wrap { @apply w-28 h-28 rounded-full overflow-hidden ring-1 ring-black/10 shrink-0; }
+  .avatar-img  { @apply w-full h-full object-cover; }
+  .avatar-ph   { @apply w-full h-full grid place-items-center bg-gray-100 text-gray-500; }
+
+  /* Inputs de fichier neutres */
+  .file-input { @apply block w-full text-sm text-gray-700 file:mr-3 file:px-3 file:py-2
+  file:rounded-md file:border file:bg-white file:text-gray-700
+  file:hover:bg-gray-50; }
+
+  /* Chips statut */
+  .chip { @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium; }
+  .chip-pending  { @apply bg-amber-100 text-amber-800; }
+  .chip-rejected { @apply bg-red-100 text-red-700; }
+  .chip-verified { @apply bg-emerald-100 text-emerald-700; }
+
+  /* Hints */
+  .hint { @apply text-xs text-gray-500; }
+
+  /* Harmonise l’input Material en fond blanc */
+  .mat-mdc-form-field-appearance-fill {
+    --mdc-filled-text-field-container-color: #ffffff;
+  }
+
+  .btn-primary { @apply !bg-blue-600 !text-white hover:!bg-blue-700; }
+  .btn-ghost   { @apply border rounded-md px-3 py-2 hover:bg-gray-50; }
+  .section-title { @apply text-lg font-semibold; }
+  /* === notif === */
+  .auth-wrapper { @apply max-w-4xl mx-auto px-4 md:px-6 lg:px-8 py-6; }
+  .auth-card { @apply rounded-2xl border bg-white shadow-sm; }
+
 
   /* === report=== */
 

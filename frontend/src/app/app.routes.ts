@@ -7,12 +7,8 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./layout/layout.component').then(m => m.LayoutComponent),
     children: [
-      // 🚪 Redirection par défaut vers la page d'accueil
-      {
-        path: '',
-        redirectTo: 'home',
-        pathMatch: 'full'
-      },
+      // 🚪 Redirection par défaut
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
 
       // 🏠 Accueil public
       {
@@ -32,14 +28,14 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/auth/register/register.component').then(m => m.RegisterComponent)
       },
-      // ✅ Vérification d'e-mail après inscription
+      // ✅ Vérification d’e-mail
       {
         path: 'verify-email',
         loadComponent: () =>
           import('./features/auth/verify-email/verify-email.component').then(m => m.default)
       },
 
-      // 📊 Dashboard utilisateur (standard)
+      // 📊 Tableau de bord utilisateur
       {
         path: 'dashboard',
         canActivate: [authGuard],
@@ -47,21 +43,21 @@ export const routes: Routes = [
           import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent)
       },
 
-      // 🏆 Classement général
+      // 🏆 Classement
       {
         path: 'classement',
         loadComponent: () =>
           import('./features/ranking/ranking.component').then(m => m.RankingComponent)
       },
 
-      // 👤 Profil public à partir du classement
+      // 👤 Profil public (via classement)
       {
         path: 'user/:id',
         loadComponent: () =>
           import('./features/users/profile-public/profile-public.component').then(m => m.ProfilePublicComponent)
       },
 
-      // 🏢 Dashboard entreprise
+      // 🏢 Espace entreprise
       {
         path: 'company',
         canActivate: [authGuard],
@@ -69,7 +65,7 @@ export const routes: Routes = [
           import('./features/dashboard/company/company.routes').then(m => m.COMPANY_ROUTES)
       },
 
-      // 🧑‍💻 Dashboard chercheur
+      // 🧑‍💻 Espace chercheur
       {
         path: 'researcher',
         canActivate: [authGuard],
@@ -93,7 +89,7 @@ export const routes: Routes = [
           import('./features/users/settings/settings.component').then(m => m.SettingsComponent)
       },
 
-      // 🧩 Programmes d'audit
+      // 🧩 Programmes d’audit
       {
         path: 'programs',
         loadChildren: () =>
@@ -122,19 +118,33 @@ export const routes: Routes = [
           import('./features/notifications/notifications.routes').then(m => m.NOTIFICATIONS_ROUTES)
       },
 
-      // 🛠️ Espace administrateur
+      // ⚖️ Mentions légales & contact
+      {
+        path: 'legal',
+        loadChildren: () =>
+          import('./features/legal/legal.routes').then(m => m.LEGAL_ROUTES)
+      },
+      {
+        path: 'contact',
+        redirectTo: 'legal/contact',
+        pathMatch: 'full'
+      },
+      {
+        path: 'mentions-legales',
+        redirectTo: 'legal/mentions',
+        pathMatch: 'full'
+      },
+
+      // 🛠️ Administration
       {
         path: 'admin',
-        canActivate: [authGuard], // ou adminGuard si tu veux limiter davantage
+        canActivate: [authGuard],
         loadChildren: () =>
           import('./features/admin/admin.routes').then(m => m.adminRoutes)
       },
     ]
   },
 
-  // 🚨 Route fallback (404 → home)
-  {
-    path: '**',
-    redirectTo: 'home'
-  }
+  // 🚨 Page non trouvée
+  { path: '**', redirectTo: 'home' }
 ];

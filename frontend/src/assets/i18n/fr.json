@@ -295,6 +295,74 @@
     "status": {
       "alreadySubmitted": "Un rapport a déjà été soumis pour ce programme."
     }
+  },
+  "profile": {
+    "title": "Mon profil",
+    "subtitle": "Gérez vos informations et votre photo",
+    "settings": "Paramètres",
+    "photo": {
+      "title": "Photo de profil",
+      "update": "Mettre à jour la photo"
+    },
+    "form": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "language": "Langue préférée",
+      "bio": "Bio"
+    },
+    "company": {
+      "title": "Informations entreprise",
+      "number": "Numéro d'entreprise",
+      "status": "Statut",
+      "docLabel": "Document de vérification (PDF uniquement)",
+      "docHint1": "Exemple disponible dans la documentation.",
+      "docHint2": "Vous pouvez renvoyer le document si la vérification est en attente ou rejetée.",
+      "selected": "Fichier sélectionné"
+    },
+    "actions": {
+      "save": "Enregistrer",
+      "delete": "Supprimer mon compte"
+    },
+    "reports": { "title": "Mes rapports" }
+  },
+  "legal": {
+    "title": "Mentions légales",
+    "back": "Retour",
+    "publisher": {
+      "title": "Éditeur",
+      "body": "Plateforme Bug Bounty – ASBL/Entreprise belge dédiée aux PME et aux chercheurs en sécurité."
+    },
+    "host": {
+      "title": "Hébergement",
+      "body": "Hébergée chez un prestataire situé dans l’UE. Disponibilité et sauvegardes conformes aux bonnes pratiques."
+    },
+    "contact": {
+      "title": "Contact",
+      "body": "Pour toute demande liée au site, à la modération ou aux signalements juridiques, écrivez-nous à"
+    },
+    "data": {
+      "title": "Données personnelles",
+      "body": "Les données sont traitées conformément au RGPD. Vous disposez de droits d’accès, rectification, effacement et opposition."
+    },
+    "ip": {
+      "title": "Propriété intellectuelle",
+      "body": "Les contenus publiés (textes, logos, éléments graphiques) sont protégés. Toute reproduction non autorisée est interdite."
+    }
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Une question, une remarque ou une demande d’assistance ? Écrivez-nous.",
+    "fields": {
+      "name": "Nom",
+      "email": "E-mail",
+      "subject": "Sujet",
+      "message": "Message",
+      "consent": "J’accepte que mes données soient utilisées pour traiter ma demande."
+    },
+    "submit": "Envoyer",
+    "sending": "Envoi en cours…",
+    "success": "Message envoyé. Merci pour votre retour !"
   }
 
 }

@@ -297,5 +297,73 @@
     "status": {
       "alreadySubmitted": "A report has already been submitted for this program."
     }
+  },
+  "profile": {
+    "title": "My profile",
+    "subtitle": "Manage your information and photo",
+    "settings": "Settings",
+    "photo": {
+      "title": "Profile photo",
+      "update": "Update photo"
+    },
+    "form": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "language": "Preferred language",
+      "bio": "Bio"
+    },
+    "company": {
+      "title": "Company information",
+      "number": "Company number",
+      "status": "Status",
+      "docLabel": "Verification document (PDF only)",
+      "docHint1": "An example is available in the documentation.",
+      "docHint2": "You can resend the document if your verification is pending or rejected.",
+      "selected": "Selected file"
+    },
+    "actions": {
+      "save": "Save",
+      "delete": "Delete my account"
+    },
+    "reports": { "title": "My reports" }
+  },
+  "legal": {
+    "title": "Legal notice",
+    "back": "Back",
+    "publisher": {
+      "title": "Publisher",
+      "body": "Bug Bounty Platform – Belgian non-profit/company dedicated to SMEs and security researchers."
+    },
+    "host": {
+      "title": "Hosting",
+      "body": "Hosted by a provider located in the EU. Availability and backups follow best practices."
+    },
+    "contact": {
+      "title": "Contact",
+      "body": "For any request related to the site, moderation or legal notices, write to"
+    },
+    "data": {
+      "title": "Personal data",
+      "body": "Data is processed in compliance with GDPR. You have rights of access, rectification, erasure and objection."
+    },
+    "ip": {
+      "title": "Intellectual property",
+      "body": "Published content (texts, logos, graphics) is protected. Any unauthorised reproduction is prohibited."
+    }
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Questions, feedback or support request? Drop us a line.",
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "consent": "I agree to the use of my data to process this request."
+    },
+    "submit": "Send",
+    "sending": "Sending…",
+    "success": "Message sent. Thanks for reaching out!"
   }
 }
