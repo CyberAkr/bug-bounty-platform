@@ -1,87 +1,133 @@
-import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatListModule } from '@angular/material/list';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslateModule } from '@ngx-translate/core';
+
 import { RankingService } from './ranking.service';
-import { UserRanking } from '@app/models/user.model';
-import { RankingProfileDialogComponent } from './ranking-profile.dialog';
+import { UserService } from '@app/features/users/user.service'; // <-- pour récupérer la bio publique
+import { UserRanking, UserPublic } from '@app/models/user.model';
+import { forkJoin, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+
+type Row = UserRanking & {
+  score: number;
+  earnings: number;
+  paidReports: number;
+  lastActive: string;
+  profilePhoto: string | null;
+  name?: string | null;
+  bio?: string | null;
+};
 
 @Component({
   selector: 'app-ranking',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatListModule,
-    MatDialogModule,
-    MatProgressSpinnerModule,
-    MatButtonModule
-  ],
-  templateUrl: './ranking.component.html',
-  styles: [`
-    .rank-wrap { max-width: 900px; margin: 0 auto; }
-    .row { display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: center; padding: 8px 0; width:100%; }
-    .avatar { width: 40px; height: 40px; border-radius: 9999px; object-fit: cover; background: #eee; }
-    .initials { width: 40px; height: 40px; border-radius: 9999px; display:flex; align-items:center; justify-content:center; font-weight:600; background:#e0e0e0; }
-    .username { font-weight: 600; display:flex; gap:8px; align-items:center; text-align:left; }
-    .rank-badge { font-weight:700; min-width:40px; text-align:right; }
-    .skeleton { height:56px; background:linear-gradient(90deg,#eee,#f6f6f6,#eee); animation:pulse 1.2s infinite; border-radius:12px; }
-    @keyframes pulse { 0%{background-position:-200px 0} 100%{background-position:200px 0} }
-    .actions { display:flex; justify-content:flex-end; margin-bottom:8px; }
-  `]
+  imports: [CommonModule, TranslateModule, MatProgressSpinnerModule, MatIconModule, MatButtonModule],
+  templateUrl: './ranking.component.html'
 })
 export class RankingComponent implements OnInit, OnDestroy {
-  private rankingService = inject(RankingService);
-  private dialog = inject(MatDialog);
+  private rankingSvc = inject(RankingService);
+  private usersSvc   = inject(UserService);
 
-  readonly users = signal<UserRanking[]>([]);
-  readonly loading = signal(true);
+  loading = signal(true);
+  expandedId = signal<number | null>(null);
+
+  private _rows = signal<Row[]>([]);
+  rows  = computed(() => this._rows());
+  users = computed(() => this._rows());
+
   private disconnect: (() => void) | null = null;
 
-  // état d’affichage : top10 ou complet
-  protected showingAll = signal(false);
+  // petit cache pour éviter de recharger la bio à chaque refresh
+  private bioCache = new Map<number, string | null>();
 
   ngOnInit(): void {
-    this.loadRanking(); // charge top10 par défaut
-    // flux SSE (maj auto des points)
-    this.disconnect = this.rankingService.connectStream((list) => {
-      if (!this.showingAll()) this.users.set(list);
+    this.loadAll();
+
+    // SSE live → on ré-enrichit avec les bios (en utilisant le cache)
+    this.disconnect = this.rankingSvc.connectStream((list) => {
+      this.enrichWithBios(list).subscribe((rows) => this._rows.set(rows));
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.disconnect) this.disconnect();
+  ngOnDestroy(): void { if (this.disconnect) this.disconnect(); }
+
+  toggle(userId: number) {
+    this.expandedId.set(this.expandedId() === userId ? null : userId);
   }
 
-  /** Charge le classement (top10 ou complet) */
-  private loadRanking(all = false) {
+  private loadAll() {
     this.loading.set(true);
-    const limit = all ? 0 : 10;
-    this.rankingService.getTopResearchers(limit).subscribe({
-      next: (list) => {
-        this.users.set(list);
-        this.showingAll.set(all);
-        this.loading.set(false);
-      },
+    this.rankingSvc.getTopResearchers(0).pipe(
+      switchMap((list) => this.enrichWithBios(list))
+    ).subscribe({
+      next: (rows) => { this._rows.set(rows); this.loading.set(false); },
       error: () => this.loading.set(false)
     });
   }
 
-  /** Bascule top10 / complet */
-  toggleView() {
-    this.loadRanking(!this.showingAll());
-  }
+  /** Enrichit la liste avec la bio/nom/photo via /users/public/{id} (avec cache). */
+  private enrichWithBios(list: UserRanking[]) {
+    if (!list?.length) return of<Row[]>([]);
 
-  /** Ouvre la fiche profil dans un dialog */
-  openProfile(userId: number) {
-    this.dialog.open(RankingProfileDialogComponent, {
-      width: '520px',
-      data: { userId },
-      autoFocus: false
+    const requests = list.map(u => {
+      const cached = this.bioCache.get(u.userId);
+      if (cached !== undefined) {
+        // on retourne un "UserPublic" minimal combiné au cache
+        return of({ userId: u.userId, bio: cached, profilePhoto: (u as any).profilePhoto ?? null, username: u.username } as Partial<UserPublic>);
+      }
+      return this.usersSvc.getPublic(u.userId).pipe(
+        map((pub) => {
+          const cleanBio = this.cleanBio(pub?.bio);
+          this.bioCache.set(u.userId, cleanBio);
+          return { ...pub, bio: cleanBio } as Partial<UserPublic>;
+        })
+      );
     });
+
+    return forkJoin(requests).pipe(
+      map((publics) => list.map((u, i) => {
+        const pub = publics[i] || {};
+        return this.mapRow(u, pub);
+      }))
+    );
   }
 
-  /** TrackBy pour éviter les rerenders inutiles */
-  trackUser = (_: number, u: UserRanking) => u.userId;
+  private mapRow(u: UserRanking, pub: Partial<UserPublic>): Row {
+    const bio = this.cleanBio(
+      (pub as any)?.bio ??
+      (u as any).bio ??
+      null
+    );
+
+    // priorité à la photo publique si disponible
+    const photo =
+      (pub as any)?.profilePhoto ??
+      (u as any).profilePhoto ??
+      null;
+
+    return {
+      ...u,
+      score:      (u as any).score ?? u.point ?? 0,
+      earnings:   (u as any).earnings ?? 0,
+      paidReports:(u as any).paidReports ?? 0,
+      lastActive: (u as any).lastActive ?? new Date().toISOString(),
+      profilePhoto: photo,
+      name: (pub as any)?.firstName && (pub as any)?.lastName
+        ? `${(pub as any).firstName} ${(pub as any).lastName}`
+        : ((pub as any)?.name ?? null),
+      bio
+    };
+  }
+
+  private cleanBio(b: any): string | null {
+    if (typeof b !== 'string') return null;
+    const s = b.trim();
+    if (!s || s.toLowerCase() === 'null' || s.toLowerCase() === 'undefined') return null;
+    return s;
+  }
+
+  trackUser = (_: number, u: Row) => u.userId;
 }

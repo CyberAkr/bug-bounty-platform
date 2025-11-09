@@ -1,47 +1,77 @@
 import { Routes } from '@angular/router';
 import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
+// Si tu as ces guards, décommente-les
+// import { authGuard } from '@app/core/auth/auth.guard';
+// import { adminGuard } from '@app/core/auth/admin.guard';
 
 export const adminRoutes: Routes = [
   {
     path: '',
     component: AdminLayoutComponent,
+    // canActivate: [authGuard, adminGuard],
+    // canActivateChild: [authGuard, adminGuard],
     children: [
       { path: '', redirectTo: 'reports', pathMatch: 'full' },
+
       {
         path: 'reports',
-        loadComponent: () => import('./reports/reports.component').then(m => m.ReportsComponent),
+        title: 'Admin · Reports',
+        data: { breadcrumb: 'Reports' },
+        loadComponent: () =>
+          import('./reports/reports.component').then(m => m.ReportsComponent),
       },
       {
         path: 'users',
-        loadComponent: () => import('./users/users.component').then(m => m.UsersComponent),
+        title: 'Admin · Users',
+        data: { breadcrumb: 'Users' },
+        loadComponent: () =>
+          import('./users/users.component').then(m => m.UsersComponent),
       },
       {
         path: 'programs',
-        loadComponent: () => import('./programs/programs.component').then(m => m.ProgramsComponent),
+        title: 'Admin · Programs',
+        data: { breadcrumb: 'Programs' },
+        loadComponent: () =>
+          import('./programs/programs.component').then(m => m.ProgramsComponent),
       },
       {
         path: 'rewards',
-        loadComponent: () => import('./rewards/rewards.component').then(m => m.RewardsComponent),
+        title: 'Admin · Rewards',
+        data: { breadcrumb: 'Rewards' },
+        loadComponent: () =>
+          import('./rewards/rewards.component').then(m => m.RewardsComponent),
       },
 
-      // ⬇️ on passe par des sous-routes pour la liste/création/édition
+      // Badges (sous-routes list/create/edit)
       {
         path: 'badges',
+        title: 'Admin · Badges',
+        data: { breadcrumb: 'Badges' },
         loadChildren: () =>
           import('./badges/admin-badges.routes').then(m => m.ADMIN_BADGES_ROUTES),
       },
 
+      // Vulnerabilities
       {
         path: 'vulnerabilities',
+        title: 'Admin · Vulnerabilities',
+        data: { breadcrumb: 'Vulnerabilities' },
         loadComponent: () =>
           import('./vulnerabilities/vulnerabilities.component')
             .then(m => m.VulnerabilitiesComponent),
       },
+
+      // Challenges (sous-routes)
       {
         path: 'challenges',
+        title: 'Admin · Challenges',
+        data: { breadcrumb: 'Challenges' },
         loadChildren: () =>
-          import('./challenges/admin-challenges.routes').then(m => m.adminChallengesRoutes)
-      }
+          import('./challenges/admin-challenges.routes').then(m => m.adminChallengesRoutes),
+      },
+
+      // Fallback interne de l’admin
+      { path: '**', redirectTo: 'reports' }
     ],
   },
 ];

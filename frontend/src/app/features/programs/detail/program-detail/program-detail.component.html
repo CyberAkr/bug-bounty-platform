@@ -1,37 +1,57 @@
-<!-- Détail du programme -->
-<div *ngIf="program; else loadingTemplate">
+<div class="auth-wrapper">
+  <div class="auth-card w-full max-w-4xl">
 
-  <!-- ✅ Bulle informative si rapport déjà soumis -->
-  <app-report-status [programId]="getId()" />
+    <!-- En-tête -->
+    <header class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="text-2xl font-semibold">{{ 'programs.detail.title' | translate }}</h2>
+        <p class="text-sm text-gray-600">{{ 'programs.detail.subtitle' | translate }}</p>
+      </div>
 
-  <h2 class="text-2xl font-semibold mb-2">Détail du programme</h2>
-  <h3 class="text-xl font-medium mb-3">{{ program.title }}</h3>
+      <a routerLink="/programs" mat-stroked-button class="btn-ghost">
+        <mat-icon class="mr-2">arrow_back</mat-icon>
+        {{ 'programs.detail.back' | translate }}
+      </a>
+    </header>
 
-  <!-- ✅ Description HTML (TinyMCE) -->
-  <div class="prose max-w-none" [innerHTML]="safeDescription()"></div>
+    <!-- Chargement -->
+    <div *ngIf="loading(); else content" class="flex justify-center py-10">
+      <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+    </div>
 
-  <div class="mt-4 text-sm text-gray-600">
-    <p><strong>Entreprise :</strong> {{ program.companyName }}</p>
-    <p><strong>Status :</strong> {{ program.status }}</p>
+    <!-- Contenu principal -->
+    <ng-template #content>
+      <div *ngIf="program; else errorTpl">
+        <!-- Bulle état du rapport -->
+        <app-report-status [programId]="getId()" class="mb-6 block"></app-report-status>
+
+        <h3 class="text-xl font-semibold mb-2">{{ program.title }}</h3>
+
+        <div class="text-sm text-gray-500 mb-4">
+          <strong>{{ 'programs.detail.company' | translate }} :</strong> {{ program.companyName }} <br />
+          <strong>{{ 'programs.detail.status' | translate }} :</strong>
+          <mat-chip [ngClass]="program.status | statusColor" class="status-chip">
+            {{ program.status }}
+          </mat-chip>
+        </div>
+
+        <!-- Description HTML -->
+        <div class="prose max-w-none bg-white rounded-xl p-5 border"
+             [innerHTML]="safeDescription()"></div>
+
+        <!-- Soumission de rapport -->
+        <section class="mt-8">
+          <h4 class="text-lg font-medium mb-3">{{ 'programs.detail.submitTitle' | translate }}</h4>
+          <app-report-submit [programId]="getId()"></app-report-submit>
+        </section>
+      </div>
+
+      <ng-template #errorTpl>
+        <div class="text-center text-red-600 py-8">
+          {{ error() || ('programs.detail.notFound' | translate) }}
+        </div>
+      </ng-template>
+    </ng-template>
+
   </div>
-
-  <a routerLink="/programs" class="underline block mt-4">⬅ Retour à la liste</a>
-
-  <!-- Composant de soumission -->
-  <hr class="my-4" />
-  <app-report-submit [programId]="getId()" />
-
-  <!-- ✅ Bouton Publier -->
-  <div class="mt-4">
-    <button (click)="publish()" [disabled]="loading()" class="btn btn-primary">
-      Publier (100 €)
-    </button>
-    <p *ngIf="error()" class="text-danger mt-2">{{ error() }}</p>
-  </div>
-
 </div>
-
-<!-- 🔄 Template de chargement -->
-<ng-template #loadingTemplate>
-  <p>Chargement du programme...</p>
-</ng-template>

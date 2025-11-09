@@ -1,10 +1,11 @@
-<!-- src/app/layout/layout.component.html -->
-<app-header></app-header>
+<div class="app-shell">
+  <app-header></app-header>
 
-<main class="container">
-  <router-outlet></router-outlet>
-</main>
+  <main class="app-main">
+    <div class="container-default">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
 
-<footer class="container footer">
-  © {{ year }} Bug Bounty — All rights reserved.
-</footer>
+  <app-footer></app-footer>
+</div>

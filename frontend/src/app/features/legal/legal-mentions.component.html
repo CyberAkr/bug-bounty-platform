@@ -1,0 +1,42 @@
+<div class="auth-wrapper">
+  <mat-card class="auth-card">
+    <header class="mb-6 flex items-center justify-between">
+      <h1 class="text-2xl font-semibold">{{ 'legal.title' | translate }}</h1>
+
+      <a routerLink="/" mat-stroked-button class="btn-ghost">
+        <mat-icon class="mr-2" aria-hidden="true">arrow_back</mat-icon>
+        {{ 'legal.back' | translate }}
+      </a>
+    </header>
+
+    <mat-card-content class="prose max-w-none">
+      <section class="mb-6">
+        <h2 class="text-lg font-semibold">{{ 'legal.publisher.title' | translate }}</h2>
+        <p>{{ 'legal.publisher.body' | translate }}</p>
+      </section>
+
+      <section class="mb-6">
+        <h2 class="text-lg font-semibold">{{ 'legal.host.title' | translate }}</h2>
+        <p>{{ 'legal.host.body' | translate }}</p>
+      </section>
+
+      <section class="mb-6">
+        <h2 class="text-lg font-semibold">{{ 'legal.contact.title' | translate }}</h2>
+        <p>
+          {{ 'legal.contact.body' | translate }}
+          <a class="link-accent" href="mailto:contact@bugbounty.be">contact&#64;bugbounty.be</a>
+        </p>
+      </section>
+
+      <section class="mb-6">
+        <h2 class="text-lg font-semibold">{{ 'legal.data.title' | translate }}</h2>
+        <p>{{ 'legal.data.body' | translate }}</p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold">{{ 'legal.ip.title' | translate }}</h2>
+        <p>{{ 'legal.ip.body' | translate }}</p>
+      </section>
+    </mat-card-content>
+  </mat-card>
+</div>

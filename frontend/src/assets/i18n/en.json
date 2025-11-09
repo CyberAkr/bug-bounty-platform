@@ -15,5 +15,766 @@
     "logout": "Logout",
     "langFr": "🇫🇷 FR",
     "langEn": "🇬🇧 EN"
+  },
+
+  "footer": {
+    "aboutTitle": "About",
+    "aboutText": "Belgian bug bounty platform for SMEs and security researchers. Report, collaborate and strengthen digital security together.",
+    "linksTitle": "Navigation",
+    "programs": "Programs",
+    "ranking": "Ranking",
+    "forum": "Forum",
+    "contact": "Contact",
+    "legal": "Legal notice",
+    "followTitle": "Follow us",
+    "copyright": "© {{year}} Bug Bounty — All rights reserved."
+  },
+
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Access your account securely",
+      "email": "Email address",
+      "password": "Password",
+      "submit": "Sign in",
+      "loading": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "register": "Create one",
+      "forgot": "Forgot password?"
+    },
+    "errors": {
+      "invalid": "Invalid credentials."
+    },
+    "register": {
+      "title": "Create an account",
+      "subtitle": "Choose your profile and fill in your details",
+      "asResearcher": "I am a researcher",
+      "asCompany": "I am a company",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email address",
+      "password": "Password",
+      "username": "Username",
+      "lang": "Preferred language",
+      "bio": "Bio",
+      "companyNumber": "Company number",
+      "submit": "Sign up",
+      "loading": "Signing up…",
+      "haveAccount": "Already have an account? Sign in",
+      "success": "Registration successful! Check your email.",
+      "emailInUse": "This email is already in use.",
+      "savedButEmailIssue": "Registration saved. Email issue: enter the code or resend it.",
+      "error": "Error during registration.",
+      "already": "Already registered?",
+      "signIn": "Sign in"
+    }
+  },
+
+  "verify": {
+    "title": "Verify your email",
+    "subtitle": "We sent a code to {{email}}.",
+    "codeLabel": "6-digit code",
+    "help": "Enter the code you received by email. Use \"resend code\" to get a new one.",
+    "resend": "Resend code",
+    "submit": "Confirm",
+    "loading": "Verifying…",
+    "resent": "Code resent. Check your inbox.",
+    "success": "Email verified! You can sign in.",
+    "errors": {
+      "invalidCode": "Invalid or expired code.",
+      "resendFail": "Unable to resend the code right now.",
+      "missingEmail": "Missing email."
+    }
+  },
+
+  "challenges": {
+    "weekly": {
+      "title": "Weekly challenge",
+      "counter": "Challenge {{current}} / {{total}}",
+      "empty": "No active challenge at the moment.",
+      "openResource": "Open challenge resource",
+      "enterCode": "Enter your code",
+      "submit": "Submit",
+      "prev": "Previous",
+      "next": "Next",
+      "status": {
+        "ongoing": "Ongoing",
+        "upcoming": "Upcoming",
+        "ended": "Ended"
+      },
+      "snackbar": {
+        "valid": "Code verified!",
+        "invalid": "Invalid code or already claimed."
+      },
+      "msg": {
+        "valid": "Your code has been verified.",
+        "invalid": "Invalid or already used code."
+      }
+    }
+  },
+
+  "ranking": {
+    "title": "🏆 Researchers ranking",
+    "total": "{{count}} profiles",
+    "points": "{{value}} pts",
+    "col": {
+      "score": "Score",
+      "earnings": "Earnings",
+      "paid": "Paid reports",
+      "last": "Last active"
+    },
+    "detail": {
+      "stats": "Statistics",
+      "topPrograms": "Top programs",
+      "bio": "Bio"
+    },
+    "expand": "See details",
+    "na": "N/A"
+  },
+
+  "programs": {
+    "list": {
+      "title": "Available audit programs",
+      "available": "programs available",
+      "empty": "No program available at the moment.",
+      "details": "View details",
+      "noDesc": "No description provided.",
+      "na": "N/A",
+      "more": "Showing {{shown}} of {{total}} programs."
+    },
+    "create": {
+      "title": "Create a program",
+      "back": "Back to programs",
+      "pricing": "Price: €100 – secured by Stripe.",
+      "publish": "Publish (€100)",
+      "hasActive": {
+        "title": "A program is already pending or active for your company.",
+        "desc": "You cannot create a new one for now.",
+        "link": "View my program"
+      },
+      "fields": {
+        "title": "Program title",
+        "titleHint": "e.g., E-commerce app security audit",
+        "desc": "Description (rich text)",
+        "descHint": "Provide scope, rules of engagement, exclusions, etc.",
+        "goal": "Goal (optional)",
+        "goalHint": "e.g., Focus on injections and auth bypass."
+      },
+      "errors": {
+        "alreadyActive": "A program is already pending/active for your company.",
+        "noStripeUrl": "Missing Stripe redirect URL.",
+        "conflict": "A company program already exists (pending/active).",
+        "generic": "Error while redirecting to Stripe."
+      }
+    },
+    "detail": {
+      "title": "Program details",
+      "subtitle": "View program information and submit a report",
+      "back": "Back to list",
+      "company": "Company",
+      "status": "Status",
+      "submitTitle": "Submit a report",
+      "publishTitle": "Publish program",
+      "publishDesc": "Activate your program by completing the secure Stripe payment.",
+      "publishBtn": "Publish (€100)",
+      "notFound": "Program not found."
+    }
+  },
+
+  "payments": {
+    "return": {
+      "title": "Payment confirmation",
+      "checking": "Checking payment…",
+      "success": "Payment confirmed, your program is now published!",
+      "back": "Back to programs",
+      "errors": {
+        "missingSession": "Missing Stripe session.",
+        "missingId": "Missing program ID.",
+        "generic": "Error while confirming."
+      }
+    }
+  },
+
+  "home": {
+    "hero": {
+      "title": "Bug bounty platform for Belgian SMEs",
+      "lede": "Cybercrime is rising. Move from reactive to proactive security: clear rules, legal framing and an ethical research community continuously testing your systems.",
+      "ctaCompany": "I am a company",
+      "ctaResearcher": "I am a researcher",
+      "compliance": "Responsible disclosure and safe-harbor, by design"
+    },
+    "advantages": {
+      "title": "Why choose the platform",
+      "subtitle": "A responsible model to reduce risk and build trust.",
+      "secure": {
+        "title": "Security first",
+        "text": "Framed programs, defined scope, and methodical vulnerability reviews."
+      },
+      "disclosure": {
+        "title": "Responsible disclosure",
+        "text": "A clear process for safe and timely handling of reports."
+      },
+      "safeHarbor": {
+        "title": "Safe-harbor",
+        "text": "Contractual protection for good-faith researchers within scope."
+      },
+      "fairRewards": {
+        "title": "Fair rewards",
+        "text": "Progressive bounties aligned with severity and impact."
+      },
+      "community": {
+        "title": "Ethical community",
+        "text": "Curated profiles, feedback loops and continuous improvement."
+      },
+      "belgium": {
+        "title": "Local footprint",
+        "text": "Aligned with Belgian and EU legal frameworks."
+      }
+    },
+    "how": {
+      "title": "How it works",
+      "subtitle": "A continuous cycle to improve security.",
+      "step1": {
+        "title": "Scope definition",
+        "text": "Authorized assets, rules of engagement and operational constraints."
+      },
+      "step2": {
+        "title": "Guided research",
+        "text": "Ethical testing within scope and timelines."
+      },
+      "step3": {
+        "title": "Actionable reporting",
+        "text": "Evidence, reproduction steps, severity and prioritized fixes."
+      },
+      "step4": {
+        "title": "Fix & validation",
+        "text": "Remediation, re-tests, then reward based on impact."
+      }
+    },
+    "assurance": {
+      "title": "Trust, compliance and support",
+      "subtitle": "A platform built to reduce risk and accelerate remediation.",
+      "policy": {
+        "title": "Clear policy",
+        "text": "Usage rules, privacy safeguards and explicit prohibitions."
+      },
+      "privacy": {
+        "title": "Data protection",
+        "text": "Procedures to avoid personal data and secure exchanges."
+      },
+      "response": {
+        "title": "Response SLAs",
+        "text": "Receipt, triage and follow-up until closure."
+      }
+    }
+  },
+
+  "reports": {
+    "labels": {
+      "program": "Program",
+      "severity": "Severity",
+      "status": "Status",
+      "receivedAt": "Received on",
+      "submittedAt": "Submitted on",
+      "researcher": "Researcher",
+      "reward": "Reward"
+    },
+    "severity": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "actions": {
+      "refresh": "Refresh",
+      "download": "Download PDF",
+      "downloadMine": "Download my report",
+      "send": "Send"
+    },
+    "errors": {
+      "loadReceived": "Failed to load received reports.",
+      "download": "Download failed."
+    },
+    "received": {
+      "title": "Received reports",
+      "empty": "No reports received yet."
+    },
+    "my": {
+      "title": "My reports",
+      "empty": "You haven’t submitted any reports yet."
+    },
+    "submit": {
+      "title": "Submit a report",
+      "program": "Program",
+      "severity": "Severity",
+      "description": "Description (evidence, reproduction, impact…)",
+      "file": "PDF file",
+      "hint": "Attach a PDF that includes all necessary technical details."
+    },
+    "status": {
+      "alreadySubmitted": "A report has already been submitted for this program."
+    }
+  },
+
+  "profile": {
+    "title": "My profile",
+    "subtitle": "Manage your information and photo",
+    "settings": "Settings",
+    "photo": {
+      "title": "Profile photo",
+      "update": "Update photo"
+    },
+    "form": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "language": "Preferred language",
+      "bio": "Bio"
+    },
+    "company": {
+      "title": "Company information",
+      "number": "Company number",
+      "status": "Status",
+      "docLabel": "Verification document (PDF only)",
+      "docHint1": "An example is available in the documentation.",
+      "docHint2": "You can resend the document if your verification is pending or rejected.",
+      "selected": "Selected file"
+    },
+    "actions": {
+      "save": "Save",
+      "delete": "Delete my account"
+    },
+    "reports": {
+      "title": "My reports"
+    }
+  },
+
+  "legal": {
+    "title": "Legal notice",
+    "back": "Back",
+    "publisher": {
+      "title": "Publisher",
+      "body": "Bug Bounty Platform – Belgian non-profit/company dedicated to SMEs and security researchers."
+    },
+    "host": {
+      "title": "Hosting",
+      "body": "Hosted by a provider located in the EU. Availability and backups follow best practices."
+    },
+    "contact": {
+      "title": "Contact",
+      "body": "For any request related to the site, moderation or legal notices, write to"
+    },
+    "data": {
+      "title": "Personal data",
+      "body": "Data is processed in compliance with GDPR. You have rights of access, rectification, erasure and objection."
+    },
+    "ip": {
+      "title": "Intellectual property",
+      "body": "Published content (texts, logos, graphics) is protected. Any unauthorised reproduction is prohibited."
+    }
+  },
+
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Questions, feedback or support request? Drop us a line.",
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "consent": "I agree to the use of my data to process this request."
+    },
+    "submit": "Send",
+    "sending": "Sending…",
+    "success": "Message sent. Thanks for reaching out!"
+  },
+
+  "common": {
+    "save": "Save",
+    "create": "Create",
+    "edit": "Edit",
+    "update": "Update",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "download": "Download",
+    "back": "Back",
+    "apply": "Apply",
+    "actions": "Actions",
+    "status": "Status",
+    "loading": "Loading…",
+    "none": "None",
+    "yes": "Yes",
+    "no": "No",
+    "filters": "Filters",
+    "all": "All",
+    "required": "Required field",
+    "success": "Operation completed",
+    "error": "Unexpected error",
+    "refresh": "Refresh",
+    "creating": "Creating...",
+    "reset": "Reset",
+    "uploading": "Uploading..."
+  },
+
+  "admin": {
+    "layout": {
+      "title": "Bug Bounty Platform — Admin",
+      "home": "Home",
+      "brand": "Admin"
+    },
+    "topbar": {
+      "homeAria": "Go to home"
+    },
+    "nav": {
+      "reports": "Reports",
+      "users": "Users",
+      "programs": "Programs",
+      "rewards": "Rewards",
+      "badges": "Badges",
+      "vulns": "Vulnerabilities",
+      "challenges": "Challenges",
+      "home": "Home"
+    },
+
+    "statuses": {
+      "PENDING": "PENDING",
+      "APPROVED": "APPROVED",
+      "REJECTED": "REJECTED",
+      "ARCHIVED": "ARCHIVED",
+      "LOW": "LOW",
+      "MEDIUM": "MEDIUM",
+      "HIGH": "HIGH"
+    },
+
+    "badges": {
+      "title": "Badges",
+      "empty": "No badges yet.",
+      "form": {
+        "back": "Back",
+        "titleEdit": "Edit a badge",
+        "titleCreate": "Create a badge",
+        "name": "Name",
+        "description": "Description",
+        "importImage": "Import image",
+        "imageHint": "PNG or JPEG recommended (square).",
+        "currentImage": "Current image",
+        "save": "Save",
+        "create": "Create",
+        "cancel": "Cancel"
+      },
+      "table": {
+        "name": "Name",
+        "description": "Description"
+      },
+      "row": {
+        "edit": "Save",
+        "delete": "Delete"
+      }
+    },
+
+    "rewards": {
+      "title": "Rewards",
+      "empty": "No rewards yet",
+      "create": {
+        "title": "Create a reward",
+        "reportId": "Report ID",
+        "amount": "Amount",
+        "dateInfo": "<strong>Date:</strong> the payment date is stored when the reward is saved.",
+        "proofInfo": "You can attach a proof later (PDF/PNG/JPEG)."
+      },
+      "list": {
+        "title": "Rewards list",
+        "empty": "No rewards yet."
+      },
+      "table": {
+        "id": "Payment ID",
+        "reportId": "Report ID",
+        "amount": "Amount",
+        "paidAt": "Paid at",
+        "proof": "Proof",
+        "actions": "Actions"
+      },
+      "proof": {
+        "present": "Proof available",
+        "missing": "No proof"
+      },
+      "actions": {
+        "replaceProof": "Replace proof",
+        "addProof": "Add proof"
+      }
+    },
+
+    "users": {
+      "title": "User management",
+      "createTitle": "Create a user",
+      "create": {
+        "title": "Create a user",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "companyNumber": "Company number",
+        "verificationDoc": "Verification document (link or ref)"
+      },
+      "form": {
+        "firstName": "First name",
+        "lastName": "Last name",
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "role": "Role",
+        "companyNumber": "Company number",
+        "verificationDocument": "Verification document (link or ref)",
+        "banned": "Banned",
+        "verificationStatus": "Verification"
+      },
+      "roles": {
+        "admin": "admin",
+        "researcher": "researcher",
+        "company": "company"
+      },
+      "verification": {
+        "PENDING": "PENDING",
+        "APPROVED": "APPROVED",
+        "REJECTED": "REJECTED"
+      },
+      "role": {
+        "researcher": "Researcher",
+        "company": "Company",
+        "admin": "Admin"
+      },
+      "verif": {
+        "PENDING": "Pending",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      },
+      "banned": "Banned",
+      "table": {
+        "roleStatus": "Role & status",
+        "verification": "Verification",
+        "document": "Document",
+        "actions": "Actions"
+      },
+      "doc": {
+        "available": "Available",
+        "none": "None"
+      },
+      "row": {
+        "save": "Save",
+        "remove": "Delete",
+        "download": "Download"
+      },
+      "empty": "No users",
+      "toasts": {
+        "created": "User created",
+        "updated": "User updated",
+        "deleted": "User deleted",
+        "download404": "Document not found",
+        "unauthorized": "Unauthorized",
+        "downloadError": "Download failed"
+      }
+    },
+
+    "programs": {
+      "title": "Programs",
+      "filter": "Status filter:",
+      "filterLabel": "Filter:",
+      "filterAll": "All",
+      "createTitle": "Create a program",
+      "form": {
+        "title": "Title",
+        "description": "Description",
+        "companyId": "Company ID",
+        "status": "Status"
+      },
+      "table": {
+        "title": "Title",
+        "description": "Description",
+        "company": "Company",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "row": {
+        "edit": "Edit",
+        "approve": "Approve",
+        "save": "Save",
+        "cancel": "Cancel",
+        "remove": "Delete"
+      },
+      "empty": "No programs",
+      "toasts": {
+        "created": "Program created",
+        "updated": "Program updated",
+        "deleted": "Program deleted",
+        "errorLoad": "Failed to load programs",
+        "errorCreate": "Creation failed",
+        "errorUpdate": "Update failed",
+        "errorDelete": "Deletion failed"
+      },
+      "filterAlt": {
+        "label": "Filter",
+        "all": "All"
+      },
+      "status": {
+        "PENDING": "Pending",
+        "APPROVED": "Approved",
+        "ARCHIVED": "Archived"
+      },
+      "create": {
+        "title": "Create a program",
+        "placeholders": {
+          "title": "Title",
+          "description": "Description",
+          "companyId": "Company ID"
+        },
+        "defaults": {
+          "pending": "Pending (default)"
+        },
+        "submit": "Create program"
+      },
+      "tableAlt": {
+        "col": {
+          "title": "Title",
+          "description": "Description (max {{ max }})",
+          "company": "Company",
+          "status": "Status",
+          "actions": "Actions"
+        }
+      },
+      "actions": {
+        "edit": "Edit",
+        "approve": "Approve",
+        "delete": "Delete",
+        "save": "Save",
+        "cancel": "Cancel"
+      }
+    },
+
+    "reports": {
+      "title": "Reports",
+      "filterLabel": "Filter:",
+      "filterAll": "All",
+      "filter": {
+        "label": "Filter",
+        "all": "All"
+      },
+      "status": {
+        "PENDING": "Pending",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      },
+      "severity": {
+        "LOW": "Low",
+        "MEDIUM": "Medium",
+        "HIGH": "High"
+      },
+      "vulnType": "Vulnerability type",
+      "commentPlaceholder": "Admin comment (optional)",
+      "actions": {
+        "preview": "Preview",
+        "approve": "Approve",
+        "reject": "Reject"
+      },
+      "table": {
+        "id": "ID",
+        "report": "Report",
+        "severity": "Severity",
+        "researcher": "Researcher",
+        "submitted": "Submitted",
+        "vulnType": "Vuln. type",
+        "adminComment": "Admin comment",
+        "comment": "Comment",
+        "actions": "Actions"
+      },
+      "row": {
+        "preview": "Preview",
+        "approve": "Approve",
+        "reject": "Reject",
+        "saveVuln": "Save"
+      },
+      "messages": {
+        "empty": "No reports.",
+        "saved": "Report updated",
+        "errorLoad": "Failed to load reports",
+        "errorUpdate": "Failed to update report"
+      },
+      "empty": "No reports yet."
+    },
+
+    "vulns": {
+      "title": "Vulnerability types",
+      "addPlaceholder": "Add a type",
+      "addBtn": "Add",
+      "name": "Name",
+      "actions": "Actions",
+      "edit": "Update",
+      "remove": "Delete",
+      "empty": "No vulnerability types",
+      "errors": {
+        "load": "Failed to load vulnerability types",
+        "create": "Creation failed",
+        "update": "Update failed",
+        "delete": "Deletion failed"
+      }
+    },
+
+    "vuln": {
+      "title": "Vulnerability types",
+      "placeholder": "Add a type (e.g., XSS, SQLi...)",
+      "ariaNewType": "New vulnerability type",
+      "col": {
+        "name": "Name",
+        "actions": "Actions"
+      },
+      "empty": "No types yet."
+    },
+
+    "challenges": {
+      "list": {
+        "title": "Challenges",
+        "create": "New challenge",
+        "table": {
+          "title": "Title",
+          "period": "Period",
+          "program": "Program",
+          "winner": "Winner",
+          "actions": "Actions"
+        },
+        "empty": "No challenge yet",
+        "deleted": "Challenge deleted",
+        "deleteError": "Deletion failed",
+        "loadError": "Failed to load challenges"
+      },
+      "form": {
+        "createTitle": "Create a challenge",
+        "editTitle": "Edit challenge",
+        "subtitle": "Winning code challenge, linked to a program",
+        "fields": {
+          "title": "Title",
+          "description": "Description",
+          "start": "Start",
+          "end": "End",
+          "program": "Program",
+          "theme": "Theme (optional)",
+          "resource": "Resource link (optional)",
+          "winningCode": "Winning code"
+        },
+        "buttons": {
+          "save": "Save",
+          "create": "Create",
+          "cancel": "Cancel"
+        },
+        "validation": {
+          "required": "Title, period and program are required.",
+          "codeRequired": "Winning code is required on creation."
+        },
+        "toast": {
+          "saved": "Challenge saved",
+          "created": "Challenge created",
+          "error": "Save failed"
+        }
+      }
+    }
   }
 }

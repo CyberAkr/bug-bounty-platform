@@ -1,0 +1,52 @@
+<div class="auth-wrapper">
+  <mat-card class="auth-card auth-card--compact">
+    <header class="mb-6">
+      <h1 class="text-2xl font-semibold">{{ 'contact.title' | translate }}</h1>
+      <p class="text-sm text-gray-500">{{ 'contact.subtitle' | translate }}</p>
+    </header>
+
+    <mat-card-content>
+      <form class="space-y-4" (ngSubmit)="submit()">
+        <div class="form-grid">
+          <mat-form-field appearance="fill">
+            <mat-label>{{ 'contact.fields.name' | translate }}</mat-label>
+            <input matInput [ngModel]="name()" (ngModelChange)="name.set($event)" name="name" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>{{ 'contact.fields.email' | translate }}</mat-label>
+            <input matInput type="email" [ngModel]="email()" (ngModelChange)="email.set($event)" name="email" required>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>{{ 'contact.fields.subject' | translate }}</mat-label>
+          <input matInput [ngModel]="subject()" (ngModelChange)="subject.set($event)" name="subject" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>{{ 'contact.fields.message' | translate }}</mat-label>
+          <textarea matInput rows="5" [ngModel]="message()" (ngModelChange)="message.set($event)" name="message" required></textarea>
+        </mat-form-field>
+
+        <mat-checkbox [ngModel]="consent()" (ngModelChange)="consent.set($event)" name="consent" class="!mb-2">
+          {{ 'contact.fields.consent' | translate }}
+        </mat-checkbox>
+
+        <div class="form-actions">
+          <button mat-raised-button class="btn-primary" type="submit" [disabled]="submitting() || !isValid()">
+            <mat-icon class="mr-2" aria-hidden="true">send</mat-icon>
+            {{ 'contact.submit' | translate }}
+          </button>
+          <span class="text-sm text-gray-500" *ngIf="submitting()">{{ 'contact.sending' | translate }}</span>
+        </div>
+
+        <p class="text-sm mt-2"
+           *ngIf="feedback()"
+           [ngClass]="{ 'text-green-600': ok(), 'text-red-600': !ok() }">
+          {{ feedback() }}
+        </p>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

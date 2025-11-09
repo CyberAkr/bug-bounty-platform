@@ -10,4 +10,9 @@ export class NotificationService {
   getMyNotifications(): Observable<NotificationResponse[]> {
     return this.http.get<NotificationResponse[]>('/api/notifications');
   }
+
+  markRead(id: number) { return this.http.post<void>(`/api/notifications/${id}/read`, {}); }
+  markUnread(id: number) { return this.http.post<void>(`/api/notifications/${id}/unread`, {}); }
+  markAllRead() { return this.http.post<void>('/api/notifications/read-all', {}); }
+
 }

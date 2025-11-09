@@ -1,83 +1,97 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormsModule, NgForm } from '@angular/forms';
+import {Router, RouterLink} from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule }      from '@angular/material/input';
+import { MatSelectModule }     from '@angular/material/select';
+import { MatButtonModule }     from '@angular/material/button';
+import { MatIconModule }       from '@angular/material/icon';
+
 import { AuthService } from '@app/core/auth/auth.service';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule, FormsModule, TranslateModule,
+    MatFormFieldModule, MatInputModule, MatSelectModule,
+    MatButtonModule, MatIconModule, RouterLink
+  ],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  private authService = inject(AuthService);
+  private auth = inject(AuthService);
   private router = inject(Router);
 
+  // état
   role = signal<'company' | 'researcher'>('researcher');
+  email = signal(''); password = signal('');
+  firstName = signal(''); lastName = signal('');
+  username = signal(''); preferredLanguage = signal<'fr'|'en'>('fr');
+  bio = signal(''); companyNumber = signal('');
+  loading = signal(false);
+  errorMsg = signal<string | null>(null);
+  successMsg = signal<string | null>(null);
+  submitAttempted = signal(false);
 
-  // Champs communs
-  email = '';
-  password = '';
-  firstName = '';
-  lastName = '';
-  username = '';
-  preferredLanguage = 'fr';
-  bio = '';
+  canSubmit = computed(() =>
+    !this.loading()
+    && !!this.email().trim()
+    && !!this.password().trim()
+    && !!this.firstName().trim()
+    && !!this.lastName().trim()
+    && !!this.username().trim()
+    && (this.role() !== 'company' || !!this.companyNumber().trim())
+  );
 
-  // Spécifique entreprise
-  companyNumber = '';
+  switchRole(next: 'company'|'researcher') {
+    this.role.set(next);
+  }
 
-  // Feedback
-  errorMessage = '';
-  successMessage = '';
+  register(f: NgForm) {
+    this.submitAttempted.set(true);
+    this.errorMsg.set(null);
+    this.successMsg.set(null);
+    if (f.invalid || !this.canSubmit()) return;
 
-  register(): void {
     const payload: any = {
-      email: this.email,
-      password: this.password,
-      firstName: this.firstName,
-      lastName: this.lastName,
-      username: this.username,
-      bio: this.bio,
-      preferredLanguage: this.preferredLanguage,
+      email: this.email(),
+      password: this.password(),
+      firstName: this.firstName(),
+      lastName: this.lastName(),
+      username: this.username(),
+      bio: this.bio(),
+      preferredLanguage: this.preferredLanguage(),
       role: this.role()
     };
+    if (this.role() === 'company') payload.companyNumber = this.companyNumber();
 
-    if (this.role() === 'company') {
-      payload.companyNumber = this.companyNumber;
-    }
-
-    this.authService.register(payload).subscribe({
-      next: (res) => {
-        // Succès normal
-        this.successMessage = 'Inscription réussie ! Vérifiez votre email.';
-        this.errorMessage = '';
-        this.router.navigate(['/verify-email'], { queryParams: { email: this.email } });
+    this.loading.set(true);
+    this.auth.register(payload).subscribe({
+      next: () => {
+        this.loading.set(false);
+        this.successMsg.set('auth.register.success');
+        this.router.navigate(['/verify-email'], { queryParams: { email: this.email() } });
       },
       error: (err) => {
-        // 409: email déjà utilisé
+        this.loading.set(false);
         if (err?.status === 409) {
-          this.successMessage = '';
-          this.errorMessage = err?.error?.message || 'Cet email est déjà utilisé.';
+          this.errorMsg.set(err?.error?.message || 'auth.register.emailInUse');
           return;
         }
-
-        // Cas réseau/5xx: le user peut être créé mais l’email a échoué → on envoie vers la vérif
         if (err?.status === 0 || (err?.status >= 500 && err?.status < 600)) {
-          this.errorMessage = 'Problème d’envoi de mail. Entrez le code ou renvoyez-le.';
-          this.successMessage = 'Inscription enregistrée. Vérifiez votre email.';
-          this.router.navigate(['/verify-email'], { queryParams: { email: this.email } });
+          this.successMsg.set('auth.register.savedButEmailIssue');
+          this.router.navigate(['/verify-email'], { queryParams: { email: this.email() } });
           return;
         }
-
-        // Autres erreurs
-        this.successMessage = '';
-        this.errorMessage =
+        this.errorMsg.set(
           (typeof err?.error === 'string' && err.error) ||
           err?.error?.message ||
-          "Erreur lors de l'inscription.";
+          'auth.register.error'
+        );
       }
     });
   }

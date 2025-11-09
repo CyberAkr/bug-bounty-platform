@@ -1,1 +1,84 @@
-<p>program-row works!</p>
+<!-- Titre -->
+<td class="px-4 py-2 align-top">
+  @if (edit) {
+    <input [(ngModel)]="title" class="border rounded p-1 text-sm w-full" />
+  } @else {
+    <div class="font-medium">{{ program.title }}</div>
+  }
+  <div class="text-xs text-gray-500">{{ program.program_id }}</div>
+</td>
+
+<!-- Description tronquée -->
+<td class="px-4 py-2 align-top">
+  @if (edit) {
+    <textarea [(ngModel)]="description" class="border rounded p-1 text-sm w-full"></textarea>
+  } @else {
+    <div class="text-sm text-gray-700">{{ program.description | truncate: maxDesc }}</div>
+  }
+</td>
+
+<!-- Entreprise -->
+<td class="px-4 py-2 align-top">
+  {{ program.company.name }}
+</td>
+
+<!-- Statut -->
+<td class="px-4 py-2 align-top">
+  @if (edit) {
+    <select [(ngModel)]="status" class="border rounded p-1 text-sm">
+      <option value="PENDING">{{ 'admin.programs.status.PENDING' | translate }}</option>
+      <option value="APPROVED">{{ 'admin.programs.status.APPROVED' | translate }}</option>
+      <option value="ARCHIVED">{{ 'admin.programs.status.ARCHIVED' | translate }}</option>
+    </select>
+  } @else {
+    <span class="px-2 py-1 text-xs rounded"
+          [class.bg-green-200]="program.status === 'APPROVED'"
+          [class.bg-yellow-200]="program.status === 'PENDING'"
+          [class.bg-gray-200]="program.status === 'ARCHIVED'">
+      {{ ('admin.programs.status.' + program.status) | translate }}
+    </span>
+  }
+</td>
+
+<!-- Actions -->
+<td class="px-4 py-2 align-top">
+  <div class="flex flex-wrap gap-2">
+    @if (!edit) {
+      <button (click)="toggleEdit()"
+              class="bg-slate-600 hover:bg-slate-700 text-white px-2 py-1 rounded text-sm"
+              title="{{ 'admin.programs.actions.edit' | translate }}">
+        <span class="material-icons align-middle text-[18px]">edit</span>
+        <span class="ml-1">{{ 'admin.programs.actions.edit' | translate }}</span>
+      </button>
+
+      <button *ngIf="program.status === 'PENDING'"
+              (click)="approve.emit({ id: program.program_id })"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-sm"
+              title="{{ 'admin.programs.actions.approve' | translate }}">
+        <span class="material-icons align-middle text-[18px]">check_circle</span>
+        <span class="ml-1">{{ 'admin.programs.actions.approve' | translate }}</span>
+      </button>
+
+      <button (click)="removed.emit(program.program_id)"
+              class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-sm"
+              title="{{ 'admin.programs.actions.delete' | translate }}">
+        <span class="material-icons align-middle text-[18px]">delete</span>
+        <span class="ml-1">{{ 'admin.programs.actions.delete' | translate }}</span>
+      </button>
+    } @else {
+      <button (click)="save()"
+              class="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-1 rounded text-sm"
+              title="{{ 'admin.programs.actions.save' | translate }}">
+        <span class="material-icons align-middle text-[18px]">save</span>
+        <span class="ml-1">{{ 'admin.programs.actions.save' | translate }}</span>
+      </button>
+
+      <button (click)="toggleEdit()"
+              class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-2 py-1 rounded text-sm"
+              title="{{ 'admin.programs.actions.cancel' | translate }}">
+        <span class="material-icons align-middle text-[18px]">undo</span>
+        <span class="ml-1">{{ 'admin.programs.actions.cancel' | translate }}</span>
+      </button>
+    }
+  </div>
+</td>

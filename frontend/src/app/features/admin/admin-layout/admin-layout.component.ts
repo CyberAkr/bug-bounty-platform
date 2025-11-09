@@ -10,6 +10,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admin-layout',
@@ -17,7 +18,7 @@ import { MatDividerModule } from '@angular/material/divider';
   imports: [
     CommonModule, RouterModule,
     MatSidenavModule, MatToolbarModule, MatListModule,
-    MatIconModule, MatButtonModule, MatDividerModule
+    MatIconModule, MatButtonModule, MatDividerModule, TranslatePipe
   ],
   templateUrl: './admin-layout.component.html',
   styleUrls: ['./admin-layout.component.css']

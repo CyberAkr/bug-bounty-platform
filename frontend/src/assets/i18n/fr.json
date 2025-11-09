@@ -15,5 +15,766 @@
     "logout": "Déconnexion",
     "langFr": "🇫🇷 FR",
     "langEn": "🇬🇧 EN"
+  },
+
+  "footer": {
+    "aboutTitle": "À propos",
+    "aboutText": "Plateforme belge de bug bounty dédiée aux PME et aux chercheurs en cybersécurité. Signalez, collaborez et renforcez ensemble la sécurité du numérique.",
+    "linksTitle": "Navigation",
+    "programs": "Programmes",
+    "ranking": "Classement",
+    "forum": "Forum",
+    "contact": "Contact",
+    "legal": "Mentions légales",
+    "followTitle": "Nous suivre",
+    "copyright": "© {{year}} Bug Bounty — Tous droits réservés."
+  },
+
+  "auth": {
+    "login": {
+      "title": "Se connecter",
+      "subtitle": "Accédez à votre compte en toute sécurité",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "submit": "Se connecter",
+      "loading": "Connexion…",
+      "noAccount": "Pas encore de compte ?",
+      "register": "Créer un compte",
+      "forgot": "Mot de passe oublié ?"
+    },
+    "errors": {
+      "invalid": "Identifiants invalides."
+    },
+    "register": {
+      "title": "Créer un compte",
+      "subtitle": "Choisissez votre profil et complétez vos informations",
+      "asResearcher": "Je suis un chercheur",
+      "asCompany": "Je suis une entreprise",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "username": "Nom d’utilisateur",
+      "lang": "Langue préférée",
+      "bio": "Bio",
+      "companyNumber": "Numéro d’entreprise",
+      "submit": "S’inscrire",
+      "loading": "Inscription…",
+      "haveAccount": "Déjà un compte ? Connectez-vous",
+      "success": "Inscription réussie ! Vérifiez votre e-mail.",
+      "emailInUse": "Cet e-mail est déjà utilisé.",
+      "savedButEmailIssue": "Inscription enregistrée. Problème d’e-mail : entrez le code ou renvoyez-le.",
+      "error": "Erreur lors de l’inscription.",
+      "already": "Déjà inscrit ?",
+      "signIn": "Se connecter"
+    }
+  },
+
+  "verify": {
+    "title": "Vérifiez votre e-mail",
+    "subtitle": "Nous avons envoyé un code à {{email}}.",
+    "codeLabel": "Code à 6 chiffres",
+    "help": "Saisissez le code reçu par e-mail. Utilisez « renvoyer le code » pour en obtenir un nouveau.",
+    "resend": "Renvoyer le code",
+    "submit": "Confirmer",
+    "loading": "Vérification…",
+    "resent": "Code renvoyé. Vérifiez votre boîte de réception.",
+    "success": "Adresse vérifiée ! Vous pouvez vous connecter.",
+    "errors": {
+      "invalidCode": "Code invalide ou expiré.",
+      "resendFail": "Impossible de renvoyer le code pour le moment.",
+      "missingEmail": "E-mail manquant."
+    }
+  },
+
+  "challenges": {
+    "weekly": {
+      "title": "Défi de la semaine",
+      "counter": "Défi {{current}} / {{total}}",
+      "empty": "Aucun défi actif pour le moment.",
+      "openResource": "Ouvrir la ressource du défi",
+      "enterCode": "Entrez votre code",
+      "submit": "Soumettre",
+      "prev": "Précédent",
+      "next": "Suivant",
+      "status": {
+        "ongoing": "En cours",
+        "upcoming": "À venir",
+        "ended": "Terminé"
+      },
+      "snackbar": {
+        "valid": "Code vérifié !",
+        "invalid": "Code invalide ou déjà réclamé."
+      },
+      "msg": {
+        "valid": "Votre code a été vérifié.",
+        "invalid": "Invalide ou déjà utilisé."
+      }
+    }
+  },
+
+  "ranking": {
+    "title": "🏆 Classement des chercheurs",
+    "total": "{{count}} profils",
+    "points": "{{value}} pts",
+    "col": {
+      "score": "Score",
+      "earnings": "Gains",
+      "paid": "Rapports payés",
+      "last": "Dernière activité"
+    },
+    "detail": {
+      "stats": "Statistiques",
+      "topPrograms": "Top programmes",
+      "bio": "Bio"
+    },
+    "expand": "Voir les détails",
+    "na": "N/A"
+  },
+
+  "programs": {
+    "list": {
+      "title": "Programmes d’audit disponibles",
+      "available": "programmes disponibles",
+      "empty": "Aucun programme disponible pour le moment.",
+      "details": "Voir les détails",
+      "noDesc": "Aucune description fournie.",
+      "na": "N/A",
+      "more": "Affichage de {{shown}} sur {{total}} programmes."
+    },
+    "create": {
+      "title": "Créer un programme",
+      "back": "Retour aux programmes",
+      "pricing": "Tarif : 100 € — sécurisé par Stripe.",
+      "publish": "Publier (100 €)",
+      "hasActive": {
+        "title": "Un programme est déjà en attente ou actif pour votre entreprise.",
+        "desc": "Vous ne pouvez pas en créer un nouveau pour l’instant.",
+        "link": "Voir mon programme"
+      },
+      "fields": {
+        "title": "Titre du programme",
+        "titleHint": "ex. : Audit de sécurité d’une application e-commerce",
+        "desc": "Description (texte riche)",
+        "descHint": "Indiquez le périmètre, les règles d’engagement, les exclusions, etc.",
+        "goal": "Objectif (optionnel)",
+        "goalHint": "ex. : Priorité aux injections et aux contournements d’auth."
+      },
+      "errors": {
+        "alreadyActive": "Un programme est déjà en attente/actif pour votre entreprise.",
+        "noStripeUrl": "URL de redirection Stripe manquante.",
+        "conflict": "Un programme entreprise existe déjà (en attente/actif).",
+        "generic": "Erreur lors de la redirection vers Stripe."
+      }
+    },
+    "detail": {
+      "title": "Détails du programme",
+      "subtitle": "Consulter les informations et soumettre un rapport",
+      "back": "Retour à la liste",
+      "company": "Entreprise",
+      "status": "Statut",
+      "submitTitle": "Soumettre un rapport",
+      "publishTitle": "Publier le programme",
+      "publishDesc": "Activez votre programme en finalisant le paiement sécurisé Stripe.",
+      "publishBtn": "Publier (100 €)",
+      "notFound": "Programme introuvable."
+    }
+  },
+
+  "payments": {
+    "return": {
+      "title": "Confirmation du paiement",
+      "checking": "Vérification du paiement…",
+      "success": "Paiement confirmé, votre programme est publié !",
+      "back": "Retour aux programmes",
+      "errors": {
+        "missingSession": "Session Stripe manquante.",
+        "missingId": "ID du programme manquant.",
+        "generic": "Erreur lors de la confirmation."
+      }
+    }
+  },
+
+  "home": {
+    "hero": {
+      "title": "Plateforme de bug bounty pour les PME belges",
+      "lede": "La cybercriminalité augmente. Passez d’une posture réactive à une approche proactive : règles claires, cadre légal et communauté éthique testant continuellement vos systèmes.",
+      "ctaCompany": "Je suis une entreprise",
+      "ctaResearcher": "Je suis un chercheur",
+      "compliance": "Responsible disclosure et safe-harbor intégrés"
+    },
+    "advantages": {
+      "title": "Pourquoi choisir la plateforme",
+      "subtitle": "Un modèle responsable pour réduire le risque et inspirer confiance.",
+      "secure": {
+        "title": "Sécurité d’abord",
+        "text": "Programmes cadrés, périmètre défini et revues méthodiques des vulnérabilités."
+      },
+      "disclosure": {
+        "title": "Responsible disclosure",
+        "text": "Processus clair pour un traitement sûr et rapide des rapports."
+      },
+      "safeHarbor": {
+        "title": "Safe-harbor",
+        "text": "Protection contractuelle des chercheurs agissant de bonne foi dans le périmètre."
+      },
+      "fairRewards": {
+        "title": "Récompenses équitables",
+        "text": "Barèmes progressifs alignés sur la sévérité et l’impact."
+      },
+      "community": {
+        "title": "Communauté éthique",
+        "text": "Profils sélectionnés, boucles de feedback et amélioration continue."
+      },
+      "belgium": {
+        "title": "Ancrage local",
+        "text": "Aligné sur les cadres juridiques belge et européen."
+      }
+    },
+    "how": {
+      "title": "Comment ça marche",
+      "subtitle": "Un cycle continu pour améliorer la sécurité.",
+      "step1": {
+        "title": "Définition du périmètre",
+        "text": "Actifs autorisés, règles d’engagement et contraintes opérationnelles."
+      },
+      "step2": {
+        "title": "Recherche encadrée",
+        "text": "Tests éthiques dans le périmètre et les délais."
+      },
+      "step3": {
+        "title": "Rapports exploitables",
+        "text": "Preuves, étapes de reproduction, sévérité et correctifs priorisés."
+      },
+      "step4": {
+        "title": "Correction & validation",
+        "text": "Remédiation, re-tests puis récompense selon l’impact."
+      }
+    },
+    "assurance": {
+      "title": "Confiance, conformité et support",
+      "subtitle": "Une plateforme conçue pour réduire le risque et accélérer la remédiation.",
+      "policy": {
+        "title": "Politique claire",
+        "text": "Règles d’usage, protection de la vie privée et interdictions explicites."
+      },
+      "privacy": {
+        "title": "Protection des données",
+        "text": "Procédures pour éviter les données personnelles et sécuriser les échanges."
+      },
+      "response": {
+        "title": "SLA de réponse",
+        "text": "Accusé de réception, tri et suivi jusqu’à la clôture."
+      }
+    }
+  },
+
+  "reports": {
+    "labels": {
+      "program": "Programme",
+      "severity": "Sévérité",
+      "status": "Statut",
+      "receivedAt": "Reçu le",
+      "submittedAt": "Soumis le",
+      "researcher": "Chercheur",
+      "reward": "Récompense"
+    },
+    "severity": {
+      "low": "Faible",
+      "medium": "Moyenne",
+      "high": "Élevée"
+    },
+    "actions": {
+      "refresh": "Actualiser",
+      "download": "Télécharger le PDF",
+      "downloadMine": "Télécharger mon rapport",
+      "send": "Envoyer"
+    },
+    "errors": {
+      "loadReceived": "Échec du chargement des rapports reçus.",
+      "download": "Échec du téléchargement."
+    },
+    "received": {
+      "title": "Rapports reçus",
+      "empty": "Aucun rapport reçu pour le moment."
+    },
+    "my": {
+      "title": "Mes rapports",
+      "empty": "Vous n’avez pas encore soumis de rapports."
+    },
+    "submit": {
+      "title": "Soumettre un rapport",
+      "program": "Programme",
+      "severity": "Sévérité",
+      "description": "Description (preuves, reproduction, impact…)",
+      "file": "Fichier PDF",
+      "hint": "Joignez un PDF contenant toutes les informations techniques nécessaires."
+    },
+    "status": {
+      "alreadySubmitted": "Un rapport a déjà été soumis pour ce programme."
+    }
+  },
+
+  "profile": {
+    "title": "Mon profil",
+    "subtitle": "Gérez vos informations et votre photo",
+    "settings": "Paramètres",
+    "photo": {
+      "title": "Photo de profil",
+      "update": "Mettre à jour la photo"
+    },
+    "form": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "E-mail",
+      "language": "Langue préférée",
+      "bio": "Bio"
+    },
+    "company": {
+      "title": "Informations entreprise",
+      "number": "Numéro d’entreprise",
+      "status": "Statut",
+      "docLabel": "Document de vérification (PDF uniquement)",
+      "docHint1": "Un exemple est disponible dans la documentation.",
+      "docHint2": "Vous pouvez renvoyer le document si la vérification est en attente ou rejetée.",
+      "selected": "Fichier sélectionné"
+    },
+    "actions": {
+      "save": "Enregistrer",
+      "delete": "Supprimer mon compte"
+    },
+    "reports": {
+      "title": "Mes rapports"
+    }
+  },
+
+  "legal": {
+    "title": "Mentions légales",
+    "back": "Retour",
+    "publisher": {
+      "title": "Éditeur",
+      "body": "Plateforme Bug Bounty — ASBL/entreprise belge dédiée aux PME et aux chercheurs en sécurité."
+    },
+    "host": {
+      "title": "Hébergement",
+      "body": "Hébergé par un prestataire situé dans l’UE. Disponibilité et sauvegardes selon les bonnes pratiques."
+    },
+    "contact": {
+      "title": "Contact",
+      "body": "Pour toute demande liée au site, à la modération ou aux mentions légales, écrivez à"
+    },
+    "data": {
+      "title": "Données personnelles",
+      "body": "Données traitées conformément au RGPD. Vous disposez de droits d’accès, rectification, effacement et opposition."
+    },
+    "ip": {
+      "title": "Propriété intellectuelle",
+      "body": "Les contenus publiés (textes, logos, graphismes) sont protégés. Toute reproduction non autorisée est interdite."
+    }
+  },
+
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Question, retour ou demande de support ? Écrivez-nous.",
+    "fields": {
+      "name": "Nom",
+      "email": "E-mail",
+      "subject": "Sujet",
+      "message": "Message",
+      "consent": "J’accepte l’utilisation de mes données pour traiter ma demande."
+    },
+    "submit": "Envoyer",
+    "sending": "Envoi…",
+    "success": "Message envoyé. Merci pour votre contact !"
+  },
+
+  "common": {
+    "save": "Enregistrer",
+    "create": "Créer",
+    "edit": "Éditer",
+    "update": "Mettre à jour",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "confirm": "Confirmer",
+    "download": "Télécharger",
+    "back": "Retour",
+    "apply": "Appliquer",
+    "actions": "Actions",
+    "status": "Statut",
+    "loading": "Chargement…",
+    "none": "Aucun",
+    "yes": "Oui",
+    "no": "Non",
+    "filters": "Filtres",
+    "all": "Tous",
+    "required": "Champ requis",
+    "success": "Opération réussie",
+    "error": "Erreur inattendue",
+    "refresh": "Actualiser",
+    "creating": "Création…",
+    "reset": "Réinitialiser",
+    "uploading": "Envoi…"
+  },
+
+  "admin": {
+    "layout": {
+      "title": "Bug Bounty Platform — Admin",
+      "home": "Accueil",
+      "brand": "Admin"
+    },
+    "topbar": {
+      "homeAria": "Aller à l’accueil"
+    },
+    "nav": {
+      "reports": "Rapports",
+      "users": "Utilisateurs",
+      "programs": "Programmes",
+      "rewards": "Récompenses",
+      "badges": "Badges",
+      "vulns": "Vulnérabilités",
+      "challenges": "Défis",
+      "home": "Accueil"
+    },
+
+    "statuses": {
+      "PENDING": "PENDING",
+      "APPROVED": "APPROVED",
+      "REJECTED": "REJECTED",
+      "ARCHIVED": "ARCHIVED",
+      "LOW": "LOW",
+      "MEDIUM": "MEDIUM",
+      "HIGH": "HIGH"
+    },
+
+    "badges": {
+      "title": "Badges",
+      "empty": "Aucun badge pour le moment.",
+      "form": {
+        "back": "Retour",
+        "titleEdit": "Modifier un badge",
+        "titleCreate": "Créer un badge",
+        "name": "Nom",
+        "description": "Description",
+        "importImage": "Importer une image",
+        "imageHint": "PNG ou JPEG recommandé (carré).",
+        "currentImage": "Image actuelle",
+        "save": "Enregistrer",
+        "create": "Créer",
+        "cancel": "Annuler"
+      },
+      "table": {
+        "name": "Nom",
+        "description": "Description"
+      },
+      "row": {
+        "edit": "Enregistrer",
+        "delete": "Supprimer"
+      }
+    },
+
+    "rewards": {
+      "title": "Récompenses",
+      "empty": "Aucune récompense",
+      "create": {
+        "title": "Créer une récompense",
+        "reportId": "ID du rapport",
+        "amount": "Montant",
+        "dateInfo": "<strong>Date :</strong> la date de paiement est enregistrée lors de la sauvegarde.",
+        "proofInfo": "Vous pourrez ajouter une preuve plus tard (PDF/PNG/JPEG)."
+      },
+      "list": {
+        "title": "Liste des récompenses",
+        "empty": "Aucune récompense pour le moment."
+      },
+      "table": {
+        "id": "ID de paiement",
+        "reportId": "ID du rapport",
+        "amount": "Montant",
+        "paidAt": "Payé le",
+        "proof": "Preuve",
+        "actions": "Actions"
+      },
+      "proof": {
+        "present": "Preuve disponible",
+        "missing": "Aucune preuve"
+      },
+      "actions": {
+        "replaceProof": "Remplacer la preuve",
+        "addProof": "Ajouter une preuve"
+      }
+    },
+
+    "users": {
+      "title": "Gestion des utilisateurs",
+      "createTitle": "Créer un utilisateur",
+      "create": {
+        "title": "Créer un utilisateur",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "username": "Nom d’utilisateur",
+        "email": "E-mail",
+        "password": "Mot de passe",
+        "companyNumber": "Numéro d’entreprise",
+        "verificationDoc": "Document de vérification (lien ou réf.)"
+      },
+      "form": {
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "username": "Nom d’utilisateur",
+        "email": "E-mail",
+        "password": "Mot de passe",
+        "role": "Rôle",
+        "companyNumber": "Numéro d’entreprise",
+        "verificationDocument": "Document de vérification (lien ou réf.)",
+        "banned": "Banni",
+        "verificationStatus": "Vérification"
+      },
+      "roles": {
+        "admin": "admin",
+        "researcher": "researcher",
+        "company": "company"
+      },
+      "verification": {
+        "PENDING": "PENDING",
+        "APPROVED": "APPROVED",
+        "REJECTED": "REJECTED"
+      },
+      "role": {
+        "researcher": "Chercheur",
+        "company": "Entreprise",
+        "admin": "Administrateur"
+      },
+      "verif": {
+        "PENDING": "En attente",
+        "APPROVED": "Approuvé",
+        "REJECTED": "Refusé"
+      },
+      "banned": "Banni",
+      "table": {
+        "roleStatus": "Rôle et statut",
+        "verification": "Vérification",
+        "document": "Document",
+        "actions": "Actions"
+      },
+      "doc": {
+        "available": "Disponible",
+        "none": "Aucun"
+      },
+      "row": {
+        "save": "Enregistrer",
+        "remove": "Supprimer",
+        "download": "Télécharger"
+      },
+      "empty": "Aucun utilisateur",
+      "toasts": {
+        "created": "Utilisateur créé",
+        "updated": "Utilisateur mis à jour",
+        "deleted": "Utilisateur supprimé",
+        "download404": "Document introuvable",
+        "unauthorized": "Non autorisé",
+        "downloadError": "Échec du téléchargement"
+      }
+    },
+
+    "programs": {
+      "title": "Programmes",
+      "filter": "Filtre de statut :",
+      "filterLabel": "Filtrer :",
+      "filterAll": "Tous",
+      "createTitle": "Créer un programme",
+      "form": {
+        "title": "Titre",
+        "description": "Description",
+        "companyId": "ID entreprise",
+        "status": "Statut"
+      },
+      "table": {
+        "title": "Titre",
+        "description": "Description",
+        "company": "Entreprise",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "row": {
+        "edit": "Modifier",
+        "approve": "Approuver",
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "remove": "Supprimer"
+      },
+      "empty": "Aucun programme",
+      "toasts": {
+        "created": "Programme créé",
+        "updated": "Programme mis à jour",
+        "deleted": "Programme supprimé",
+        "errorLoad": "Échec du chargement des programmes",
+        "errorCreate": "Échec de la création",
+        "errorUpdate": "Échec de la mise à jour",
+        "errorDelete": "Échec de la suppression"
+      },
+      "filterAlt": {
+        "label": "Filtrer",
+        "all": "Tous"
+      },
+      "status": {
+        "PENDING": "En attente",
+        "APPROVED": "Approuvé",
+        "ARCHIVED": "Archivé"
+      },
+      "create": {
+        "title": "Créer un programme",
+        "placeholders": {
+          "title": "Titre",
+          "description": "Description",
+          "companyId": "ID entreprise"
+        },
+        "defaults": {
+          "pending": "En attente (défaut)"
+        },
+        "submit": "Créer le programme"
+      },
+      "tableAlt": {
+        "col": {
+          "title": "Titre",
+          "description": "Description (max {{ max }})",
+          "company": "Entreprise",
+          "status": "Statut",
+          "actions": "Actions"
+        }
+      },
+      "actions": {
+        "edit": "Modifier",
+        "approve": "Approuver",
+        "delete": "Supprimer",
+        "save": "Enregistrer",
+        "cancel": "Annuler"
+      }
+    },
+
+    "reports": {
+      "title": "Rapports",
+      "filterLabel": "Filtrer :",
+      "filterAll": "Tous",
+      "filter": {
+        "label": "Filtrer",
+        "all": "Tous"
+      },
+      "status": {
+        "PENDING": "En attente",
+        "APPROVED": "Approuvé",
+        "REJECTED": "Refusé"
+      },
+      "severity": {
+        "LOW": "Faible",
+        "MEDIUM": "Moyenne",
+        "HIGH": "Élevée"
+      },
+      "vulnType": "Type de vulnérabilité",
+      "commentPlaceholder": "Commentaire admin (optionnel)",
+      "actions": {
+        "preview": "Aperçu",
+        "approve": "Valider",
+        "reject": "Refuser"
+      },
+      "table": {
+        "id": "ID",
+        "report": "Rapport",
+        "severity": "Sévérité",
+        "researcher": "Chercheur",
+        "submitted": "Soumis",
+        "vulnType": "Type vuln.",
+        "adminComment": "Commentaire admin",
+        "comment": "Commentaire",
+        "actions": "Actions"
+      },
+      "row": {
+        "preview": "Aperçu",
+        "approve": "Valider",
+        "reject": "Refuser",
+        "saveVuln": "Enregistrer"
+      },
+      "messages": {
+        "empty": "Aucun rapport.",
+        "saved": "Rapport mis à jour",
+        "errorLoad": "Échec du chargement des rapports",
+        "errorUpdate": "Échec de la mise à jour"
+      },
+      "empty": "Aucun rapport pour le moment."
+    },
+
+    "vulns": {
+      "title": "Types de vulnérabilités",
+      "addPlaceholder": "Ajouter un type",
+      "addBtn": "Ajouter",
+      "name": "Nom",
+      "actions": "Actions",
+      "edit": "Mettre à jour",
+      "remove": "Supprimer",
+      "empty": "Aucun type de vulnérabilité",
+      "errors": {
+        "load": "Échec du chargement des types de vulnérabilités",
+        "create": "Échec de la création",
+        "update": "Échec de la mise à jour",
+        "delete": "Échec de la suppression"
+      }
+    },
+
+    "vuln": {
+      "title": "Types de vulnérabilités",
+      "placeholder": "Ajouter un type (ex. : XSS, SQLi...)",
+      "ariaNewType": "Nouveau type de vulnérabilité",
+      "col": {
+        "name": "Nom",
+        "actions": "Actions"
+      },
+      "empty": "Aucun type pour l’instant."
+    },
+
+    "challenges": {
+      "list": {
+        "title": "Défis",
+        "create": "Nouveau défi",
+        "table": {
+          "title": "Titre",
+          "period": "Période",
+          "program": "Programme",
+          "winner": "Gagnant",
+          "actions": "Actions"
+        },
+        "empty": "Aucun défi pour l’instant",
+        "deleted": "Défi supprimé",
+        "deleteError": "Échec de la suppression",
+        "loadError": "Échec du chargement des défis"
+      },
+      "form": {
+        "createTitle": "Créer un défi",
+        "editTitle": "Modifier un défi",
+        "subtitle": "Défi avec code gagnant, lié à un programme",
+        "fields": {
+          "title": "Titre",
+          "description": "Description",
+          "start": "Début",
+          "end": "Fin",
+          "program": "Programme",
+          "theme": "Thème (optionnel)",
+          "resource": "Lien ressource (optionnel)",
+          "winningCode": "Code gagnant"
+        },
+        "buttons": {
+          "save": "Enregistrer",
+          "create": "Créer",
+          "cancel": "Annuler"
+        },
+        "validation": {
+          "required": "Titre, période et programme sont requis.",
+          "codeRequired": "Le code gagnant est requis à la création."
+        },
+        "toast": {
+          "saved": "Défi enregistré",
+          "created": "Défi créé",
+          "error": "Échec de l’enregistrement"
+        }
+      }
+    }
   }
 }

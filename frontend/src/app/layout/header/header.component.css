@@ -1,8 +1,0 @@
-/* simple utilitaire pour pousser les éléments à droite */
-.spacer { flex: 1 1 auto; }
-/* si tu veux un peu d’espace sur les icônes : */
-.mr-1 { margin-right: .25rem; }
-.mr-2 { margin-right: .5rem; }
-.px-4 { padding-left: 1rem; padding-right: 1rem; }
-.ml-2 { margin-left: .5rem; }
-.font-semibold { font-weight: 600; }

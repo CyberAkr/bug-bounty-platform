@@ -1,6 +1,12 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpResponse } from '@angular/common/http';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+
 import { ReportService, MyRewardView } from '../report.service';
 import { DateFormatPipe } from '@app/shared/pipes/date-format.pipe';
 import { ReportResponse } from '@app/models/report.model';
@@ -8,8 +14,12 @@ import { ReportResponse } from '@app/models/report.model';
 @Component({
   selector: 'app-my-reports',
   standalone: true,
-  imports: [CommonModule, DateFormatPipe],
-  templateUrl: './my-reports.component.html',
+  imports: [
+    CommonModule, TranslateModule,
+    MatCardModule, MatProgressSpinnerModule, MatButtonModule, MatIconModule,
+    DateFormatPipe
+  ],
+  templateUrl: './my-reports.component.html'
 })
 export class MyReportsComponent implements OnInit {
   private reportsSvc = inject(ReportService);
@@ -21,16 +31,12 @@ export class MyReportsComponent implements OnInit {
   ngOnInit(): void {
     this.loading.set(true);
     this.reportsSvc.getMyReports().subscribe({
-      next: (list: ReportResponse[]) => {
+      next: (list) => {
         this.reports.set(list);
         this.loading.set(false);
-
-        // charger la récompense pour chaque rapport
         list.forEach((r) => {
           this.reportsSvc.getMyRewardForReport(r.id).subscribe((rv) => {
-            const map = { ...this.rewardsMap() };
-            map[r.id] = rv;
-            this.rewardsMap.set(map);
+            const map = { ...this.rewardsMap() }; map[r.id] = rv; this.rewardsMap.set(map);
           });
         });
       },
@@ -42,13 +48,8 @@ export class MyReportsComponent implements OnInit {
     this.reportsSvc.downloadOwnReport(id).subscribe((res: HttpResponse<Blob>) => {
       const blob = res.body as Blob;
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `report-${id}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+      const a = document.createElement('a'); a.href = url; a.download = `report-${id}.pdf`;
+      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     });
   }
 }

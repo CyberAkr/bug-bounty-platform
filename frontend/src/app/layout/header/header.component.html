@@ -1,28 +1,51 @@
-<mat-toolbar class="px-4">
-  <button mat-button routerLink="/home" class="font-semibold">
-    <mat-icon aria-hidden="true" class="mr-2">security</mat-icon>
-    {{ 'navbar.title' | translate }}
-  </button>
+<header class="app-header">
+  <div class="app-header__container">
+    <div class="app-header__bar">
+      <a routerLink="/home" class="flex items-center gap-2 font-bold text-xl link-accent">
+        <span class="material-icons" style="color:var(--accent)">security</span>
+        {{ 'navbar.title' | translate }}
+      </a>
 
-  <span class="spacer"></span>
+      <nav class="hidden md:flex items-center gap-4 font-medium">
+        <a routerLink="/classement" class="link-accent">{{ 'navbar.ranking' | translate }}</a>
+        <a routerLink="/programs" *ngIf="isLoggedIn" class="link-accent">{{ 'navbar.programs' | translate }}</a>
+        <a routerLink="/challenge/semaine" *ngIf="isLoggedIn" class="link-accent">{{ 'navbar.challenge' | translate }}</a>
+        <a routerLink="/company" *ngIf="isLoggedIn && isCompany()" class="link-accent">{{ 'navbar.companySpace' | translate }}</a>
+        <a routerLink="/admin" *ngIf="isLoggedIn && isAdmin()" class="link-accent">{{ 'navbar.admin' | translate }}</a>
+        <a routerLink="/profile" *ngIf="isLoggedIn" class="link-accent">{{ 'navbar.profile' | translate }}</a>
+      </nav>
 
-  <a mat-button routerLink="/classement">{{ 'navbar.ranking' | translate }}</a>
-  <a mat-button routerLink="/programs" *ngIf="isLoggedIn">{{ 'navbar.programs' | translate }}</a>
-  <a mat-button routerLink="/challenge/semaine" *ngIf="isLoggedIn">{{ 'navbar.challenge' | translate }}</a>
-  <a mat-button routerLink="/company" *ngIf="isLoggedIn && isCompany()">{{ 'navbar.companySpace' | translate }}</a>
-  <a mat-button routerLink="/admin" *ngIf="isLoggedIn && isAdmin()">{{ 'navbar.admin' | translate }}</a>
+      <div class="hidden md:flex items-center gap-2">
+        <ng-container *ngIf="!isLoggedIn">
+          <a routerLink="/login" class="btn-ghost">{{ 'navbar.login' | translate }}</a>
+          <a routerLink="/register" class="btn-primary">{{ 'navbar.register' | translate }}</a>
+        </ng-container>
+        <ng-container *ngIf="isLoggedIn">
+          <button (click)="logout()" class="btn-ghost flex items-center gap-1">
+            <span class="material-icons" style="color:var(--accent)">logout</span>
+            {{ 'navbar.logout' | translate }}
+          </button>
+        </ng-container>
+        <app-language-selector class="lang-on-dark"></app-language-selector>
 
-  <a mat-button routerLink="/profile" *ngIf="isLoggedIn">{{ 'navbar.profile' | translate }}</a>
-  <a mat-button routerLink="/login" *ngIf="!isLoggedIn">{{ 'navbar.login' | translate }}</a>
-  <a mat-stroked-button color="primary" routerLink="/register" *ngIf="!isLoggedIn">
-    {{ 'navbar.register' | translate }}
-  </a>
-  <button mat-button (click)="logout()" *ngIf="isLoggedIn">
-    <mat-icon class="mr-1" aria-hidden="true">logout</mat-icon>
-    {{ 'navbar.logout' | translate }}
-  </button>
+      </div>
 
-  <span class="ml-2">
-    <app-language-selector></app-language-selector>
-  </span>
-</mat-toolbar>
+      <button class="md:hidden btn-ghost" (click)="toggleMobile()" aria-label="menu">
+        <span class="material-icons">menu</span>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="mobileOpen()" class="md:hidden border-top border-white/20">
+    <nav class="flex flex-col gap-1 px-4 py-3 text-sm" style="background:var(--color-primary)">
+      <a routerLink="/classement" (click)="closeMobile()" class="link-accent py-2">{{ 'navbar.ranking' | translate }}</a>
+      <a routerLink="/programs" *ngIf="isLoggedIn" (click)="closeMobile()" class="link-accent py-2">{{ 'navbar.programs' | translate }}</a>
+      <a routerLink="/challenge/semaine" *ngIf="isLoggedIn" (click)="closeMobile()" class="link-accent py-2">{{ 'navbar.challenge' | translate }}</a>
+      <a routerLink="/profile" *ngIf="isLoggedIn" (click)="closeMobile()" class="link-accent py-2">{{ 'navbar.profile' | translate }}</a>
+      <div class="mt-2 flex gap-2 items-center">
+        <a *ngIf="!isLoggedIn" routerLink="/login" (click)="closeMobile()" class="btn-ghost">{{ 'navbar.login' | translate }}</a>
+        <a *ngIf="!isLoggedIn" routerLink="/register" (click)="closeMobile()" class="btn-primary">{{ 'navbar.register' | translate }}</a>
+      </div>
+    </nav>
+  </div>
+</header>

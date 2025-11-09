@@ -1,161 +1,175 @@
-<mat-card class="profile-card">
-  <mat-card-header>
-    <mat-icon mat-card-avatar>person</mat-icon>
-    <mat-card-title>Mon profil</mat-card-title>
-    <mat-card-subtitle>Gérez vos informations et votre photo</mat-card-subtitle>
-  </mat-card-header>
+<div class="auth-wrapper">
+  <mat-card class="auth-card">
 
-  <mat-card-content>
-    <div *ngIf="user() as u" class="profile-grid">
-      <!-- Colonne photo -->
-      <div class="photo-col">
-        <div class="avatar">
-          <!-- Preview locale si sélectionnée -->
-          <img
-            *ngIf="photoPreviewUrl(); else currentPhoto"
-            [src]="photoPreviewUrl()!"
-            alt="Preview photo"
-            class="avatar-img" />
-          <ng-template #currentPhoto>
-            <!-- Photo depuis le backend (utilise ta fonction resolvePhotoUrl si besoin) -->
-            <img
-              *ngIf="resolvePhotoUrl(u.profilePhoto); else placeholder"
-              [src]="resolvePhotoUrl(u.profilePhoto)!"
-              alt="Photo de profil"
-              class="avatar-img" />
-            <ng-template #placeholder>
-              <div class="avatar-placeholder">
-                <mat-icon>person</mat-icon>
-              </div>
-            </ng-template>
-          </ng-template>
-        </div>
-
-        <div class="photo-actions">
-          <input type="file" accept="image/*" (change)="onPhotoSelected($event)" />
-          <button mat-stroked-button color="primary" (click)="uploadPhoto()">
-            <mat-icon>upload</mat-icon>
-            Mettre à jour la photo
-          </button>
-        </div>
+    <!-- Header -->
+    <header class="mb-6 flex items-center justify-between">
+      <div>
+        <h2 class="text-2xl font-semibold">{{ 'profile.title' | translate }}</h2>
+        <p class="text-sm text-gray-500">{{ 'profile.subtitle' | translate }}</p>
       </div>
 
-      <!-- Formulaire infos -->
-      <form class="form-col" (ngSubmit)="update()" enctype="multipart/form-data">
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>Prénom</mat-label>
-            <input matInput [(ngModel)]="u.firstName" name="firstName" />
-          </mat-form-field>
+      <a routerLink="/settings" mat-stroked-button class="btn-ghost">
+        <mat-icon class="mr-2">settings</mat-icon>
+        {{ 'profile.settings' | translate }}
+      </a>
+    </header>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Nom</mat-label>
-            <input matInput [(ngModel)]="u.lastName" name="lastName" />
-          </mat-form-field>
-        </div>
+    <mat-card-content>
+      <ng-container *ngIf="user() as u; else loadingTpl">
 
-        <div class="form-row">
-          <mat-form-field appearance="outline" class="full">
-            <mat-label>Email</mat-label>
-            <input matInput [value]="u.email" disabled />
-          </mat-form-field>
+        <!-- Layout 2 colonnes -->
+        <div class="grid gap-6 xl:gap-8 grid-cols-1 md:grid-cols-[320px_1fr]">
 
-          <mat-form-field appearance="outline">
-            <mat-label>Langue préférée</mat-label>
-            <mat-select [(ngModel)]="u.preferredLanguage" name="preferredLanguage">
-              <mat-option value="fr">Français</mat-option>
-              <mat-option value="en">English</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+          <!-- ====== Colonne gauche : photo + entreprise ====== -->
+          <aside class="panel">
+            <!-- Photo -->
+            <h3 class="panel-title">{{ 'profile.photo.title' | translate }}</h3>
 
-        <mat-form-field appearance="outline" class="full">
-          <mat-label>Bio</mat-label>
-          <textarea matInput rows="4" [(ngModel)]="u.bio" name="bio"></textarea>
-        </mat-form-field>
+            <div class="flex items-center gap-4">
+              <div class="avatar-wrap">
+                <img *ngIf="photoPreviewUrl(); else currentPhoto"
+                     [src]="photoPreviewUrl()!" alt="preview" class="avatar-img"/>
+                <ng-template #currentPhoto>
+                  <img *ngIf="resolvePhotoUrl(u.profilePhoto); else placeholder"
+                       [src]="resolvePhotoUrl(u.profilePhoto)!" alt="profile" class="avatar-img"/>
+                  <ng-template #placeholder>
+                    <div class="avatar-ph">
+                      <mat-icon>person</mat-icon>
+                    </div>
+                  </ng-template>
+                </ng-template>
+              </div>
 
-        <!-- compat backend -->
-        <input type="hidden" [value]="u.profilePhoto || ''" name="profilePhoto" />
-
-        <!-- Entreprise -->
-        <div *ngIf="isCompany()" class="company-box">
-          <h3>Informations entreprise</h3>
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="full">
-              <mat-label>Numéro d'entreprise</mat-label>
-              <input matInput [value]="u.companyNumber" disabled />
-            </mat-form-field>
-
-            <div class="status">
-              <span class="label">Statut :</span>
-              <span
-                [ngClass]="{
-                  pending: u.verificationStatus === 'PENDING',
-                  rejected: u.verificationStatus === 'REJECTED',
-                  verified: u.verificationStatus === 'APPROVED'
-                }"
-                class="value"
-              >
-                {{ u.verificationStatus }}
-              </span>
+              <div class="flex-1 min-w-0">
+                <input type="file" accept="image/*" (change)="onPhotoSelected($event)"
+                       class="file-input"/>
+                <button mat-stroked-button color="primary" class="mt-2 w-full"
+                        (click)="uploadPhoto()">
+                  <mat-icon class="mr-2">upload</mat-icon>
+                  {{ 'profile.photo.update' | translate }}
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div class="form-row">
-            <div class="full">
-              <label class="file-label">Document de vérification (PDF uniquement)</label>
-              <input
-                type="file"
-                accept="application/pdf"
-                (change)="onVerificationSelected($event)" />
+            <!-- Entreprise -->
+            <section *ngIf="isCompany()" class="mt-6">
+              <h3 class="panel-title">{{ 'profile.company.title' | translate }}</h3>
 
-              <p class="hint">
-                Besoin d’un exemple ?
-                <a href="/assets/docs/modele-verification-entreprise.pdf" target="_blank" rel="noopener">
-                  Télécharger le modèle PDF
-                </a>
-              </p>
+              <div class="space-y-3">
+                <div class="label-row">
+                  <span class="label">{{ 'profile.company.number' | translate }}</span>
+                  <span class="value">{{ u.companyNumber || '—' }}</span>
+                </div>
 
-              <p class="hint">
-                Vous pouvez renvoyer votre document si la vérification est en attente ou rejetée.
-              </p>
+                <div class="label-row">
+                  <span class="label">{{ 'profile.company.status' | translate }}</span>
+                  <span class="chip"
+                        [ngClass]="{
+                          'chip-pending' : u.verificationStatus === 'PENDING',
+                          'chip-rejected': u.verificationStatus === 'REJECTED',
+                          'chip-verified': u.verificationStatus === 'APPROVED'
+                        }">
+                    {{ u.verificationStatus }}
+                  </span>
+                </div>
 
-              <p class="selected-file" *ngIf="verificationDocumentName()">
-                Fichier sélectionné : <strong>{{ verificationDocumentName() }}</strong>
-              </p>
-            </div>
-          </div>
+                <div class="mt-4">
+                  <label class="block text-sm font-medium mb-1">
+                    {{ 'profile.company.docLabel' | translate }}
+                  </label>
+                  <input type="file" accept="application/pdf" (change)="onVerificationSelected($event)"
+                         class="file-input"/>
+
+                  <p class="hint mt-2">{{ 'profile.company.docHint1' | translate }}</p>
+                  <p class="hint">{{ 'profile.company.docHint2' | translate }}</p>
+
+                  <p class="text-sm mt-1" *ngIf="verificationDocumentName()">
+                    {{ 'profile.company.selected' | translate }}:
+                    <strong>{{ verificationDocumentName() }}</strong>
+                  </p>
+                </div>
+              </div>
+            </section>
+          </aside>
+
+          <!-- ====== Colonne droite : formulaire ====== -->
+          <section class="panel">
+            <h3 class="panel-title">{{ 'profile.title' | translate }}</h3>
+
+            <form class="space-y-5" (ngSubmit)="update()" enctype="multipart/form-data">
+
+              <div class="form-grid">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{ 'profile.form.firstName' | translate }}</mat-label>
+                  <input matInput [(ngModel)]="u.firstName" name="firstName"/>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>{{ 'profile.form.lastName' | translate }}</mat-label>
+                  <input matInput [(ngModel)]="u.lastName" name="lastName"/>
+                </mat-form-field>
+              </div>
+
+              <div class="form-grid">
+                <mat-form-field appearance="fill" class="md:col-span-2">
+                  <mat-label>{{ 'profile.form.email' | translate }}</mat-label>
+                  <input matInput [value]="u.email" disabled/>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>{{ 'profile.form.language' | translate }}</mat-label>
+                  <mat-select [(ngModel)]="u.preferredLanguage" name="preferredLanguage">
+                    <mat-option value="fr">Français</mat-option>
+                    <mat-option value="en">English</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>{{ 'profile.form.bio' | translate }}</mat-label>
+                <textarea matInput rows="5" [(ngModel)]="u.bio" name="bio"></textarea>
+              </mat-form-field>
+
+              <!-- compat backend -->
+              <input type="hidden" [value]="u.profilePhoto || ''" name="profilePhoto"/>
+
+              <div class="flex justify-end">
+                <button mat-raised-button color="primary" type="submit" class="btn-primary">
+                  <mat-icon class="mr-2">save</mat-icon>
+                  {{ 'profile.actions.save' | translate }}
+                </button>
+              </div>
+            </form>
+          </section>
         </div>
+      </ng-container>
 
-        <div class="actions">
-          <button mat-raised-button color="primary" type="submit">
-            <mat-icon>save</mat-icon>
-            Enregistrer
-          </button>
+      <ng-template #loadingTpl>
+        <div class="flex justify-center py-10">
+          <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
         </div>
-      </form>
-    </div>
-  </mat-card-content>
-</mat-card>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
 
-<div class="danger-zone">
-  <button mat-stroked-button color="warn" (click)="delete()">
-    <mat-icon>delete</mat-icon>
-    Supprimer mon compte
-  </button>
+  <!-- Danger zone -->
+  <div class="mt-6 flex justify-end">
+    <button mat-stroked-button color="warn" (click)="delete()" class="w-full md:w-auto">
+      <mat-icon class="mr-2">delete</mat-icon>
+      {{ 'profile.actions.delete' | translate }}
+    </button>
+  </div>
+
+  <mat-divider class="my-8"></mat-divider>
+
+  <!-- Mes rapports -->
+  <section class="auth-card p-5">
+    <h3 class="section-title mb-4">{{ 'profile.reports.title' | translate }}</h3>
+    <ng-container *ngIf="isCompany(); else researcherReports">
+      <app-company-received></app-company-received>
+    </ng-container>
+    <ng-template #researcherReports>
+      <app-my-reports></app-my-reports>
+    </ng-template>
+  </section>
 </div>
-
-<mat-divider class="my-6"></mat-divider>
-
-<!-- 🔹 Bloc rapports : entreprise => reçus / chercheur => soumis -->
-<section class="mt-6">
-  <h3 class="section-title">📄 Mes rapports</h3>
-
-  <ng-container *ngIf="isCompany(); else researcherReports">
-    <app-company-received></app-company-received>
-  </ng-container>
-
-  <ng-template #researcherReports>
-    <app-my-reports></app-my-reports>
-  </ng-template>
-</section>

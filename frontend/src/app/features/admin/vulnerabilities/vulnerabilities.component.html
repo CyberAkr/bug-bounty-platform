@@ -1,1 +1,63 @@
-<p>vulnerabilities works!</p>
+<div class="vuln-wrap">
+  <h1 class="text-2xl font-semibold mb-4">
+    {{ 'admin.vuln.title' | translate }}
+  </h1>
+
+  <div class="flex gap-2 mb-4 items-center">
+    <input
+      [(ngModel)]="newType"
+      [placeholder]="'admin.vuln.placeholder' | translate"
+      class="border p-2 rounded flex-1"
+      [attr.aria-label]="'admin.vuln.ariaNewType' | translate" />
+    <button
+      (click)="addType()"
+      class="bg-green-600 text-white px-4 py-2 rounded"
+      [disabled]="!newType.trim()">
+      {{ 'common.add' | translate }}
+    </button>
+  </div>
+
+  <div *ngIf="error()" class="rounded border border-red-300 bg-red-50 text-red-700 p-3 mb-3">
+    {{ error() }}
+  </div>
+
+  <div *ngIf="loading()" class="py-6 text-center text-gray-600">
+    {{ 'common.loading' | translate }}
+  </div>
+
+  <table *ngIf="!loading()" class="w-full text-sm border bg-white rounded">
+    <thead class="bg-gray-100 text-left">
+    <tr>
+      <th class="px-4 py-2">{{ 'admin.vuln.col.name' | translate }}</th>
+      <th class="px-4 py-2">{{ 'admin.vuln.col.actions' | translate }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let vuln of types()" class="border-b">
+      <td class="px-4 py-2">
+        <input [(ngModel)]="vuln.name" class="text-sm border p-1 rounded w-full" />
+      </td>
+      <td class="px-4 py-2 space-x-2">
+        <button
+          (click)="updateType(vuln)"
+          class="bg-blue-600 text-white px-3 py-1 rounded text-sm"
+          [disabled]="!(vuln.name && vuln.name.trim())">
+          {{ 'common.update' | translate }}
+        </button>
+
+        <button
+          (click)="deleteType(vuln.type_id)"
+          class="bg-red-500 text-white px-3 py-1 rounded text-sm">
+          {{ 'common.delete' | translate }}
+        </button>
+      </td>
+    </tr>
+
+    <tr *ngIf="types().length === 0">
+      <td class="px-4 py-6 text-center text-gray-500" colspan="2">
+        {{ 'admin.vuln.empty' | translate }}
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

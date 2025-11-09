@@ -1,10 +1,46 @@
-<section class="py-12 bg-gray-50 px-4">
-  <h2 class="text-xl font-semibold mb-6 text-center">💡 Pourquoi utiliser notre plateforme ?</h2>
-  <ul class="max-w-3xl mx-auto space-y-4 text-gray-700">
-    <li>✅ Plateforme belge locale et citoyenne</li>
-    <li>💸 Récompenses possibles même avec de petits budgets</li>
-    <li>🧠 Développement des compétences pour les chercheurs</li>
-    <li>🔒 Amélioration concrète de la sécurité numérique en Belgique</li>
-    <li>🔗 Valorisation sur LinkedIn et réseaux professionnels</li>
-  </ul>
+<section class="home-section home-section--alt">
+  <div class="container-default">
+    <header class="home-section__head">
+      <h2 class="home-section__title">{{ 'home.advantages.title' | translate }}</h2>
+      <p class="home-section__subtitle">{{ 'home.advantages.subtitle' | translate }}</p>
+    </header>
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <article class="adv-card">
+        <mat-icon class="adv-icon" aria-hidden="true">shield</mat-icon>
+        <h3 class="adv-title">{{ 'home.advantages.secure.title' | translate }}</h3>
+        <p class="adv-text">{{ 'home.advantages.secure.text' | translate }}</p>
+      </article>
+
+      <article class="adv-card">
+        <mat-icon class="adv-icon" aria-hidden="true">policy</mat-icon>
+        <h3 class="adv-title">{{ 'home.advantages.disclosure.title' | translate }}</h3>
+        <p class="adv-text">{{ 'home.advantages.disclosure.text' | translate }}</p>
+      </article>
+
+      <article class="adv-card">
+        <mat-icon class="adv-icon" aria-hidden="true">gavel</mat-icon>
+        <h3 class="adv-title">{{ 'home.advantages.safeHarbor.title' | translate }}</h3>
+        <p class="adv-text">{{ 'home.advantages.safeHarbor.text' | translate }}</p>
+      </article>
+
+      <article class="adv-card">
+        <mat-icon class="adv-icon" aria-hidden="true">payments</mat-icon>
+        <h3 class="adv-title">{{ 'home.advantages.fairRewards.title' | translate }}</h3>
+        <p class="adv-text">{{ 'home.advantages.fairRewards.text' | translate }}</p>
+      </article>
+
+      <article class="adv-card">
+        <mat-icon class="adv-icon" aria-hidden="true">groups</mat-icon>
+        <h3 class="adv-title">{{ 'home.advantages.community.title' | translate }}</h3>
+        <p class="adv-text">{{ 'home.advantages.community.text' | translate }}</p>
+      </article>
+
+      <article class="adv-card">
+        <mat-icon class="adv-icon" aria-hidden="true">public</mat-icon>
+        <h3 class="adv-title">{{ 'home.advantages.belgium.title' | translate }}</h3>
+        <p class="adv-text">{{ 'home.advantages.belgium.text' | translate }}</p>
+      </article>
+    </div>
+  </div>
 </section>

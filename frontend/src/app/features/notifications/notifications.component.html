@@ -1,12 +1,69 @@
-<h2>Mes notifications</h2>
+<div class="auth-wrapper">
+  <div class="auth-card p-5">
 
-<ul *ngIf="notifications().length > 0; else noNotif">
-  <li *ngFor="let notif of notifications()" [class.font-bold]="!notif.isRead">
-    <p>{{ notif.message }}</p>
-    <p class="text-sm text-gray-500">{{ notif.sentAt | date:'short' }}</p>
-  </li>
-</ul>
+    <!-- En-tête -->
+    <header class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-semibold">Mes notifications</h2>
 
-<ng-template #noNotif>
-  <p>Aucune notification pour l’instant.</p>
-</ng-template>
+      <div class="flex items-center gap-2">
+        <button mat-stroked-button (click)="refresh()" [disabled]="loading()">
+          <mat-icon class="mr-1">refresh</mat-icon> Actualiser
+        </button>
+        <button mat-flat-button color="primary"
+                (click)="markAllRead()" [disabled]="loading() || unreadCount()===0">
+          <mat-icon class="mr-1">done_all</mat-icon> Tout marquer comme lu
+        </button>
+      </div>
+    </header>
+
+    <!-- États -->
+    <div *ngIf="loading()" class="py-8 flex justify-center">
+      <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
+    </div>
+
+    <div *ngIf="!loading() && error()" class="text-red-600 mb-3">
+      {{ error() }}
+    </div>
+
+    <!-- Liste -->
+    <ng-container *ngIf="!loading() && !error()">
+      <div *ngIf="notifications().length === 0" class="text-slate-500">
+        Aucune notification pour l’instant.
+      </div>
+
+      <mat-nav-list *ngIf="notifications().length > 0" class="rounded-xl border">
+        <a mat-list-item
+           *ngFor="let n of notifications(); trackBy: trackNotif"
+           (click)="toggleRead(n)"
+           class="!py-3"
+           [ngClass]="{ 'bg-blue-50/60': !n.isRead }">
+
+          <mat-icon matListItemIcon class="opacity-80">
+            {{ iconFor(n.type) }}
+          </mat-icon>
+
+          <div matListItemTitle class="flex items-center gap-2">
+            <span class="font-medium" [class.font-semibold]="!n.isRead">{{ n.message }}</span>
+            <span *ngIf="!n.isRead" class="inline-block w-2 h-2 rounded-full bg-blue-600"></span>
+          </div>
+
+          <div matListItemLine class="text-xs text-gray-500">
+            {{ n.sentAt | date:'short' }}
+          </div>
+
+          <div matListItemMeta class="flex items-center gap-2">
+            <mat-chip *ngIf="n.type" class="!text-[11px]" selected>
+              {{ n.type }}
+            </mat-chip>
+
+            <button mat-icon-button [matTooltip]="n.isRead ? 'Marquer comme non lu' : 'Marquer comme lu'"
+                    (click)="$event.stopPropagation(); toggleRead(n)">
+              <mat-icon>{{ n.isRead ? 'mark_email_unread' : 'mark_email_read' }}</mat-icon>
+            </button>
+          </div>
+        </a>
+      </mat-nav-list>
+    </ng-container>
+
+  </div>
+</div>

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeroSectionComponent } from './components/hero-section/hero-section.component';
-import { StatsComponent } from './components/stats/stats.component';
-import { HowItWorksComponent } from './components/how-it-works/how-it-works.component';
 import { AdvantagesComponent } from './components/advantages/advantages.component';
+import { HowItWorksComponent } from './components/how-it-works/how-it-works.component';
+import { AssuranceComponent } from './components/assurance/assurance.component';
 
 @Component({
   selector: 'app-home',
@@ -11,16 +11,15 @@ import { AdvantagesComponent } from './components/advantages/advantages.componen
   imports: [
     CommonModule,
     HeroSectionComponent,
-    StatsComponent,
+    AdvantagesComponent,
     HowItWorksComponent,
-    AdvantagesComponent
+    AssuranceComponent
   ],
   template: `
-
     <app-hero-section></app-hero-section>
-    <app-stats></app-stats>
-    <app-how-it-works></app-how-it-works>
     <app-advantages></app-advantages>
-  `,
+    <app-how-it-works></app-how-it-works>
+    <app-assurance></app-assurance>
+  `
 })
 export class HomeComponent {}
