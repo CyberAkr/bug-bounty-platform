@@ -862,3 +862,4 @@ html, body {
   .container-page { @apply max-w-7xl mx-auto p-6 md:p-10; }
   .focus-ring:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
 }
+

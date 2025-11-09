@@ -9,15 +9,20 @@
       </p>
     </div>
 
-    <!-- 🧭 Colonne 2 : navigation -->
+    <!-- 🧭 Colonne 2 : liens utiles (réduits) -->
     <div>
       <h3 class="font-semibold text-base mb-3">{{ 'footer.linksTitle' | translate }}</h3>
       <ul class="space-y-2">
-        <li><a routerLink="/programs" class="link-accent hover:underline">{{ 'footer.programs' | translate }}</a></li>
-        <li><a routerLink="/classement" class="link-accent hover:underline">{{ 'footer.ranking' | translate }}</a></li>
-        <li><a routerLink="/forum" class="link-accent hover:underline">{{ 'footer.forum' | translate }}</a></li>
-        <li><a routerLink="/legal/contact" class="link-accent hover:underline">{{ 'footer.contact' | translate }}</a></li>
-        <li><a routerLink="/legal/mentions" class="link-accent hover:underline">{{ 'footer.legal' | translate }}</a></li>
+        <li>
+          <a routerLink="/legal/contact" class="link-accent hover:underline">
+            {{ 'footer.contact' | translate }}
+          </a>
+        </li>
+        <li>
+          <a routerLink="/legal/mentions" class="link-accent hover:underline">
+            {{ 'footer.legal' | translate }}
+          </a>
+        </li>
       </ul>
     </div>
 

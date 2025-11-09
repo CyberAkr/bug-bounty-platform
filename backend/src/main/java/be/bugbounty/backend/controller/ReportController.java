@@ -6,6 +6,7 @@ import be.bugbounty.backend.service.ReportService;
 import be.bugbounty.backend.service.RewardPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +34,7 @@ public class ReportController {
 
     // Soumission d’un rapport (chercheur)
     @PostMapping(consumes = "multipart/form-data")
+    @PreAuthorize("hasRole('RESEARCHER')")
     public ResponseEntity<?> submit(
             @AuthenticationPrincipal User user,
             @RequestParam("programId") Long programId,
@@ -46,6 +48,7 @@ public class ReportController {
 
     // Mes rapports (chercheur)
     @GetMapping("/my")
+    @PreAuthorize("hasRole('RESEARCHER')")
     public List<ReportResponseDTO> myReports(@AuthenticationPrincipal User user) {
         return service.findByResearcher(user);
     }

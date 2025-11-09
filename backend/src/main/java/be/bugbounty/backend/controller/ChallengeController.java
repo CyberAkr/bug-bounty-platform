@@ -24,7 +24,7 @@ public class ChallengeController {
      * Récupère le challenge actif – accessible uniquement aux chercheurs connectés
      */
     @GetMapping("/current")
-    @PreAuthorize("hasRole('RESEARCHER')")
+    @PreAuthorize("hasAnyRole('RESEARCHER','COMPANY', 'ADMIN')")
     public ResponseEntity<Challenge> getCurrentChallenge() {
         Challenge challenge = challengeService.getActiveChallenge();
         return challenge != null
@@ -32,7 +32,7 @@ public class ChallengeController {
                 : ResponseEntity.noContent().build();
     }
     @GetMapping("/active")
-    @PreAuthorize("hasRole('RESEARCHER')")
+    @PreAuthorize("hasAnyRole('RESEARCHER','COMPANY','ADMIN')")
     public ResponseEntity<List<Challenge>> getActiveChallenges() {
         var list = challengeService.findActive();
         return list.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(list);
