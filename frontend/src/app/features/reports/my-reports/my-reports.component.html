@@ -1,38 +1,46 @@
-<section class="p-4">
-  <h2 class="text-xl font-semibold mb-4">Mes rapports</h2>
+<div class="reports-wrapper">
+  <div class="reports-card">
+    <header class="reports-head">
+      <h2 class="reports-title">{{ 'reports.my.title' | translate }}</h2>
+    </header>
 
-  <div *ngIf="loading()">Chargement…</div>
+    <div class="reports-state" *ngIf="loading()">
+      <mat-progress-spinner mode="indeterminate" diameter="28"></mat-progress-spinner>
+      <span>{{ 'common.loading' | translate }}</span>
+    </div>
 
-  <div *ngIf="!loading() && reports().length === 0" class="text-sm text-slate-500">
-    Vous n'avez pas encore soumis de rapports.
+    <div class="reports-empty" *ngIf="!loading() && reports().length === 0">
+      {{ 'reports.my.empty' | translate }}
+    </div>
+
+    <div class="space-y-3" *ngIf="!loading() && reports().length > 0">
+      <mat-card class="card" *ngFor="let r of reports()">
+        <mat-card-title class="text-base font-semibold">{{ r.title }}</mat-card-title>
+        <mat-card-content class="text-sm space-y-1">
+          <div><b>{{ 'reports.labels.program' | translate }}:</b> {{ r.programTitle }}</div>
+          <div><b>{{ 'reports.labels.severity' | translate }}:</b> {{ r.severity }}</div>
+          <div><b>{{ 'reports.labels.status' | translate }}:</b> {{ r.status }}</div>
+          <div><b>{{ 'reports.labels.submittedAt' | translate }}:</b> {{ r.submittedAt | dateFormat:{ withTime:true } }}</div>
+
+          <ng-container *ngIf="rewardsMap()[r.id] as rw; else noReward">
+            <div><b>{{ 'reports.labels.reward' | translate }}:</b>
+              {{ rw.amount | number:'1.2-2' }} € ({{ rw.paymentDate | dateFormat:{ withTime:true } }})
+            </div>
+          </ng-container>
+          <ng-template #noReward>
+            <div class="text-slate-500">
+              <b>{{ 'reports.labels.reward' | translate }}:</b> —
+            </div>
+          </ng-template>
+        </mat-card-content>
+
+        <mat-card-actions class="mt-2">
+          <button mat-stroked-button (click)="downloadMine(r.id)">
+            <mat-icon>download</mat-icon>
+            <span>{{ 'reports.actions.downloadMine' | translate }}</span>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
   </div>
-
-  <ul class="space-y-4" *ngIf="!loading() && reports().length > 0">
-    <li *ngFor="let r of reports()" class="rounded-lg border p-4 bg-white">
-      <div class="font-semibold text-lg mb-1">{{ r.title }}</div>
-
-      <div class="text-sm">
-        <div><b>Programme :</b> {{ r.programTitle }}</div>
-        <div><b>Sévérité :</b> {{ r.severity }}</div>
-        <div><b>Status :</b> {{ r.status }}</div>
-        <div><b>Soumis le :</b> {{ r.submittedAt | dateFormat:{ withTime: true } }}</div>
-
-        <!-- ✅ Récompense reçue -->
-        <div class="mt-1" *ngIf="rewardsMap()[r.id] as rw; else noReward">
-          <b>Récompense :</b> {{ rw.amount | number:'1.2-2' }} € (le {{ rw.paymentDate | dateFormat:{ withTime: true } }})
-        </div>
-        <ng-template #noReward>
-          <div class="mt-1 text-slate-500"><b>Récompense :</b> —</div>
-        </ng-template>
-      </div>
-
-      <!-- ✅ Télécharger mon rapport -->
-      <div class="mt-3">
-        <button class="px-3 py-1.5 rounded border hover:bg-gray-50"
-                (click)="downloadMine(r.id)">
-          ⬇️ Télécharger mon rapport
-        </button>
-      </div>
-    </li>
-  </ul>
-</section>
+</div>

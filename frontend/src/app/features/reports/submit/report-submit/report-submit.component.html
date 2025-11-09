@@ -1,41 +1,45 @@
-<h2>Soumettre un rapport</h2>
+<section class="reports-wrapper">
+  <div class="reports-card">
+    <header class="reports-head">
+      <h3 class="reports-title">{{ 'reports.submit.title' | translate }}</h3>
+    </header>
 
-<form (ngSubmit)="submitReport()" #form="ngForm" class="space-y-4">
-  <!-- Sélection du programme (optionnel si déjà fourni) -->
-  <div *ngIf="!programId">
-    <label for="program">Programme :</label>
-    <select [(ngModel)]="selectedProgramId" name="program" required>
-      <option *ngFor="let p of programs()" [value]="p.id">{{ p.title }}</option>
-    </select>
+    <form class="space-y-4" (ngSubmit)="submitReport()" #form="ngForm">
+      <ng-container *ngIf="!programId">
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>{{ 'reports.submit.program' | translate }}</mat-label>
+          <mat-select [(ngModel)]="selectedProgramId" name="program" required>
+            <mat-option *ngFor="let p of programs()" [value]="p.id">{{ p.title }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>{{ 'reports.submit.severity' | translate }}</mat-label>
+        <mat-select [(ngModel)]="severity" name="severity" required>
+          <mat-option value="LOW">{{ 'reports.severity.low' | translate }}</mat-option>
+          <mat-option value="MEDIUM">{{ 'reports.severity.medium' | translate }}</mat-option>
+          <mat-option value="HIGH">{{ 'reports.severity.high' | translate }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>{{ 'reports.submit.description' | translate }}</mat-label>
+        <textarea matInput rows="5" [(ngModel)]="title" name="title" required></textarea>
+      </mat-form-field>
+
+      <div class="file-field">
+        <label class="file-label">{{ 'reports.submit.file' | translate }}</label>
+        <input type="file" accept="application/pdf" (change)="onFileSelected($event)" />
+        <small class="text-gray-500">{{ 'reports.submit.hint' | translate }}</small>
+      </div>
+
+      <div class="form-actions">
+        <button mat-raised-button color="primary" class="btn-primary"
+                type="submit" [disabled]="!selectedProgramId || !title.trim() || !selectedFile">
+          {{ 'reports.actions.send' | translate }}
+        </button>
+      </div>
+    </form>
   </div>
-
-  <!-- Sévérité -->
-  <div>
-    <label for="severity">Sévérité :</label>
-    <select [(ngModel)]="severity" name="severity" required>
-      <option value="LOW">Faible</option>
-      <option value="MEDIUM">Moyenne</option>
-      <option value="HIGH">Élevée</option>
-    </select>
-  </div>
-
-  <!-- Titre/Description -->
-  <div>
-    <label for="title">Description :</label>
-    <textarea [(ngModel)]="title" name="title" rows="4" required></textarea>
-  </div>
-
-  <!-- Upload fichier PDF -->
-  <div>
-    <label for="file">Fichier PDF :</label>
-    <input type="file" accept="application/pdf" (change)="onFileSelected($event)" required />
-  </div>
-
-  <button
-    type="submit"
-    [disabled]="!selectedFile"
-    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-  >
-    📤 Envoyer
-  </button>
-</form>
+</section>

@@ -1,59 +1,64 @@
-<div class="cr-wrap">
-  <header class="cr-head">
-    <h1>📥 Rapports reçus</h1>
-    <button class="cr-refresh" (click)="refresh()">↻</button>
-  </header>
+<div class="reports-wrapper">
+  <div class="reports-card">
+    <header class="reports-head">
+      <h2 class="reports-title">{{ 'reports.received.title' | translate }}</h2>
+      <button mat-icon-button class="btn-ghost" (click)="refresh()" [attr.aria-label]="'reports.actions.refresh' | translate">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </header>
 
-  <div *ngIf="loading()" class="cr-state">Chargement…</div>
-  <div *ngIf="!loading() && error()" class="cr-error">{{ error() }}</div>
+    <div class="reports-state" *ngIf="loading()">
+      <mat-progress-spinner mode="indeterminate" diameter="28"></mat-progress-spinner>
+      <span>{{ 'common.loading' | translate }}</span>
+    </div>
 
-  <div *ngIf="!loading() && !error() && reports().length === 0" class="cr-empty">
-    Aucun rapport reçu pour le moment.
+    <div class="reports-error" *ngIf="!loading() && error()">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ error() }}</span>
+    </div>
+
+    <div class="reports-empty" *ngIf="!loading() && !error() && reports().length === 0">
+      {{ 'reports.received.empty' | translate }}
+    </div>
+
+    <mat-nav-list *ngIf="!loading() && !error() && reports().length > 0" class="reports-list">
+      <a mat-list-item *ngFor="let r of reports(); trackBy: trackById" class="reports-item" (click)="$event.preventDefault()">
+        <div class="item-top">
+          <div class="item-title">{{ r.title }}</div>
+          <span class="item-status" [style.borderColor]="(r.status | statusColor)" [style.color]="(r.status | statusColor)">
+            {{ r.status }}
+          </span>
+        </div>
+
+        <div class="item-meta">
+          <div class="meta-row">
+            <span class="meta-label">{{ 'reports.labels.program' | translate }}</span>
+            <span class="meta-value">{{ r.programTitle }}</span>
+          </div>
+          <div class="meta-row" *ngIf="r.severity">
+            <span class="meta-label">{{ 'reports.labels.severity' | translate }}</span>
+            <span class="meta-value font-semibold">{{ r.severity }}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">{{ 'reports.labels.receivedAt' | translate }}</span>
+            <span class="meta-value">{{ r.submittedAt | dateFormat }}</span>
+          </div>
+          <div class="meta-row" *ngIf="r.researcher">
+            <span class="meta-label">{{ 'reports.labels.researcher' | translate }}</span>
+            <span class="meta-value">{{ r.researcher }}</span>
+          </div>
+        </div>
+
+        <div class="item-actions">
+          <button mat-stroked-button
+                  class="btn-wide"
+                  [disabled]="r.status !== 'APPROVED'"
+                  (click)="download(r)">
+            <mat-icon>download</mat-icon>
+            <span>{{ 'reports.actions.download' | translate }}</span>
+          </button>
+        </div>
+      </a>
+    </mat-nav-list>
   </div>
-
-  <ul *ngIf="!loading() && !error() && reports().length > 0" class="cr-list">
-    <li *ngFor="let r of reports(); trackBy: trackById" class="cr-item">
-      <div class="cr-item-top">
-        <div class="cr-title">{{ r.title }}</div>
-        <span class="cr-status"
-              [style.borderColor]="(r.status | statusColor)"
-              [style.color]="(r.status | statusColor)">
-          {{ r.status }}
-        </span>
-      </div>
-
-      <div class="cr-meta">
-        <span class="cr-meta-row">
-          <span class="cr-label">Programme :</span>
-          <span class="cr-link">{{ r.programTitle }}</span>
-        </span>
-
-        <span class="cr-meta-row" *ngIf="r.severity">
-          <span class="cr-label">Sévérité :</span>
-          <strong>{{ r.severity }}</strong>
-        </span>
-
-        <span class="cr-meta-row">
-          <span class="cr-label">Reçu le :</span>
-          <span>{{ r.submittedAt | dateFormat }}</span>
-        </span>
-
-        <span class="cr-meta-row" *ngIf="r.researcher">
-          <span class="cr-label">Chercheur :</span>
-          <span>{{ r.researcher }}</span>
-        </span>
-      </div>
-      <div class="cr-actions">
-        <button class="cr-download"
-                [disabled]="r.status !== 'APPROVED'"
-                (click)="download(r)">
-          Télécharger le PDF
-        </button>
-      </div>
-
-      <div class="cr-actions">
-        <!-- Pas de lien programme car pas de programId dans le modèle -->
-      </div>
-    </li>
-  </ul>
 </div>

@@ -247,6 +247,54 @@
       "text": "Accusé de réception, tri initial, et suivi jusqu’à la fermeture."
     }
   }
-}
+},
+  "common": {
+    "loading": "Chargement…"
+  },
+  "reports": {
+    "labels": {
+      "program": "Programme",
+      "severity": "Sévérité",
+      "status": "Statut",
+      "receivedAt": "Reçu le",
+      "submittedAt": "Soumis le",
+      "researcher": "Chercheur",
+      "reward": "Récompense"
+    },
+    "severity": {
+      "low": "Faible",
+      "medium": "Moyenne",
+      "high": "Élevée"
+    },
+    "actions": {
+      "refresh": "Rafraîchir",
+      "download": "Télécharger le PDF",
+      "downloadMine": "Télécharger mon rapport",
+      "send": "Envoyer"
+    },
+    "errors": {
+      "loadReceived": "Erreur lors du chargement des rapports reçus.",
+      "download": "Téléchargement impossible."
+    },
+    "received": {
+      "title": "Rapports reçus",
+      "empty": "Aucun rapport reçu pour le moment."
+    },
+    "my": {
+      "title": "Mes rapports",
+      "empty": "Vous n'avez pas encore soumis de rapports."
+    },
+    "submit": {
+      "title": "Soumettre un rapport",
+      "program": "Programme",
+      "severity": "Sévérité",
+      "description": "Description (preuve, reproduction, impact…)",
+      "file": "Fichier PDF",
+      "hint": "Joignez un PDF contenant toutes les informations techniques nécessaires."
+    },
+    "status": {
+      "alreadySubmitted": "Un rapport a déjà été soumis pour ce programme."
+    }
+  }
 
 }

@@ -584,7 +584,52 @@ html, body {
   }
   .btn-ghost:hover { @apply opacity-90; }
 
+  /* === report=== */
 
+  .reports-wrapper { @apply container-default py-6; }
+  .reports-card { @apply card p-5; }
+
+  .reports-head { @apply flex items-center justify-between mb-4; }
+  .reports-title { @apply text-lg font-semibold; }
+
+  .reports-state { @apply flex items-center gap-3 text-sm text-gray-600; }
+  .reports-error { @apply flex items-center gap-2 text-red-600 text-sm; }
+  .reports-empty { @apply text-sm text-gray-500; }
+
+  .reports-list { @apply divide-y; }
+  .reports-item { @apply py-3; }
+
+  .item-top { @apply flex items-center justify-between; }
+  .item-title { @apply font-medium; }
+  .item-status { @apply border rounded-full px-2 py-0.5 text-xs; }
+
+  .item-meta { @apply grid gap-1 mt-2 text-sm; }
+  .meta-row { @apply flex items-center gap-2; }
+  .meta-label { @apply text-gray-500; }
+  .meta-value { @apply text-gray-800; }
+
+  .item-actions { @apply mt-3; }
+  .btn-wide { @apply gap-2 flex items-center; }
+
+  /* Bulle inline (report-status) */
+  .inline-banner { @apply rounded-lg border p-3 text-sm flex items-center gap-2 mb-3; }
+  .inline-banner.info { @apply bg-blue-50 border-blue-200 text-blue-800; }
+
+  /* Inputs Material en blanc (cohérent projet) */
+  .mat-mdc-form-field-appearance-fill {
+    --mdc-filled-text-field-container-color: #ffffff;
+    --mdc-filled-text-field-container-opacity: 1;
+    --mdc-filled-text-field-container-shape: 12px;
+  }
+
+  .file-field { @apply grid gap-1; }
+  .file-label { @apply text-sm font-medium; }
+
+  /* Boutons */
+  .btn-ghost {
+    @apply rounded-md border px-2;
+    background: transparent; color: var(--text);
+  }
   /* === INPUTS MATERIAL EN BLANC PUR === */
   /* Force les variables MDC utilisées par Angular Material (appearance="fill") */
   .mat-mdc-form-field-appearance-fill {

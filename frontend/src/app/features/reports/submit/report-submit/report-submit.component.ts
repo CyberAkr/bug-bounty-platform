@@ -1,23 +1,32 @@
-import { Component, inject, Input, OnInit, signal } from '@angular/core';
+import { Component, Input, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+
 import { ProgramService } from '@app/features/programs/program.service';
 import { ReportService } from '@app/features/reports/report.service';
 import { AuditProgramResponse } from '@app/models/program.model';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-report-submit',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './report-submit.component.html',
+  imports: [
+    CommonModule, FormsModule, TranslateModule,
+    MatFormFieldModule, MatSelectModule, MatInputModule, MatButtonModule
+  ],
+  templateUrl: './report-submit.component.html'
 })
 export class ReportSubmitComponent implements OnInit {
   private programService = inject(ProgramService);
   private reportService = inject(ReportService);
   private router = inject(Router);
 
-  @Input({ required: false }) programId?: number;
+  @Input() programId?: number;
 
   programs = signal<AuditProgramResponse[]>([]);
   selectedProgramId: number | null = null;
@@ -27,9 +36,7 @@ export class ReportSubmitComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.programId) {
-      this.programService.getAll().subscribe((data) => {
-        this.programs.set(data);
-      });
+      this.programService.getAll().subscribe((data) => this.programs.set(data));
     } else {
       this.selectedProgramId = this.programId;
     }
@@ -37,23 +44,21 @@ export class ReportSubmitComponent implements OnInit {
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (input.files?.length) {
-      this.selectedFile = input.files[0];
-    }
+    this.selectedFile = input.files?.[0] ?? null;
   }
 
   submitReport(): void {
     if (!this.selectedProgramId || !this.title.trim() || !this.selectedFile) return;
 
     const formData = new FormData();
-    formData.append('programId', this.selectedProgramId.toString());
+    formData.append('programId', String(this.selectedProgramId));
     formData.append('title', this.title);
     formData.append('severity', this.severity);
     formData.append('file', this.selectedFile);
 
-    this.reportService.submitFormData(formData).subscribe(() => {
-      alert('✅ Rapport soumis avec succès !');
-      this.router.navigate(['/reports/my']);
+    this.reportService.submitFormData(formData).subscribe({
+      next: () => this.router.navigate(['/reports/my']),
+      error: () => { /* Optionnel: bulle d’erreur inline si besoin */ }
     });
   }
 }

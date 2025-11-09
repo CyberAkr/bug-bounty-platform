@@ -26,6 +26,7 @@
         <app-report-status [programId]="getId()" class="mb-6 block"></app-report-status>
 
         <h3 class="text-xl font-semibold mb-2">{{ program.title }}</h3>
+
         <div class="text-sm text-gray-500 mb-4">
           <strong>{{ 'programs.detail.company' | translate }} :</strong> {{ program.companyName }} <br />
           <strong>{{ 'programs.detail.status' | translate }} :</strong>
@@ -35,27 +36,13 @@
         </div>
 
         <!-- Description HTML -->
-        <div class="prose max-w-none bg-white rounded-xl p-5 border" [innerHTML]="safeDescription()"></div>
+        <div class="prose max-w-none bg-white rounded-xl p-5 border"
+             [innerHTML]="safeDescription()"></div>
 
-        <!-- Composant de soumission -->
+        <!-- Soumission de rapport -->
         <section class="mt-8">
           <h4 class="text-lg font-medium mb-3">{{ 'programs.detail.submitTitle' | translate }}</h4>
-          <app-report-submit [programId]="getId()" />
-        </section>
-
-        <!-- Publication -->
-        <section class="mt-8 border-t pt-5">
-          <h4 class="text-lg font-medium mb-3">{{ 'programs.detail.publishTitle' | translate }}</h4>
-          <p class="text-sm text-gray-600 mb-3">{{ 'programs.detail.publishDesc' | translate }}</p>
-
-          <button mat-raised-button color="primary"
-                  (click)="publish()" [disabled]="loading()"
-                  class="btn-primary">
-            <mat-icon class="mr-2">payments</mat-icon>
-            {{ 'programs.detail.publishBtn' | translate }}
-          </button>
-
-          <p *ngIf="error()" class="text-red-600 text-sm mt-3">{{ error() }}</p>
+          <app-report-submit [programId]="getId()"></app-report-submit>
         </section>
       </div>
 

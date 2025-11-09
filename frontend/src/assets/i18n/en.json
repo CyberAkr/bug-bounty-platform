@@ -249,5 +249,53 @@
         "text": "Receipt, triage and follow-up until closure."
       }
     }
+  },
+  "common": {
+    "loading": "Loading…"
+  },
+  "reports": {
+    "labels": {
+      "program": "Program",
+      "severity": "Severity",
+      "status": "Status",
+      "receivedAt": "Received on",
+      "submittedAt": "Submitted on",
+      "researcher": "Researcher",
+      "reward": "Reward"
+    },
+    "severity": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "actions": {
+      "refresh": "Refresh",
+      "download": "Download PDF",
+      "downloadMine": "Download my report",
+      "send": "Send"
+    },
+    "errors": {
+      "loadReceived": "Failed to load received reports.",
+      "download": "Download failed."
+    },
+    "received": {
+      "title": "Received reports",
+      "empty": "No reports received yet."
+    },
+    "my": {
+      "title": "My reports",
+      "empty": "You haven’t submitted any reports yet."
+    },
+    "submit": {
+      "title": "Submit a report",
+      "program": "Program",
+      "severity": "Severity",
+      "description": "Description (evidence, reproduction, impact…)",
+      "file": "PDF file",
+      "hint": "Attach a PDF that includes all necessary technical details."
+    },
+    "status": {
+      "alreadySubmitted": "A report has already been submitted for this program."
+    }
   }
 }
