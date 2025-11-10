@@ -8,34 +8,47 @@ import be.bugbounty.backend.repository.UserRepository;
 import be.bugbounty.backend.service.JwtService;
 import be.bugbounty.backend.web.auth.ResendCodeRequest;
 import be.bugbounty.backend.web.auth.VerifyEmailRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.lang.Nullable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Random;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
+    private final JavaMailSender mailSender; // peut être null en dev
 
-    @Autowired
-    private JwtService jwtService;
+    @Value("${mail.from:Bug Bounty <no-reply@bugbounty.local>}")
+    private String defaultFrom;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired(required = false)
-    private JavaMailSender mailSender; // auto-config (spring-boot-starter-mail)
+    @Value("${spring.mail.username:}")
+    private String smtpUsername;
 
     private static final int CODE_TTL_MINUTES = 15;
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+
+    public AuthController(
+            UserRepository userRepository,
+            JwtService jwtService,
+            PasswordEncoder passwordEncoder,
+            @Nullable JavaMailSender mailSender
+    ) {
+        this.userRepository = userRepository;
+        this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
+        this.mailSender = mailSender;
+    }
 
     // ========= SIGN IN =========
     @PostMapping("/signin")
@@ -45,13 +58,25 @@ public class AuthController {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Email introuvable"));
 
+        // 1) banni ?
+        if (user.isBanned()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Compte banni");
+        }
+
+        // 2) email non vérifié ?  ⟵ AVANT le check password
+        if (Boolean.FALSE.equals(user.getEmailVerified())) {
+            // soit message texte (front détecte par regex)
+            // return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Email non vérifié");
+
+            // soit (recommandé) un JSON "propre"
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("status", "unverified", "email", user.getEmail()));
+        }
+
+        // 3) mot de passe
         boolean valid = passwordEncoder.matches(request.getPassword(), user.getPasswordHash());
         if (!valid) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mot de passe incorrect");
-        }
-
-        if (Boolean.FALSE.equals(user.getEmailVerified())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Email non vérifié");
         }
 
         String token = jwtService.generateToken(user);
@@ -61,8 +86,8 @@ public class AuthController {
     // ========= REGISTER =========
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message","Cet email est déjà utilisé"));
+        if (userRepository.existsByEmail(request.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "Cet email est déjà utilisé"));
         }
 
         User user = new User();
@@ -81,22 +106,14 @@ public class AuthController {
         user.setVerificationStatus(User.VerificationStatus.PENDING);
         user.setProfilePhoto(null);
 
-        // vérif email
-        String code = String.format("%06d", new java.util.Random().nextInt(1_000_000));
+        String code = generateCode6();
         user.setEmailVerified(false);
         user.setEmailVerificationCode(code);
-        user.setEmailVerificationExpires(java.time.LocalDateTime.now().plusMinutes(CODE_TTL_MINUTES));
+        user.setEmailVerificationExpires(LocalDateTime.now().plusMinutes(CODE_TTL_MINUTES));
 
         userRepository.save(user);
 
-        boolean emailSent = true;
-        try {
-            sendVerificationEmail(user.getEmail(), code);
-        } catch (Exception ex) {
-            // ne pas échouer l’inscription si le mail plante
-            emailSent = false;
-            System.out.println("[WARN] Envoi email échoué: " + ex.getMessage());
-        }
+        boolean emailSent = sendVerificationEmail(user.getEmail(), code);
 
         return ResponseEntity.accepted().body(Map.of(
                 "message", "Utilisateur enregistré. Vérifiez votre e-mail.",
@@ -129,7 +146,6 @@ public class AuthController {
         u.setEmailVerificationExpires(null);
         userRepository.save(u);
 
-        // Option: générer un JWT après vérif
         String token = jwtService.generateToken(u);
         return ResponseEntity.ok(Map.of("status", "verified", "token", token));
     }
@@ -144,8 +160,6 @@ public class AuthController {
             return ResponseEntity.ok(Map.of("status", "already_verified"));
         }
 
-        // anti-spam simple: si l'ancien code est encore valide > renvoyer le même,
-        // sinon régénérer un nouveau
         String code = u.getEmailVerificationCode();
         if (code == null || u.getEmailVerificationExpires() == null ||
                 LocalDateTime.now().isAfter(u.getEmailVerificationExpires())) {
@@ -155,24 +169,35 @@ public class AuthController {
         u.setEmailVerificationExpires(LocalDateTime.now().plusMinutes(CODE_TTL_MINUTES));
         userRepository.save(u);
 
-        sendVerificationEmail(u.getEmail(), code);
-        return ResponseEntity.ok(Map.of("status", "resent"));
+        boolean emailSent = sendVerificationEmail(u.getEmail(), code);
+        return ResponseEntity.ok(Map.of("status", "resent", "emailSent", emailSent));
     }
 
-    // ========= helpers =========
+    // ======= helpers =======
     private String generateCode6() {
-        return String.format("%06d", new Random().nextInt(1_000_000));
+        int n = SECURE_RANDOM.nextInt(1_000_000);
+        return String.format("%06d", n);
     }
 
-    private void sendVerificationEmail(String to, String code) {
-        if (mailSender == null) {
-            System.out.println("[WARN] MailSender absent — code pour " + to + " = " + code);
-            return;
+    private String resolveFromAddress() {
+        if (defaultFrom != null && !defaultFrom.isBlank()) return defaultFrom;
+        if (smtpUsername != null && !smtpUsername.isBlank()) return smtpUsername;
+        return "no-reply@bugbounty.local";
+    }
+
+    private boolean sendVerificationEmail(String to, String code) {
+        if (mailSender == null) return false;
+        try {
+            SimpleMailMessage msg = new SimpleMailMessage();
+            msg.setFrom(resolveFromAddress());
+            msg.setTo(to);
+            msg.setSubject("Votre code de vérification");
+            msg.setText("Voici votre code: " + code + " (valide " + CODE_TTL_MINUTES + " minutes).");
+            mailSender.send(msg);
+            return true;
+        } catch (Exception ex) {
+            System.out.println("[WARN] Envoi email échoué: " + ex.getMessage());
+            return false;
         }
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo(to);
-        msg.setSubject("Votre code de vérification");
-        msg.setText("Voici votre code: " + code + " (valide " + CODE_TTL_MINUTES + " minutes).");
-        mailSender.send(msg);
     }
 }

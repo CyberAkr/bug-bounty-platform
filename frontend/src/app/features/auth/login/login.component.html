@@ -63,18 +63,12 @@
     <p class="mt-6 text-center text-sm flex flex-col md:flex-row items-center justify-center gap-2">
       <span>
         {{ 'auth.login.noAccount' | translate }}
-        <a
-          routerLink="/register"
-          class="text-[var(--accent)] font-medium hover:underline"
-        >
+        <a routerLink="/register" class="text-[var(--accent)] font-medium hover:underline">
           {{ 'auth.login.register' | translate }}
         </a>
       </span>
 
-      <a
-        routerLink="/forgot-password"
-        class="text-[var(--accent)] font-medium hover:underline"
-      >
+      <a routerLink="/forgot-password" class="text-[var(--accent)] font-medium hover:underline">
         {{ 'auth.login.forgot' | translate }}
       </a>
     </p>

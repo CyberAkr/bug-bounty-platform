@@ -2,10 +2,8 @@ package be.bugbounty.backend.service;
 
 import be.bugbounty.backend.dto.admin.AdminUserCreateRequestDTO;
 import be.bugbounty.backend.dto.admin.AdminUserUpdateRequestDTO;
-import be.bugbounty.backend.dto.program.AuditProgramRequestDTO;
 import be.bugbounty.backend.dto.user.UserResponseDTO;
 import be.bugbounty.backend.dto.user.UserUpdateRequestDTO;
-import be.bugbounty.backend.model.AuditProgram;
 import be.bugbounty.backend.model.User;
 import be.bugbounty.backend.repository.UserRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -31,7 +29,9 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // ======= Public (profil courant) =======
+    // =============================
+    // === Profil utilisateur ===
+    // =============================
 
     public UserResponseDTO getCurrentUser(User user) {
         return new UserResponseDTO(
@@ -69,7 +69,9 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec l'email : " + email));
     }
 
-    // ======= Admin =======
+    // =============================
+    // === Section ADMIN ===
+    // =============================
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -85,14 +87,17 @@ public class UserService {
             validateRole(role);
             user.setRole(role);
         }
+
         if (dto.getBanned() != null) {
-            user.setBanned(dto.getBanned());
+            user.setBanned(dto.getBanned()); // ✅ fonctionne avec Lombok et le champ "banned"
         }
+
         if (dto.getVerificationStatus() != null) {
             user.setVerificationStatus(
                     User.VerificationStatus.valueOf(dto.getVerificationStatus().toUpperCase())
             );
         }
+
         return userRepository.save(user);
     }
 
@@ -101,6 +106,7 @@ public class UserService {
         if (userRepository.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("Email déjà utilisé");
         }
+
         String role = dto.getRole().toLowerCase();
         validateRole(role);
 
@@ -117,7 +123,7 @@ public class UserService {
         u.setUsername(dto.getUsername());
         u.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
         u.setRole(role);
-        u.setBanned(Boolean.TRUE.equals(dto.getBanned()));
+        u.setBanned(Boolean.TRUE.equals(dto.getBanned())); // ✅ champ cohérent
         u.setVerificationStatus(
                 dto.getVerificationStatus() != null
                         ? User.VerificationStatus.valueOf(dto.getVerificationStatus().toUpperCase())
@@ -126,7 +132,6 @@ public class UserService {
         u.setCompanyNumber(role.equals("company") ? dto.getCompanyNumber() : null);
         u.setVerificationDocument(role.equals("company") ? dto.getVerificationDocument() : null);
         u.setPoint(0);
-        // champs facultatifs laissés à null par défaut (photo, langue, bio)
 
         return userRepository.save(u);
     }
@@ -137,18 +142,17 @@ public class UserService {
         try {
             userRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            // Si contraintes d'intégrité (FK) empêchent la suppression
             throw new IllegalStateException("Suppression impossible : l'utilisateur est référencé (rapports, challenges, ...).");
         }
     }
 
-    // ======= Helpers =======
+    // =============================
+    // === Méthodes utilitaires ===
+    // =============================
 
     private void validateRole(String roleLowercase) {
         if (!ALLOWED_ROLES.contains(roleLowercase)) {
             throw new IllegalArgumentException("Rôle invalide");
         }
     }
-
-
 }

@@ -46,8 +46,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private VerificationStatus verificationStatus;
 
+    // IMPORTANT : champ renommé en "banned" mais colonne conservée "is_banned"
     @Column(name = "is_banned")
-    private boolean isBanned;
+    private boolean banned;
 
     private int point;
 

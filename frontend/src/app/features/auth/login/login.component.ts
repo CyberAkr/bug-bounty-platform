@@ -1,13 +1,13 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import {Router, RouterLink} from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule }      from '@angular/material/input';
-import { MatButtonModule }     from '@angular/material/button';
-import { MatIconModule }       from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AuthService } from '@app/core/auth/auth.service';
 import { UserResponse } from '@app/models/user.model';
@@ -25,16 +25,18 @@ export class LoginComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
 
-  // état via signaux
-  email   = signal('');
+  email = signal('');
   password = signal('');
-  loading  = signal(false);
+  loading = signal(false);
   errorMsg = signal<string | null>(null);
   submitAttempted = signal(false);
 
-  // bouton disabled si en cours / champs vides
-  canSubmit = computed(() =>
-    !this.loading() && this.email().trim().length > 0 && this.password().trim().length > 0
+  // disabled si loading ou champs vides
+  canSubmit = computed(
+    () =>
+      !this.loading() &&
+      this.email().trim().length > 0 &&
+      this.password().trim().length > 0
   );
 
   login(form: NgForm) {
@@ -44,26 +46,61 @@ export class LoginComponent {
     if (form.invalid) return;
 
     this.loading.set(true);
-    this.auth.login(this.email(), this.password()).subscribe({
-      next: () => {
-        this.auth.getCurrentUser().subscribe({
-          next: (user: UserResponse) => {
+
+    const email = this.email().trim();
+    const password = this.password().trim();
+
+    this.auth.login(email, password).subscribe(
+      () => {
+        // login OK → récupérer le profil et router en fonction du rôle
+        this.auth.getCurrentUser().subscribe(
+          (user: UserResponse) => {
             const role = (user?.role || '').toString().toLowerCase();
-            if (role === 'company')      this.router.navigate(['/company']);
-            else if (role === 'researcher') this.router.navigate(['/dashboard']);
-            else                          this.router.navigate(['/home']);
+            if (role === 'company') {
+              void this.router.navigate(['/company']);
+            } else if (role === 'researcher') {
+              void this.router.navigate(['/dashboard']);
+            } else {
+              void this.router.navigate(['/home']);
+            }
             this.loading.set(false);
           },
-          error: () => {
+          () => {
             this.loading.set(false);
-            this.router.navigate(['/home']);
+            void this.router.navigate(['/home']);
           }
-        });
+        );
       },
-      error: () => {
+      (err) => {
         this.loading.set(false);
+
+        // ----- redirection auto vers vérification si email non vérifié -----
+        const status = err?.status;
+        const body = err?.error;
+        const bodyText =
+          typeof body === 'string' ? body : (body?.message || '');
+
+        const isUnverifiedByText =
+          status === 403 && /email non vérifié/i.test(bodyText || '');
+        const isUnverifiedByJson =
+          status === 403 && (body?.status === 'unverified');
+
+        if (isUnverifiedByText || isUnverifiedByJson) {
+          const targetEmail = body?.email || email;
+          try {
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('bb.emailPending', targetEmail);
+            }
+          } catch {}
+          void this.router.navigate(['/verify-email'], {
+            queryParams: { email: targetEmail },
+          });
+          return;
+        }
+        // -------------------------------------------------------------------
+
         this.errorMsg.set('auth.errors.invalid');
       }
-    });
+    );
   }
 }

@@ -8,7 +8,8 @@
       </p>
     </div>
 
-    <form #f="ngForm" (ngSubmit)="onSubmit(f)" class="space-y-4">
+    <form (ngSubmit)="onSubmit()" class="space-y-4">
+      <!-- Champ code -->
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>{{ 'verify.codeLabel' | translate }}</mat-label>
         <mat-icon matPrefix>pin</mat-icon>
@@ -25,15 +26,29 @@
         {{ 'verify.help' | translate }}
       </p>
 
+      <!-- Boutons -->
       <div class="form-actions">
-        <button type="button" class="btn-ghost" (click)="onResend()" [disabled]="loading()">
-          {{ 'verify.resend' | translate }}
+        <button
+          type="button"
+          class="btn-ghost flex items-center gap-1"
+          (click)="onResend()"
+          [disabled]="loading() || cooldown() > 0"
+        >
+          <mat-icon>refresh</mat-icon>
+          <ng-container *ngIf="cooldown() === 0; else wait">
+            {{ 'verify.resend' | translate }}
+          </ng-container>
+          <ng-template #wait>
+            {{ 'verify.resendIn' | translate:{ seconds: cooldown() } }}
+          </ng-template>
         </button>
 
         <button
-          mat-flat-button color="primary"
+          mat-flat-button
+          color="primary"
           class="btn-primary flex items-center gap-2"
-          type="submit" [disabled]="loading()"
+          type="submit"
+          [disabled]="loading()"
         >
           <mat-icon *ngIf="loading()" class="animate-spin">hourglass_top</mat-icon>
           {{ loading() ? ('verify.loading' | translate) : ('verify.submit' | translate) }}
@@ -43,5 +58,11 @@
 
     <p class="error-text text-center mt-4" *ngIf="error()">{{ error() | translate }}</p>
     <p class="success-text text-center mt-2" *ngIf="success()">{{ success() | translate }}</p>
+
+    <div class="mt-6 text-center text-sm">
+      <a routerLink="/login" class="text-[var(--accent)] font-medium hover:underline">
+        {{ 'verify.backToLogin' | translate }}
+      </a>
+    </div>
   </div>
 </div>
