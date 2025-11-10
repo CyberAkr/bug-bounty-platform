@@ -1,23 +1,47 @@
-<h2 class="text-2xl font-bold mb-4">Dashboard</h2>
+<section class="auth-wrapper">
+  <mat-card class="auth-card space-y-6">
+    <header class="flex items-center gap-3">
+      <mat-icon aria-hidden="true">dashboard</mat-icon>
+      <h2 class="text-2xl font-bold">
+        {{ 'dashboard.title' | translate }}
+      </h2>
+    </header>
 
-<div *ngIf="user">
-  <p>Bienvenue, {{ user.firstName }} 👋</p>
+    <p *ngIf="user() as u">
+      {{ 'dashboard.greeting' | translate:{ name: u.firstName } }}
+    </p>
 
-  <!-- Espace entreprise -->
-  <div *ngIf="user.role === 'company'" class="mt-4">
-    <p>🧠 Espace entreprise :</p>
-    <ul>
-      <li><a routerLink="/company">→ Page entreprise</a></li>
-      <li><a routerLink="/profile">→ Compléter votre profil</a></li>
-    </ul>
-  </div>
+    <!-- Espace entreprise -->
+    <section *ngIf="isCompany()" class="space-y-3">
+      <h3 class="text-lg font-semibold flex items-center gap-2">
+        <mat-icon>business</mat-icon>
+        {{ 'dashboard.company.sectionTitle' | translate }}
+      </h3>
 
-  <!-- Espace chercheur (TOUS les composants affichés directement ici) -->
-  <div *ngIf="user.role === 'researcher'" class="mt-4 space-y-6">
-    <app-researcher-welcome />
-    <app-researcher-training />
-    <app-report-guide />
-    <app-bounty-example />
-    <app-researcher-thanks />
-  </div>
-</div>
+      <div class="flex flex-wrap gap-3">
+        <a routerLink="/company">
+          <button mat-raised-button color="primary" class="btn-primary">
+            <mat-icon>home_work</mat-icon>
+            {{ 'dashboard.company.page' | translate }}
+          </button>
+        </a>
+
+        <a routerLink="/profile">
+          <button mat-stroked-button class="btn-ghost">
+            <mat-icon>manage_accounts</mat-icon>
+            {{ 'dashboard.company.profile' | translate }}
+          </button>
+        </a>
+      </div>
+    </section>
+
+    <!-- Espace chercheur : on affiche les pages pédagogiques directement -->
+    <section *ngIf="isResearcher()" class="space-y-6">
+      <app-researcher-welcome />
+      <app-researcher-training />
+      <app-report-guide />
+      <app-bounty-example />
+      <app-researcher-thanks />
+    </section>
+  </mat-card>
+</section>

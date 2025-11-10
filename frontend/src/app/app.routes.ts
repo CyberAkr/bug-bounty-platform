@@ -70,7 +70,7 @@ export const routes: Routes = [
         path: 'researcher',
         canActivate: [authGuard],
         loadChildren: () =>
-          import('./features/dashboard/researcher/researcher.routes').then(m => m.researcherRoutes)
+          import('./features/dashboard/researcher/researcher.routes').then(m => m.RESEARCHER_ROUTES)
       },
 
       // 👤 Profil utilisateur

@@ -1,14 +1,52 @@
-<h2 class="text-2xl font-semibold mb-4">Rédiger un bon rapport 📝</h2>
+<section class="auth-wrapper">
+  <mat-card class="auth-card space-y-6">
+    <header class="flex items-center gap-3">
+      <mat-icon aria-hidden="true">description</mat-icon>
+      <h2 class="text-2xl font-semibold">
+        {{ 'researcher.reportGuide.title' | translate }}
+      </h2>
+    </header>
 
-<p>Un rapport doit être :</p>
-<ul class="list-disc list-inside mt-2">
-  <li>🧾 Clair et structuré</li>
-  <li>🔍 Inclure une preuve (screenshot, log, lien de reproduction)</li>
-  <li>📌 Respecter le périmètre défini</li>
-  <li>🕵️‍♂️ Fournir une étape de reproduction simple</li>
-</ul>
+    <p>{{ 'researcher.reportGuide.intro' | translate }}</p>
 
-<p class="mt-4">
-  Exemples et modèles à consulter :
-  <a href="https://hackerone.com/resources/reports" target="_blank" class="underline text-blue-600">HackerOne Report Examples</a>
-</p>
+    <mat-list>
+      <mat-list-item>
+        <mat-icon matListItemIcon>fact_check</mat-icon>
+        <div matListItemTitle>{{ 'researcher.reportGuide.items.clear' | translate }}</div>
+        <div matListItemLine>{{ 'researcher.reportGuide.items.clearHint' | translate }}</div>
+      </mat-list-item>
+
+      <mat-list-item>
+        <mat-icon matListItemIcon>image_search</mat-icon>
+        <div matListItemTitle>{{ 'researcher.reportGuide.items.proof' | translate }}</div>
+        <div matListItemLine>{{ 'researcher.reportGuide.items.proofHint' | translate }}</div>
+      </mat-list-item>
+
+      <mat-list-item>
+        <mat-icon matListItemIcon>policy</mat-icon>
+        <div matListItemTitle>{{ 'researcher.reportGuide.items.scope' | translate }}</div>
+        <div matListItemLine>{{ 'researcher.reportGuide.items.scopeHint' | translate }}</div>
+      </mat-list-item>
+
+      <mat-list-item>
+        <mat-icon matListItemIcon>format_list_numbered</mat-icon>
+        <div matListItemTitle>{{ 'researcher.reportGuide.items.steps' | translate }}</div>
+        <div matListItemLine>{{ 'researcher.reportGuide.items.stepsHint' | translate }}</div>
+      </mat-list-item>
+    </mat-list>
+
+    <section class="space-y-2">
+      <p class="font-medium">
+        {{ 'researcher.reportGuide.resources.title' | translate }}
+      </p>
+      <a
+        class="link-primary inline-flex items-center gap-2"
+        href="https://hackerone.com/resources/reports"
+        target="_blank"
+        rel="noopener">
+        <mat-icon>open_in_new</mat-icon>
+        {{ 'researcher.reportGuide.resources.h1Examples' | translate }}
+      </a>
+    </section>
+  </mat-card>
+</section>

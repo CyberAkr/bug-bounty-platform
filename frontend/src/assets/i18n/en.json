@@ -86,8 +86,139 @@
       "missingEmail": "Missing email."
     }
   },
+  "dashboard": {
+    "title": "Dashboard",
+    "greeting": "Welcome, {{name}}",
+    "company": {
+      "sectionTitle": "Company space",
+      "page": "Go to company space",
+      "profile": "Complete my profile"
+    }
+  },
+  "company": {
+    "dashboard": {
+      "title": "🏢 Company Dashboard",
+      "createProgram": "Create a program",
+      "approvalRequired": "You must be verified to create a program.",
+      "viewReports": "View received reports"
+    },
+    "welcome": {
+      "title": "Welcome to your company space",
+      "intro": "Securing your systems is essential. By creating a bug bounty program, you allow security researchers to detect vulnerabilities before attackers do. It’s a modern, efficient, and affordable solution for Belgian SMEs.",
+      "benefits": {
+        "security": "Increase your security level",
+        "trust": "Gain the trust of your clients",
+        "experts": "Collaborate with cybersecurity experts"
+      },
+      "notVerified": "Your company is not yet verified. You need to complete your profile before you can create a program.",
+      "completeProfile": "Complete my profile",
+      "createProgram": "Create a program"
+    },
+    "verify": {
+      "status": {
+        "pending": {
+          "title": "Your account is pending verification",
+          "desc": "We are reviewing your information. You will be notified once a decision is made."
+        },
+        "rejected": {
+          "title": "Your verification was rejected",
+          "desc": "Please correct your information and resend a valid document for a new verification."
+        },
+        "approved": {
+          "title": "Your company is verified",
+          "desc": "You can now create and manage your bug bounty programs."
+        }
+      }
+    }
+  },
+  "researcher": {
+    "bountyExample": {
+      "title": "Example of a validated report with bounty",
+      "fields": {
+        "vuln": "Vulnerability",
+        "severity": "Severity",
+        "bounty": "Awarded bounty"
+      },
+      "values": {
+        "vuln": "SQL Injection on login form",
+        "severity": "High",
+        "bounty": "€200"
+      },
+      "provided": {
+        "title": "The researcher provided:",
+        "video": "A demonstration video",
+        "script": "A reproduction script",
+        "mitigation": "A possible mitigation solution"
+      },
+      "approved": "The report was approved in under 72 hours."
+    },
+    "reportGuide": {
+      "title": "Write a good report",
+      "intro": "A report must be:",
+      "items": {
+        "clear": "Clear and structured",
+        "clearHint": "Explain the context, impact, and conclusion.",
+        "proof": "Include evidence (screenshot, log, repro link)",
+        "proofHint": "Add concrete artefacts that confirm the vulnerability.",
+        "scope": "Respect the defined scope",
+        "scopeHint": "Test only the targets allowed by the program.",
+        "steps": "Provide simple reproduction steps",
+        "stepsHint": "Numbered, precise, and minimal steps."
+      },
+      "resources": {
+        "title": "Examples and templates to check:",
+        "h1Examples": "HackerOne report examples"
+      }
+    },
+    "thanks": {
+      "title": "Thank you",
+      "lead": "You help make the web safer for everyone. Your contribution matters.",
+      "share": "Consider sharing your ranking or badges on LinkedIn to showcase your commitment.",
+      "callToAction": "Keep submitting reports and climb the leaderboard.",
+      "cta": {
+        "ranking": "View ranking",
+        "badges": "View my badges",
+        "submit": "Submit a report"
+      }
+    },
+    "training": {
+      "title": "Ethical hacking training platforms",
+      "intro": "Here are some popular sites to practice:",
+      "platforms": {
+        "tryhackme": "TryHackMe",
+        "tryhackmeDesc": "Interactive labs and guided paths for beginners and intermediates.",
+        "hackthebox": "Hack The Box",
+        "hacktheboxDesc": "Hands-on machines and challenges to sharpen your skills.",
+        "portswigger": "PortSwigger Labs",
+        "portswiggerDesc": "Excellent web labs to learn vulnerabilities and exploitation techniques."
+      },
+      "cta": "Feel free to share your progress with the community on our forum!"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "greeting": "Welcome, {{name}}",
+      "company": {
+        "sectionTitle": "Company space",
+        "page": "Go to company space",
+        "profile": "Complete my profile"
+      }
+    },
+    "welcome": {
+      "title": "Welcome, ethical hacker",
+      "lead1": "Thanks for joining our citizen cybersecurity platform in Belgium.",
+      "lead2": "You're here to learn, practice, and submit reports that make the web safer.",
+      "links": {
+        "guide": "How to write a good report",
+        "example": "Example report + awarded bounty",
+        "training": "Resources to practice",
+        "programs": "See programs to audit"
+      },
+      "thanks": "Thank you for helping secure Belgian companies!"
+    }
+  },
 
-  "challenges": {
+
+"challenges": {
     "weekly": {
       "title": "Weekly challenge",
       "counter": "Challenge {{current}} / {{total}}",

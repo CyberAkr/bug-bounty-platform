@@ -1,4 +1,40 @@
-<h2 class="text-2xl font-semibold mb-4">Merci 🙏</h2>
-<p>Tu contribues à rendre le web plus sûr, pour tous. Ton aide est précieuse.</p>
-<p class="mt-2">Pense à partager ton classement ou tes badges sur LinkedIn pour montrer ton engagement !</p>
-<p class="mt-4 text-green-600">→ Continue à soumettre des rapports et monte dans le classement 💥</p>
+<section class="auth-wrapper">
+  <mat-card class="auth-card space-y-6">
+    <header class="flex items-center gap-3">
+      <mat-icon aria-hidden="true">emoji_events</mat-icon>
+      <h2 class="text-2xl font-semibold">
+        {{ 'researcher.thanks.title' | translate }}
+      </h2>
+    </header>
+
+    <p>{{ 'researcher.thanks.lead' | translate }}</p>
+    <p>{{ 'researcher.thanks.share' | translate }}</p>
+
+    <p class="accent-callout">
+      {{ 'researcher.thanks.callToAction' | translate }}
+    </p>
+
+    <div class="flex flex-wrap gap-3 pt-2">
+      <a routerLink="/ranking">
+        <button mat-raised-button color="primary" class="btn-primary">
+          <mat-icon>leaderboard</mat-icon>
+          {{ 'researcher.thanks.cta.ranking' | translate }}
+        </button>
+      </a>
+
+      <a routerLink="/profile">
+        <button mat-stroked-button class="btn-ghost">
+          <mat-icon>verified</mat-icon>
+          {{ 'researcher.thanks.cta.badges' | translate }}
+        </button>
+      </a>
+
+      <a routerLink="/reports/submit">
+        <button mat-stroked-button class="btn-ghost">
+          <mat-icon>upload_file</mat-icon>
+          {{ 'researcher.thanks.cta.submit' | translate }}
+        </button>
+      </a>
+    </div>
+  </mat-card>
+</section>

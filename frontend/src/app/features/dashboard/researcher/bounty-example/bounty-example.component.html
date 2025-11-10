@@ -1,14 +1,55 @@
-<h2 class="text-2xl font-semibold mb-4">Exemple de rapport validé avec bounty</h2>
+<section class="auth-wrapper">
+  <mat-card class="auth-card space-y-6">
+    <header class="flex items-center gap-3">
+      <mat-icon aria-hidden="true">workspace_premium</mat-icon>
+      <h2 class="text-2xl font-semibold">
+        {{ 'researcher.bountyExample.title' | translate }}
+      </h2>
+    </header>
 
-<p class="mb-2"><strong>Vulnérabilité :</strong> Injection SQL sur formulaire de login</p>
-<p class="mb-2"><strong>Sévérité :</strong> Haute</p>
-<p class="mb-2"><strong>Bounty attribué :</strong> 200 €</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div class="flex items-center gap-2">
+        <mat-icon>security</mat-icon>
+        <span class="font-medium">{{ 'researcher.bountyExample.fields.vuln' | translate }}:</span>
+      </div>
+      <div> {{ 'researcher.bountyExample.values.vuln' | translate }} </div>
 
-<p class="mt-4">Le chercheur a fourni :</p>
-<ul class="list-disc list-inside">
-  <li>Une vidéo de démonstration</li>
-  <li>Un script de reproduction</li>
-  <li>Une solution de mitigation possible</li>
-</ul>
+      <div class="flex items-center gap-2">
+        <mat-icon>priority_high</mat-icon>
+        <span class="font-medium">{{ 'researcher.bountyExample.fields.severity' | translate }}:</span>
+      </div>
+      <div> {{ 'researcher.bountyExample.values.severity' | translate }} </div>
 
-<p class="mt-4">✅ Le rapport a été approuvé en moins de 72h.</p>
+      <div class="flex items-center gap-2">
+        <mat-icon>paid</mat-icon>
+        <span class="font-medium">{{ 'researcher.bountyExample.fields.bounty' | translate }}:</span>
+      </div>
+      <div> {{ 'researcher.bountyExample.values.bounty' | translate }} </div>
+    </div>
+
+    <section class="space-y-2">
+      <p class="font-medium">{{ 'researcher.bountyExample.provided.title' | translate }}</p>
+      <mat-list>
+        <mat-list-item>
+          <mat-icon matListItemIcon>videocam</mat-icon>
+          <div matListItemTitle>{{ 'researcher.bountyExample.provided.video' | translate }}</div>
+        </mat-list-item>
+        <mat-list-item>
+          <mat-icon matListItemIcon>terminal</mat-icon>
+          <div matListItemTitle>{{ 'researcher.bountyExample.provided.script' | translate }}</div>
+        </mat-list-item>
+        <mat-list-item>
+          <mat-icon matListItemIcon>shield</mat-icon>
+          <div matListItemTitle>{{ 'researcher.bountyExample.provided.mitigation' | translate }}</div>
+        </mat-list-item>
+      </mat-list>
+    </section>
+
+    <div class="alert-success">
+      <div class="flex items-start gap-2">
+        <mat-icon>check_circle</mat-icon>
+        <p class="m-0">{{ 'researcher.bountyExample.approved' | translate }}</p>
+      </div>
+    </div>
+  </mat-card>
+</section>

@@ -1,26 +1,101 @@
-<h3 class="text-lg font-semibold mb-2">Vérification de l’entreprise</h3>
+<section class="auth-wrapper">
+  <mat-card class="auth-card">
+    <h3 class="text-xl font-semibold mb-4">
+      {{ 'company.verify.title' | translate }}
+    </h3>
 
-<form (ngSubmit)="submit()" class="space-y-4">
-  <div>
-    <label>Numéro d’entreprise :</label>
-    <input [(ngModel)]="companyNumber" name="companyNumber" required class="input" />
-  </div>
+    <form (ngSubmit)="submit()" class="space-y-5" #formRef="ngForm" novalidate>
+      <!-- Company number -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>{{ 'company.verify.companyNumber.label' | translate }}</mat-label>
+        <input
+          matInput
+          required
+          name="companyNumber"
+          [(ngModel)]="companyNumber"
+          [attr.aria-required]="true"
+          [placeholder]="'company.verify.companyNumber.placeholder' | translate" />
+        <mat-hint>{{ 'company.verify.companyNumber.hint' | translate }}</mat-hint>
+      </mat-form-field>
 
-  <div>
-    <label>Document justificatif (PDF uniquement) :</label>
-    <input type="file" accept="application/pdf" (change)="onFileSelected($event)" required class="input" />
-    <p class="text-sm mt-1">
-      Besoin d’un modèle ?
-      <a href="/assets/docs/modele-verification-entreprise.pdf" target="_blank" rel="noopener">
-        Télécharger le modèle PDF
-      </a>
-    </p>
-  </div>
+      <!-- Document (PDF) -->
+      <div class="space-y-2">
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>{{ 'company.verify.document.label' | translate }}</mat-label>
 
-  <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-    📤 Envoyer pour vérification
-  </button>
+          <!-- input hidden + bouton -->
+          <input
+            #fileInput
+            type="file"
+            accept="application/pdf"
+            class="sr-only"
+            (change)="onFileSelected($event)" />
 
-  <p class="text-green-600 mt-2" *ngIf="successMessage()">{{ successMessage() }}</p>
-  <p class="text-red-600 mt-2" *ngIf="errorMessage()">{{ errorMessage() }}</p>
-</form>
+          <div class="flex items-center gap-3">
+            <button
+              type="button"
+              mat-stroked-button
+              class="btn-ghost"
+              (click)="fileInput.click()">
+              <mat-icon>attach_file</mat-icon>
+              {{ 'company.verify.document.choose' | translate }}
+            </button>
+
+            <span class="text-sm text-gray-700 truncate" *ngIf="document">
+              {{ 'company.verify.document.selected' | translate }}: {{ document?.name }}
+            </span>
+            <span class="text-sm text-gray-500" *ngIf="!document">
+              {{ 'company.verify.document.noFile' | translate }}
+            </span>
+          </div>
+
+          <mat-hint>
+            {{ 'company.verify.document.hint' | translate }}
+            <a
+              href="/assets/docs/modele-verification-entreprise.pdf"
+              target="_blank"
+              rel="noopener"
+              class="underline">
+              {{ 'company.verify.document.downloadModel' | translate }}
+            </a>
+          </mat-hint>
+        </mat-form-field>
+
+        <p class="text-xs text-gray-500">
+          {{ 'company.verify.document.constraints' | translate }}
+        </p>
+      </div>
+
+      <!-- Alerts -->
+      <div *ngIf="successKey()" class="alert-success" role="status">
+        <div class="flex items-center gap-2">
+          <mat-icon>check_circle</mat-icon>
+          <span>{{ successKey() | translate }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="errorKey() || errorText()" class="alert-error" role="alert">
+        <div class="flex items-center gap-2">
+          <mat-icon>error</mat-icon>
+          <span *ngIf="errorKey()">{{ errorKey() | translate }}</span>
+          <span *ngIf="!errorKey() && errorText()">{{ errorText() }}</span>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="pt-2">
+        <button
+          type="submit"
+          mat-raised-button
+          color="primary"
+          class="btn-primary"
+          [disabled]="!companyNumber || !document || isSubmitting()">
+          <mat-icon>publish</mat-icon>
+          <span>{{ 'company.verify.submit' | translate }}</span>
+        </button>
+      </div>
+
+      <mat-progress-bar *ngIf="isSubmitting()" mode="indeterminate"></mat-progress-bar>
+    </form>
+  </mat-card>
+</section>

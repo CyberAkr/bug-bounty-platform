@@ -1,29 +1,37 @@
-<section class="p-6">
-  <h2 class="text-2xl font-semibold mb-4">🏢 Tableau de bord entreprise</h2>
+<section class="p-6 space-y-6">
+  <h2 class="text-2xl font-semibold flex items-center gap-2">
+    <mat-icon aria-hidden="true">business</mat-icon>
+    {{ 'company.dashboard.title' | translate }}
+  </h2>
 
   <app-verification-status-banner [status]="verificationStatus()"></app-verification-status-banner>
 
-  <div class="my-6">
-    <a [routerLink]="isApproved() ? '/programs/create' : null">
-      <button
-        class="bg-blue-500 text-white px-4 py-2 rounded"
-        [disabled]="!isApproved()"
-        [class.opacity-50]="!isApproved()">
-        ➕ Créer un programme
-      </button>
-    </a>
+  <div class="flex flex-col gap-3">
+    <button
+      mat-raised-button
+      color="primary"
+      class="btn-primary w-fit"
+      [routerLink]="isApproved() ? '/programs/create' : null"
+      [disabled]="!isApproved()">
+      <mat-icon>add_circle</mat-icon>
+      {{ 'company.dashboard.createProgram' | translate }}
+    </button>
 
-    <p *ngIf="!isApproved()" class="text-sm text-gray-600 mt-1">
-      Vous devez être vérifié pour créer un programme.
+    <p *ngIf="!isApproved()" class="text-sm text-gray-600">
+      {{ 'company.dashboard.approvalRequired' | translate }}
     </p>
   </div>
 
   <app-verification-form *ngIf="!isApproved()"></app-verification-form>
-</section>
-<div class="my-4">
-  <a routerLink="/company/reports">
-    <button class="bg-gray-100 px-4 py-2 rounded border">
-      📥 Voir mes rapports reçus
+
+  <div class="pt-4">
+    <button
+      mat-stroked-button
+      color="accent"
+      class="btn-ghost w-fit"
+      routerLink="/company/reports">
+      <mat-icon>inbox</mat-icon>
+      {{ 'company.dashboard.viewReports' | translate }}
     </button>
-  </a>
-</div>
+  </div>
+</section>

@@ -1,12 +1,42 @@
-<h1 class="text-3xl font-bold mb-4">Bienvenue, chercheur éthique 👋</h1>
-<p class="mb-2">Merci de rejoindre notre plateforme citoyenne de cybersécurité en Belgique.</p>
-<p class="mb-2">Tu es ici pour apprendre, t'entraîner et soumettre des rapports qui rendent le web plus sûr.</p>
+<section class="auth-wrapper">
+  <mat-card class="auth-card space-y-6">
+    <header class="flex items-center gap-3">
+      <mat-icon aria-hidden="true">waving_hand</mat-icon>
+      <h1 class="text-3xl font-bold">
+        {{ 'researcher.welcome.title' | translate }}
+      </h1>
+    </header>
 
-<ul class="mt-6 space-y-2">
-  <li>📚 <a routerLink="/researcher/guide" class="underline text-blue-600">Comment rédiger un bon rapport</a></li>
-  <li>🧠 <a routerLink="/researcher/example" class="underline text-blue-600">Exemple de rapport + bounty attribué</a></li>
-  <li>🕹 <a routerLink="/researcher/training" class="underline text-blue-600">Ressources pour t'entraîner</a></li>
-  <li>🔍 <a routerLink="/programs" class="underline text-blue-600">Voir les programmes à auditer</a></li>
-</ul>
+    <p>{{ 'researcher.welcome.lead1' | translate }}</p>
+    <p>{{ 'researcher.welcome.lead2' | translate }}</p>
 
-<p class="mt-6">🙏 Merci de contribuer à sécuriser les entreprises belges !</p>
+    <ul class="mt-4 space-y-2">
+      <li class="flex items-start gap-2">
+        <mat-icon>menu_book</mat-icon>
+        <a routerLink="/researcher/guide" class="link-primary">
+          {{ 'researcher.welcome.links.guide' | translate }}
+        </a>
+      </li>
+      <li class="flex items-start gap-2">
+        <mat-icon>workspace_premium</mat-icon>
+        <a routerLink="/researcher/example" class="link-primary">
+          {{ 'researcher.welcome.links.example' | translate }}
+        </a>
+      </li>
+      <li class="flex items-start gap-2">
+        <mat-icon>sports_esports</mat-icon>
+        <a routerLink="/researcher/training" class="link-primary">
+          {{ 'researcher.welcome.links.training' | translate }}
+        </a>
+      </li>
+      <li class="flex items-start gap-2">
+        <mat-icon>search</mat-icon>
+        <a routerLink="/programs" class="link-primary">
+          {{ 'researcher.welcome.links.programs' | translate }}
+        </a>
+      </li>
+    </ul>
+
+    <p class="pt-2">{{ 'researcher.welcome.thanks' | translate }}</p>
+  </mat-card>
+</section>

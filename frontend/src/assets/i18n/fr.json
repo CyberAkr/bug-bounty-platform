@@ -87,6 +87,138 @@
     }
   },
 
+  "dashboard": {
+    "title": "Tableau de bord",
+    "greeting": "Bienvenue, {{name}}",
+    "company": {
+      "sectionTitle": "Espace entreprise",
+      "page": "Accéder à l’espace entreprise",
+      "profile": "Compléter mon profil"
+    }
+  },
+  "company": {
+    "dashboard": {
+      "title": "🏢 Tableau de bord entreprise",
+      "createProgram": "Créer un programme",
+      "approvalRequired": "Vous devez être vérifié pour créer un programme.",
+      "viewReports": "Voir mes rapports reçus"
+    },
+    "welcome": {
+      "title": "Bienvenue sur votre espace entreprise",
+      "intro": "La sécurité de vos systèmes est essentielle. En créant un programme de bug bounty, vous permettez à des chercheurs en cybersécurité de détecter des vulnérabilités avant les attaquants. C’est une solution moderne, efficace et adaptée aux PME belges.",
+      "benefits": {
+        "security": "Augmentez votre niveau de sécurité",
+        "trust": "Gagnez la confiance de vos clients",
+        "experts": "Collaborez avec des experts en cybersécurité"
+      },
+      "notVerified": "Votre entreprise n’est pas encore vérifiée. Vous devez compléter votre profil pour pouvoir créer un programme.",
+      "completeProfile": "Compléter mon profil",
+      "createProgram": "Créer un programme"
+    },
+    "verify": {
+      "status": {
+        "pending": {
+          "title": "Votre compte est en attente de vérification",
+          "desc": "Nous examinons vos informations. Vous serez notifié dès qu’une décision sera prise."
+        },
+        "rejected": {
+          "title": "Votre vérification a été refusée",
+          "desc": "Corrigez vos informations et renvoyez un document valide pour une nouvelle vérification."
+        },
+        "approved": {
+          "title": "Votre entreprise est vérifiée",
+          "desc": "Vous pouvez désormais créer et gérer vos programmes de bug bounty."
+        }
+      }
+    }
+  },
+  "researcher": {
+    "bountyExample": {
+      "title": "Exemple de rapport validé avec bounty",
+      "fields": {
+        "vuln": "Vulnérabilité",
+        "severity": "Sévérité",
+        "bounty": "Bounty attribué"
+      },
+      "values": {
+        "vuln": "Injection SQL sur formulaire de login",
+        "severity": "Haute",
+        "bounty": "200 €"
+      },
+      "provided": {
+        "title": "Le chercheur a fourni :",
+        "video": "Une vidéo de démonstration",
+        "script": "Un script de reproduction",
+        "mitigation": "Une solution de mitigation possible"
+      },
+      "approved": "Le rapport a été approuvé en moins de 72h."
+    },
+    "reportGuide": {
+      "title": "Rédiger un bon rapport",
+      "intro": "Un rapport doit être :",
+      "items": {
+        "clear": "Clair et structuré",
+        "clearHint": "Expliquez le contexte, l'impact et la conclusion.",
+        "proof": "Inclure une preuve (capture d’écran, log, lien de reproduction)",
+        "proofHint": "Ajoutez des éléments concrets qui confirment la vulnérabilité.",
+        "scope": "Respecter le périmètre défini",
+        "scopeHint": "Ne testez que les cibles autorisées par le programme.",
+        "steps": "Fournir des étapes de reproduction simples",
+        "stepsHint": "Des étapes numérotées, précises et minimalistes."
+      },
+      "resources": {
+        "title": "Exemples et modèles à consulter :",
+        "h1Examples": "Exemples de rapports HackerOne"
+      }
+    },
+    "thanks": {
+      "title": "Merci",
+      "lead": "Tu contribues à rendre le web plus sûr, pour tous. Ton aide est précieuse.",
+      "share": "Pense à partager ton classement ou tes badges sur LinkedIn pour montrer ton engagement.",
+      "callToAction": "Continue à soumettre des rapports et monte dans le classement.",
+      "cta": {
+        "ranking": "Voir le classement",
+        "badges": "Voir mes badges",
+        "submit": "Soumettre un rapport"
+      }
+    },
+    "training": {
+      "title": "Plateformes d'entraînement au hacking éthique",
+      "intro": "Voici quelques sites populaires pour t'entraîner :",
+      "platforms": {
+        "tryhackme": "TryHackMe",
+        "tryhackmeDesc": "Laboratoires interactifs et parcours guidés pour débutants et intermédiaires.",
+        "hackthebox": "Hack The Box",
+        "hacktheboxDesc": "Machines et défis orientés pratique pour améliorer tes compétences.",
+        "portswigger": "PortSwigger Labs",
+        "portswiggerDesc": "Excellents labs Web pour apprendre les vulnérabilités et techniques d'exploitation."
+      },
+      "cta": "N'hésite pas à partager tes progrès avec la communauté sur notre forum !"
+    },
+    "dashboard": {
+      "title": "Tableau de bord",
+      "greeting": "Bienvenue, {{name}}",
+      "company": {
+        "sectionTitle": "Espace entreprise",
+        "page": "Accéder à l’espace entreprise",
+        "profile": "Compléter mon profil"
+      }
+    },
+    "welcome": {
+      "title": "Bienvenue, chercheur éthique",
+      "lead1": "Merci de rejoindre notre plateforme citoyenne de cybersécurité en Belgique.",
+      "lead2": "Tu es ici pour apprendre, t'entraîner et soumettre des rapports qui rendent le web plus sûr.",
+      "links": {
+        "guide": "Comment rédiger un bon rapport",
+        "example": "Exemple de rapport + bounty attribué",
+        "training": "Ressources pour t'entraîner",
+        "programs": "Voir les programmes à auditer"
+      },
+      "thanks": "Merci de contribuer à sécuriser les entreprises belges !"
+    }
+  },
+
+
   "challenges": {
     "weekly": {
       "title": "Défi de la semaine",

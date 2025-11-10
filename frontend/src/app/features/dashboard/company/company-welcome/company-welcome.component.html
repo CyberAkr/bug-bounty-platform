@@ -1,29 +1,55 @@
-<section class="p-6 max-w-3xl mx-auto">
-  <h1 class="text-3xl font-bold mb-4">👋 Bienvenue sur votre espace entreprise</h1>
+<section class="auth-wrapper">
+  <mat-card class="auth-card space-y-5">
+    <header class="flex items-center gap-3">
+      <mat-icon aria-hidden="true">business</mat-icon>
+      <h1 class="text-3xl font-bold">
+        {{ 'company.welcome.title' | translate }}
+      </h1>
+    </header>
 
-  <p class="text-gray-700 mb-6">
-    La sécurité de vos systèmes est essentielle. En créant un programme de bug bounty, vous permettez à des chercheurs
-    en cybersécurité de détecter des vulnérabilités avant les attaquants. C’est une solution moderne, efficace
-    et adaptée aux PME belges.
-  </p>
+    <p class="text-gray-700">
+      {{ 'company.welcome.intro' | translate }}
+    </p>
 
-  <ul class="list-disc list-inside mb-6 text-gray-800">
-    <li>✔️ Augmentez votre niveau de sécurité</li>
-    <li>✔️ Gagnez la confiance de vos clients</li>
-    <li>✔️ Collaborez avec des experts en cybersécurité</li>
-  </ul>
+    <div>
+      <ul class="list-none space-y-2">
+        <li class="flex items-start gap-2">
+          <mat-icon aria-hidden="true">check_circle</mat-icon>
+          <span>{{ 'company.welcome.benefits.security' | translate }}</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <mat-icon aria-hidden="true">check_circle</mat-icon>
+          <span>{{ 'company.welcome.benefits.trust' | translate }}</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <mat-icon aria-hidden="true">check_circle</mat-icon>
+          <span>{{ 'company.welcome.benefits.experts' | translate }}</span>
+        </li>
+      </ul>
+    </div>
 
-  <div *ngIf="!isApproved" class="bg-red-100 border border-red-500 text-red-800 px-4 py-3 rounded mb-4">
-    ⚠️ Votre entreprise n’est pas encore vérifiée. Vous devez compléter votre profil pour pouvoir créer un programme.
-    <button (click)="goToProfile()" class="underline text-sm block mt-2 text-red-700 hover:text-red-900">
-      → Compléter mon profil
-    </button>
-  </div>
+    <div *ngIf="!isApproved()" class="alert-danger" role="alert">
+      <div class="flex flex-col gap-2">
+        <div>{{ 'company.welcome.notVerified' | translate }}</div>
+        <button
+          type="button"
+          class="btn-ghost w-fit"
+          (click)="goToProfile()">
+          {{ 'company.welcome.completeProfile' | translate }}
+        </button>
+      </div>
+    </div>
 
-  <button
-    class="bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50"
-    [disabled]="!isApproved"
-    (click)="createProgram()">
-    ➕ Créer un programme
-  </button>
+    <div class="pt-2">
+      <button
+        mat-raised-button
+        color="primary"
+        class="btn-primary"
+        [disabled]="!isApproved()"
+        (click)="createProgram()">
+        <mat-icon>add_circle</mat-icon>
+        {{ 'company.welcome.createProgram' | translate }}
+      </button>
+    </div>
+  </mat-card>
 </section>
