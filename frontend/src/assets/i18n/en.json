@@ -1,7 +1,7 @@
 {
   "navbar": {
     "language": "Language",
-    "title": "Bug Bounty Platform",
+    "title": "Sentinelle",
     "home": "Home",
     "login": "Login",
     "register": "Register",
@@ -95,12 +95,38 @@
       "profile": "Complete my profile"
     }
   },
+
   "company": {
     "dashboard": {
       "title": "🏢 Company Dashboard",
       "createProgram": "Create a program",
       "approvalRequired": "You must be verified to create a program.",
       "viewReports": "View received reports"
+    },
+    "dashboardIntro": {
+      "title": "Thank you for trusting our researchers",
+      "lead": "By publishing a program, you enable responsible disclosures and strengthen your services' security.",
+      "steps": {
+        "scope": {
+          "title": "Define the scope",
+          "text": "Choose authorized targets, rules, and sensitive information to exclude."
+        },
+        "program": {
+          "title": "Publish the program",
+          "text": "Describe expectations, severity levels, and potential rewards."
+        },
+
+        "reports": {
+          "title": "Receive & triage",
+          "text": "Researchers submit reports. You triage them and fix vulnerabilities."
+        }
+      },
+      "resource": {
+        "title": "Template & best practices",
+        "text": "A ready-to-use program template to publish quickly and clearly.",
+        "cta": "Download the template (PDF)"
+      },
+      "needVerification": "Your company account must be verified to create a program."
     },
     "welcome": {
       "title": "Welcome to your company space",
@@ -122,12 +148,36 @@
         },
         "rejected": {
           "title": "Your verification was rejected",
-          "desc": "Please correct your information and resend a valid document for a new verification."
+          "desc": "Please correct your information and upload a valid document for a new verification."
         },
         "approved": {
           "title": "Your company is verified",
           "desc": "You can now create and manage your bug bounty programs."
         }
+      },
+
+      "title": "Company Verification",
+      "companyNumber": {
+        "label": "Company Number",
+        "placeholder": "e.g. 0123.456.789",
+        "hint": "Enter your official company registration number (Belgian format)."
+      },
+      "document": {
+        "label": "Supporting Document (PDF)",
+        "choose": "Choose a file",
+        "selected": "Selected file",
+        "noFile": "No file selected",
+        "constraints": "Format: PDF only, maximum size 20 MB.",
+        "hint": "Need a template?",
+        "downloadModel": "Download the model (PDF)"
+      },
+      "submit": "Submit for verification",
+      "success": "Document sent. Verification in progress.",
+      "errors": {
+        "onlyPdf": "Only PDF files are accepted.",
+        "tooLarge": "File too large (> 20 MB).",
+        "required": "All fields are required.",
+        "submitFailed": "Submission failed. Please try again."
       }
     }
   },
@@ -552,6 +602,13 @@
       "title": "Bug Bounty Platform — Admin",
       "home": "Home",
       "brand": "Admin"
+    },
+    "intro": {
+      "title": "Welcome to the Administrator Area",
+      "p1": "We are pleased to have you among the administrators of the Sentinelle platform. Your role is key to ensuring the security, reliability, and transparency of our cybersecurity ecosystem.",
+      "p2": "From here, you can oversee programs, moderate discussions, verify companies, and ensure smooth community operations.",
+      "p3": "Thank you for your commitment to protecting users and making Sentinelle a benchmark for bug bounty programs in Belgium.",
+      "button": "Go to the administration panel"
     },
     "topbar": {
       "homeAria": "Go to home"

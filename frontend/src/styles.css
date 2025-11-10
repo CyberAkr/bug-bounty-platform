@@ -16,7 +16,7 @@
   --accent-glow:   #E6FF00;  /* highlight */
 
   --surface:   #F7F9FC;
-  --surface-2: #ffffff;
+  --surface-2: #f8f8f8;
   --text:      #0B1220;
   --muted:     #6B7280;
   --ring:      rgba(23,190,187,.35);
@@ -863,3 +863,8 @@ html, body {
   .focus-ring:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
 }
 
+/* Taille du logo Sentinelle dans le header */
+
+.brand-logo {
+  @apply h-14 w-auto md:h-16 object-contain;
+}

@@ -57,7 +57,7 @@ export class LoginComponent {
           (user: UserResponse) => {
             const role = (user?.role || '').toString().toLowerCase();
             if (role === 'company') {
-              void this.router.navigate(['/company']);
+              void this.router.navigate(['/dashboard']);
             } else if (role === 'researcher') {
               void this.router.navigate(['/dashboard']);
             } else {

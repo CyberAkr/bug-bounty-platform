@@ -1,0 +1,66 @@
+<section class="panel space-y-6">
+  <!-- Titre + message -->
+  <header class="flex items-start gap-3">
+    <mat-icon aria-hidden="true">handshake</mat-icon>
+    <div class="space-y-1">
+      <h3 class="text-xl font-semibold">
+        {{ 'company.dashboardIntro.title' | translate }}
+      </h3>
+      <p class="text-gray-700 leading-relaxed">
+        {{ 'company.dashboardIntro.lead' | translate }}
+      </p>
+    </div>
+  </header>
+
+  <!-- Comment ça marche -->
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <article class="hiw-card">
+      <mat-icon>rule</mat-icon>
+      <h4 class="hiw-title">{{ 'company.dashboardIntro.steps.scope.title' | translate }}</h4>
+      <p class="hiw-text">{{ 'company.dashboardIntro.steps.scope.text' | translate }}</p>
+    </article>
+
+    <article class="hiw-card">
+      <mat-icon>assignment</mat-icon>
+      <h4 class="hiw-title">{{ 'company.dashboardIntro.steps.program.title' | translate }}</h4>
+      <p class="hiw-text">{{ 'company.dashboardIntro.steps.program.text' | translate }}</p>
+    </article>
+
+    <article class="hiw-card">
+      <mat-icon>verified</mat-icon>
+      <h4 class="hiw-title">{{ 'company.dashboardIntro.steps.reports.title' | translate }}</h4>
+      <p class="hiw-text">{{ 'company.dashboardIntro.steps.reports.text' | translate }}</p>
+    </article>
+  </div>
+
+  <!-- Ressource PDF -->
+  <div class="resource-card">
+    <div class="flex items-start gap-3">
+      <mat-icon aria-hidden="true">picture_as_pdf</mat-icon>
+      <div>
+        <p class="font-medium">{{ 'company.dashboardIntro.resource.title' | translate }}</p>
+        <p class="text-sm text-gray-600">
+          {{ 'company.dashboardIntro.resource.text' | translate }}
+        </p>
+        <a
+          class="link-primary inline-flex items-center gap-2 mt-2"
+          href="/assets/docs/modele-programme.pdf"
+          target="_blank"
+          rel="noopener">
+          <mat-icon>download</mat-icon>
+          {{ 'company.dashboardIntro.resource.cta' | translate }}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statut de vérification -->
+  <app-verification-status-banner [status]="verificationStatus()"></app-verification-status-banner>
+
+  <!-- Formulaire si non approuvé -->
+  <div *ngIf="!isApproved()" class="alert-warning">
+    {{ 'company.dashboardIntro.needVerification' | translate }}
+  </div>
+
+  <app-verification-form *ngIf="!isApproved()"></app-verification-form>
+</section>

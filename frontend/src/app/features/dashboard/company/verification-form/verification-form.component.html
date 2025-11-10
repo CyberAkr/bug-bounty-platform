@@ -18,51 +18,52 @@
         <mat-hint>{{ 'company.verify.companyNumber.hint' | translate }}</mat-hint>
       </mat-form-field>
 
-      <!-- Document (PDF) -->
-      <div class="space-y-2">
-        <mat-form-field appearance="fill" class="w-full">
-          <mat-label>{{ 'company.verify.document.label' | translate }}</mat-label>
+      <!-- Document (PDF) — retirer mat-form-field ici -->
+      <div class="space-y-2" role="group" aria-labelledby="doc-label">
+        <div id="doc-label" class="text-sm font-medium">
+          {{ 'company.verify.document.label' | translate }}
+        </div>
 
-          <!-- input hidden + bouton -->
-          <input
-            #fileInput
-            type="file"
-            accept="application/pdf"
-            class="sr-only"
-            (change)="onFileSelected($event)" />
+        <!-- input hidden + bouton -->
+        <input
+          #fileInput
+          type="file"
+          accept="application/pdf"
+          class="sr-only"
+          (change)="onFileSelected($event)" />
 
-          <div class="flex items-center gap-3">
-            <button
-              type="button"
-              mat-stroked-button
-              class="btn-ghost"
-              (click)="fileInput.click()">
-              <mat-icon>attach_file</mat-icon>
-              {{ 'company.verify.document.choose' | translate }}
-            </button>
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            mat-stroked-button
+            class="btn-ghost"
+            (click)="fileInput.click()">
+            <mat-icon>attach_file</mat-icon>
+            {{ 'company.verify.document.choose' | translate }}
+          </button>
 
-            <span class="text-sm text-gray-700 truncate" *ngIf="document">
-              {{ 'company.verify.document.selected' | translate }}: {{ document?.name }}
-            </span>
-            <span class="text-sm text-gray-500" *ngIf="!document">
-              {{ 'company.verify.document.noFile' | translate }}
-            </span>
-          </div>
+          <!-- alias as file => plus de ?. warning -->
+          <span class="text-sm text-gray-700 truncate" *ngIf="document as file">
+            {{ 'company.verify.document.selected' | translate }}: {{ file.name }}
+          </span>
+          <span class="text-sm text-gray-500" *ngIf="!document">
+            {{ 'company.verify.document.noFile' | translate }}
+          </span>
+        </div>
 
-          <mat-hint>
-            {{ 'company.verify.document.hint' | translate }}
-            <a
-              href="/assets/docs/modele-verification-entreprise.pdf"
-              target="_blank"
-              rel="noopener"
-              class="underline">
-              {{ 'company.verify.document.downloadModel' | translate }}
-            </a>
-          </mat-hint>
-        </mat-form-field>
-
+        <!-- Hints -->
         <p class="text-xs text-gray-500">
           {{ 'company.verify.document.constraints' | translate }}
+        </p>
+        <p class="text-xs">
+          {{ 'company.verify.document.hint' | translate }}
+          <a
+            href="/assets/docs/modele-verification-entreprise.pdf"
+            target="_blank"
+            rel="noopener"
+            class="underline">
+            {{ 'company.verify.document.downloadModel' | translate }}
+          </a>
         </p>
       </div>
 

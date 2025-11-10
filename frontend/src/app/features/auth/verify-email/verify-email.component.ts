@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,7 +19,7 @@ type ResendResponse = { status: string; emailSent?: boolean };
   selector: 'app-verify-email',
   imports: [
     CommonModule, FormsModule, TranslateModule,
-    MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule,
+    MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, RouterLink,
   ],
   templateUrl: './verify-email.component.html',
 })
@@ -79,7 +79,7 @@ export default class VerifyEmailComponent {
             (user: UserResponse) => {
               this.loading.set(false);
               const role = (user?.role || '').toString().toLowerCase();
-              if (role === 'company')      { void this.router.navigate(['/company']); }
+              if (role === 'company')      { void this.router.navigate(['/dashboard']); }
               else if (role === 'researcher') { void this.router.navigate(['/dashboard']); }
               else                           { void this.router.navigate(['/home']); }
             },

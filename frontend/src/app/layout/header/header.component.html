@@ -3,12 +3,19 @@
     <div class="app-header__bar">
       <!-- LOGO / TITRE -->
       <a routerLink="/home" class="flex items-center gap-2 font-bold text-xl link-accent">
-        <span class="material-icons" style="color:var(--accent)">security</span>
+        <img src="assets/brand/sentinelle.png" alt="Sentinelle" class="brand-logo" loading="lazy" />
         {{ 'navbar.title' | translate }}
       </a>
 
+
+
       <!-- NAVIGATION DESKTOP -->
       <nav class="hidden md:flex items-center gap-4 font-medium">
+        <!-- ✅ Accueil -> dashboard -->
+        <a routerLink="/dashboard" *ngIf="isLoggedIn()" class="link-accent">
+          {{ 'navbar.home' | translate }}
+        </a>
+
         <a routerLink="/classement" *ngIf="isLoggedIn()" class="link-accent">
           {{ 'navbar.ranking' | translate }}
         </a>
@@ -56,6 +63,11 @@
   <!-- MENU MOBILE -->
   <div *ngIf="mobileOpen()" class="md:hidden border-top border-white/20">
     <nav class="flex flex-col gap-1 px-4 py-3 text-sm" style="background:var(--color-primary)">
+      <!-- ✅ Accueil -> dashboard -->
+      <a routerLink="/dashboard" *ngIf="isLoggedIn()" (click)="closeMobile()" class="link-accent py-2">
+        {{ 'navbar.home' | translate }}
+      </a>
+
       <a routerLink="/classement" *ngIf="isLoggedIn()" (click)="closeMobile()" class="link-accent py-2">
         {{ 'navbar.ranking' | translate }}
       </a>

@@ -1,7 +1,7 @@
 {
   "navbar": {
     "language": "Langue",
-    "title": "Plateforme Bug Bounty",
+    "title": "Sentinelle",
     "home": "Accueil",
     "login": "Connexion",
     "register": "Inscription",
@@ -103,6 +103,30 @@
       "approvalRequired": "Vous devez être vérifié pour créer un programme.",
       "viewReports": "Voir mes rapports reçus"
     },
+    "dashboardIntro": {
+      "title": "Merci de faire confiance à nos chercheurs",
+      "lead": "En publiant un programme, vous permettez des signalements responsables et vous renforcez la sécurité de vos services.",
+      "steps": {
+        "scope": {
+          "title": "Définir le périmètre",
+          "text": "Choisissez les cibles autorisées, les règles et les informations sensibles à exclure."
+        },
+        "program": {
+          "title": "Publier le programme",
+          "text": "Décrivez les attentes, les niveaux de sévérité et les récompenses éventuelles."
+        },
+        "reports": {
+          "title": "Recevoir & traiter",
+          "text": "Les chercheurs soumettent des rapports. Vous les qualifiez et corrigez les vulnérabilités."
+        }
+      },
+      "resource": {
+        "title": "Modèle et bonnes pratiques",
+        "text": "Un modèle de programme prêt à l’emploi pour publier rapidement et clairement.",
+        "cta": "Télécharger le modèle (PDF)"
+      },
+      "needVerification": "Votre compte entreprise doit être vérifié pour créer un programme."
+    },
     "welcome": {
       "title": "Bienvenue sur votre espace entreprise",
       "intro": "La sécurité de vos systèmes est essentielle. En créant un programme de bug bounty, vous permettez à des chercheurs en cybersécurité de détecter des vulnérabilités avant les attaquants. C’est une solution moderne, efficace et adaptée aux PME belges.",
@@ -129,8 +153,33 @@
           "title": "Votre entreprise est vérifiée",
           "desc": "Vous pouvez désormais créer et gérer vos programmes de bug bounty."
         }
+      },
+
+      "title": "Vérification de l’entreprise",
+      "companyNumber": {
+        "label": "Numéro d’entreprise",
+        "placeholder": "Ex. : 0123.456.789",
+        "hint": "Indiquez votre numéro BCE (format belge)."
+      },
+      "document": {
+        "label": "Document justificatif (PDF)",
+        "choose": "Choisir un fichier",
+        "selected": "Fichier sélectionné",
+        "noFile": "Aucun fichier sélectionné",
+        "constraints": "Format : PDF uniquement, taille maximale 20 Mo.",
+        "hint": "Besoin d’un modèle ?",
+        "downloadModel": "Télécharger le modèle (PDF)"
+      },
+      "submit": "Envoyer pour vérification",
+      "success": "Document envoyé. Vérification en cours.",
+      "errors": {
+        "onlyPdf": "Seuls les fichiers PDF sont acceptés.",
+        "tooLarge": "Fichier trop volumineux (> 20 Mo).",
+        "required": "Tous les champs sont requis.",
+        "submitFailed": "Échec de l’envoi. Veuillez réessayer."
       }
     }
+
   },
   "researcher": {
     "bountyExample": {
@@ -577,7 +626,13 @@
       "MEDIUM": "MEDIUM",
       "HIGH": "HIGH"
     },
-
+    "intro": {
+      "title": "Bienvenue dans l’espace administrateur",
+      "p1": "Nous sommes heureux de vous compter parmi les administrateurs de la plateforme Sentinelle. Votre rôle est essentiel pour garantir la sécurité, la fiabilité et la transparence de notre écosystème de cybersécurité.",
+      "p2": "Depuis cet espace, vous pouvez superviser les programmes, modérer les échanges, vérifier les entreprises et assurer le bon déroulement des activités de la communauté.",
+      "p3": "Merci pour votre engagement à protéger les utilisateurs et à faire de Sentinelle une référence en matière de bug bounty en Belgique.",
+      "button": "Accéder au panneau d’administration"
+    },
     "badges": {
       "title": "Badges",
       "empty": "Aucun badge pour le moment.",

@@ -1,0 +1,14 @@
+.admin-hero-card {
+  @apply rounded-2xl border shadow-xl p-6 md:p-8;
+  background: var(--surface-2);
+  border-color: color-mix(in oklab, var(--text) 6%, transparent);
+}
+
+.admin-welcome-wrapper {
+  @apply container-default pb-6;
+}
+
+.admin-hero-card p {
+  @apply text-sm md:text-base;
+}
+

@@ -15,6 +15,10 @@ import { ResearcherTrainingComponent } from './researcher/training/researcher-tr
 import { ReportGuideComponent } from './researcher/report-guide/report-guide.component';
 import { BountyExampleComponent } from './researcher/bounty-example/bounty-example.component';
 import { ResearcherThanksComponent } from './researcher/thanks/researcher-thanks.component';
+
+import { CompanyDashboardIntroComponent } from '@app/features/dashboard/company/company-dashboard-intro/company-dashboard-intro.component';
+import {AdminWelcomeComponent} from '@app/features/dashboard/admin/admin-welcome/admin-welcome.component';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -25,7 +29,14 @@ import { ResearcherThanksComponent } from './researcher/thanks/researcher-thanks
     MatIconModule,
     MatButtonModule,
     TranslatePipe,
-    // sous-sections chercheur
+
+    // Admin
+    AdminWelcomeComponent,
+
+    // Entreprise
+    CompanyDashboardIntroComponent,
+
+    // Chercheur
     ResearcherWelcomeComponent,
     ResearcherTrainingComponent,
     ReportGuideComponent,
@@ -38,8 +49,9 @@ export class DashboardComponent {
   private readonly authService = inject(AuthService);
 
   readonly user = signal<UserResponse | null>(null);
-  readonly isCompany = computed(() => this.user()?.role === 'company');
+  readonly isCompany    = computed(() => this.user()?.role === 'company');
   readonly isResearcher = computed(() => this.user()?.role === 'researcher');
+  readonly isAdmin      = computed(() => this.user()?.role === 'admin');
 
   constructor() {
     this.authService.getCurrentUser().subscribe({

@@ -1,5 +1,7 @@
 <section class="auth-wrapper">
   <mat-card class="auth-card space-y-6">
+
+    <!-- HEADER -->
     <header class="flex items-center gap-3">
       <mat-icon aria-hidden="true">dashboard</mat-icon>
       <h2 class="text-2xl font-bold">
@@ -7,35 +9,47 @@
       </h2>
     </header>
 
+    <!-- SALUTATION -->
     <p *ngIf="user() as u">
       {{ 'dashboard.greeting' | translate:{ name: u.firstName } }}
     </p>
 
-    <!-- Espace entreprise -->
-    <section *ngIf="isCompany()" class="space-y-3">
-      <h3 class="text-lg font-semibold flex items-center gap-2">
-        <mat-icon>business</mat-icon>
-        {{ 'dashboard.company.sectionTitle' | translate }}
-      </h3>
+    <!-- 🛡️ ACCUEIL ADMIN (grand panneau vitrine) -->
+    <section *ngIf="isAdmin()" class="space-y-6">
+      <app-admin-welcome></app-admin-welcome>
+    </section>
 
-      <div class="flex flex-wrap gap-3">
-        <a routerLink="/company">
-          <button mat-raised-button color="primary" class="btn-primary">
-            <mat-icon>home_work</mat-icon>
-            {{ 'dashboard.company.page' | translate }}
-          </button>
-        </a>
+    <!-- 🌐 ESPACE ENTREPRISE -->
+    <section *ngIf="isCompany()" class="space-y-6">
+      <!-- Introduction / Explications -->
+      <app-company-dashboard-intro></app-company-dashboard-intro>
 
-        <a routerLink="/profile">
-          <button mat-stroked-button class="btn-ghost">
-            <mat-icon>manage_accounts</mat-icon>
-            {{ 'dashboard.company.profile' | translate }}
-          </button>
-        </a>
+      <!-- Bloc actions rapides -->
+      <div class="border-t pt-4 space-y-4">
+        <h3 class="text-lg font-semibold flex items-center gap-2">
+          <mat-icon>business</mat-icon>
+          {{ 'dashboard.company.sectionTitle' | translate }}
+        </h3>
+
+        <div class="flex flex-wrap gap-3">
+          <a routerLink="/company">
+            <button mat-raised-button color="primary" class="btn-primary">
+              <mat-icon>home_work</mat-icon>
+              {{ 'dashboard.company.page' | translate }}
+            </button>
+          </a>
+
+          <a routerLink="/profile">
+            <button mat-stroked-button class="btn-ghost">
+              <mat-icon>manage_accounts</mat-icon>
+              {{ 'dashboard.company.profile' | translate }}
+            </button>
+          </a>
+        </div>
       </div>
     </section>
 
-    <!-- Espace chercheur : on affiche les pages pédagogiques directement -->
+    <!-- 🧪 ESPACE CHERCHEUR -->
     <section *ngIf="isResearcher()" class="space-y-6">
       <app-researcher-welcome />
       <app-researcher-training />

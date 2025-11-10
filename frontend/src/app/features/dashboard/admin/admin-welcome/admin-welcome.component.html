@@ -1,0 +1,45 @@
+<section class="admin-welcome-wrapper">
+  <mat-card class="admin-hero-card space-y-6">
+
+    <!-- En-tête -->
+    <header class="flex items-center gap-3 mb-2">
+      <mat-icon aria-hidden="true" class="text-[var(--accent)] text-4xl">security</mat-icon>
+      <h2 class="text-2xl font-bold">
+        {{ 'admin.intro.title' | translate }}
+      </h2>
+    </header>
+
+    <!-- Texte de bienvenue -->
+    <div class="space-y-3 text-[var(--text)] leading-relaxed">
+      <p>
+        {{ 'admin.intro.p1' | translate }}
+      </p>
+
+      <p>
+        {{ 'admin.intro.p2' | translate }}
+      </p>
+
+      <p>
+        {{ 'admin.intro.p3' | translate }}
+      </p>
+
+      <!-- Ligne décorative d’icônes -->
+      <div class="flex items-center gap-4 mt-6 text-[var(--accent)] justify-center">
+        <mat-icon aria-hidden="true">shield</mat-icon>
+        <mat-icon aria-hidden="true">support_agent</mat-icon>
+        <mat-icon aria-hidden="true">verified_user</mat-icon>
+        <mat-icon aria-hidden="true">lock</mat-icon>
+      </div>
+    </div>
+
+    <!-- Bouton vers l’espace admin -->
+    <div class="pt-4 text-center">
+      <a routerLink="/admin">
+        <button mat-raised-button color="primary" class="btn-primary">
+          <mat-icon>settings</mat-icon>
+          {{ 'admin.intro.button' | translate }}
+        </button>
+      </a>
+    </div>
+  </mat-card>
+</section>
