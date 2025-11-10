@@ -1,0 +1,87 @@
+<section class="container-page">
+  <div class="forum-card max-w-3xl mx-auto">
+    <header class="mb-4 text-center">
+      <h2 class="text-2xl font-semibold">{{ 'forum.title' | translate }}</h2>
+      <p class="text-sm opacity-80">{{ 'forum.subtitle' | translate }}</p>
+    </header>
+
+    <!-- Composer -->
+    <div class="composer" *ngIf="!isBanned()">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>{{ 'forum.composer.placeholder' | translate }}</mat-label>
+        <textarea matInput rows="3"
+                  [ngModel]="draft()" (ngModelChange)="draft.set($event)"></textarea>
+      </mat-form-field>
+
+      <div class="flex items-center justify-between mt-2">
+        <span class="text-xs opacity-70">{{ draft().length }}/2000</span>
+        <button mat-flat-button color="primary"
+                class="btn-primary"
+                [disabled]="!canPost()"
+                (click)="post()">
+          <mat-icon class="mr-1">send</mat-icon>
+          {{ 'forum.composer.submit' | translate }}
+        </button>
+      </div>
+
+      <p class="error-text mt-2 text-center" *ngIf="errorMsg()">{{ errorMsg() | translate }}</p>
+    </div>
+
+    <div class="ban-banner" *ngIf="isBanned()">
+      <mat-icon>block</mat-icon>
+      <span>{{ 'forum.banned' | translate }}</span>
+    </div>
+
+    <!-- Liste des messages -->
+    <div class="space-y-3 mt-6">
+      <ng-container *ngIf="messages().length; else noData">
+        <article class="message-item" *ngFor="let m of messages(); trackBy: trackById">
+          <div class="message-head">
+            <div class="flex items-center gap-2">
+              <img *ngIf="m.author.profilePhoto" [src]="m.author.profilePhoto" class="avatar" alt="" />
+              <div>
+                <div class="flex items-center gap-2">
+                  <strong class="username">{{ m.author.username || '—' }}</strong>
+                  <mat-chip-set>
+                    <mat-chip [disabled]="true" class="role-chip">
+                      {{ 'roles.' + (m.author.role || 'researcher') | translate }}
+                    </mat-chip>
+                  </mat-chip-set>
+                </div>
+                <div class="message-meta">
+                  {{ m.postedAt | date:'short' }}
+                  <span class="sep">•</span>
+                  <span class="status" [class.status-deleted]="m.status==='DELETED'">
+                    {{ 'forum.status.' + m.status | translate }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actions admin -->
+            <div *ngIf="isAdmin()" class="message-actions">
+              <button mat-icon-button
+                      class="danger-icon"
+                      matTooltip="{{ m.status==='ACTIVE' ? ('forum.admin.delete' | translate) : ('forum.admin.restore' | translate) }}"
+                      (click)="toggleStatus(m)">
+                <mat-icon>{{ m.status==='ACTIVE' ? 'delete' : 'restore_from_trash' }}</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <p class="message-content whitespace-pre-wrap">{{ m.content }}</p>
+        </article>
+
+        <div class="flex justify-center pt-2">
+          <button mat-stroked-button class="btn-ghost" (click)="loadMore()" *ngIf="hasMore()">
+            {{ 'forum.loadMore' | translate }}
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-template #noData>
+        <p class="text-center opacity-70 py-8">{{ 'forum.empty' | translate }}</p>
+      </ng-template>
+    </div>
+  </div>
+</section>

@@ -103,13 +103,20 @@ export const routes: Routes = [
           import('./features/reports/reports.routes').then(m => m.REPORTS_ROUTES)
       },
 
+
       // 🎯 Challenges
       {
         path: 'challenge',
         loadChildren: () =>
           import('./features/challenges/challenges.routes').then(m => m.challengesRoutes)
       },
-
+      // 💬 Forum communautaire
+      {
+        path: 'forum',
+        canActivate: [authGuard], // si tu veux réserver l'accès aux connectés
+        loadChildren: () =>
+          import('./features/forum/forum.routes').then(m => m.default)
+      },
       // 🔔 Notifications
       {
         path: 'notifications',
