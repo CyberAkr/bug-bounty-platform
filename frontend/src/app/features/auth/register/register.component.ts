@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '@app/core/auth/auth.service';
+import {MatCheckboxRequiredValidator} from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +17,7 @@ import { AuthService } from '@app/core/auth/auth.service';
   imports: [
     CommonModule, FormsModule, TranslateModule,
     MatFormFieldModule, MatInputModule, MatSelectModule,
-    MatButtonModule, MatIconModule, RouterLink
+    MatButtonModule, MatIconModule, RouterLink, MatCheckboxRequiredValidator
   ],
   templateUrl: './register.component.html',
 })
@@ -37,6 +38,9 @@ export class RegisterComponent {
   errorMsg = signal<string | null>(null);
   successMsg = signal<string | null>(null);
   submitAttempted = signal(false);
+
+  // acceptation légale obligatoire
+  acceptLegal = signal(false);
 
   // Helpers MDP
   private regex = new RegExp(this.PASSWORD_REGEX);
@@ -62,6 +66,7 @@ export class RegisterComponent {
     && this.passwordValid()
     && this.passwordsMatch()
     && (this.role() !== 'company' || !!this.companyNumber().trim())
+    && this.acceptLegal() // ⬅️ bloque le bouton si non accepté
   );
 
   switchRole(next: 'company'|'researcher') {
@@ -73,13 +78,17 @@ export class RegisterComponent {
     this.errorMsg.set(null);
     this.successMsg.set(null);
 
-    // Garde-front : empêche l’envoi si règles MDP non respectées
+    // Garde-front
     if (!this.passwordValid()) {
       this.errorMsg.set('auth.register.errors.password.rules');
       return;
     }
     if (!this.passwordsMatch()) {
       this.errorMsg.set('auth.register.errors.confirmPassword');
+      return;
+    }
+    if (!this.acceptLegal()) {
+      this.errorMsg.set('auth.register.errors.acceptLegal');
       return;
     }
     if (f.invalid || !this.canSubmit()) return;
@@ -92,7 +101,8 @@ export class RegisterComponent {
       username: this.username(),
       bio: this.bio(),
       preferredLanguage: this.preferredLanguage(),
-      role: this.role()
+      role: this.role(),
+      // acceptLegal: this.acceptLegal() // ⬅️ optionnel si tu veux le journaliser côté back
     };
     if (this.role() === 'company') payload.companyNumber = this.companyNumber();
 
@@ -106,14 +116,11 @@ export class RegisterComponent {
       error: (err) => {
         this.loading.set(false);
 
-        // Si le back renvoie un 400 avec un message de validation
         if (err?.status === 400 && (err?.error?.message || err?.error?.errors)) {
-          // errors = tableau des violations Bean Validation
           const first = Array.isArray(err.error.errors) ? err.error.errors[0] : null;
           this.errorMsg.set(first?.message || err.error.message || 'auth.register.error');
           return;
         }
-
         if (err?.status === 409) {
           this.errorMsg.set(err?.error?.message || 'auth.register.emailInUse');
           return;

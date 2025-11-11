@@ -162,6 +162,39 @@
         </ng-container>
       </div>
 
+      <!-- Acceptation légale obligatoire -->
+      <div class="space-y-2">
+        <mat-checkbox
+          [ngModel]="acceptLegal()"
+          (ngModelChange)="acceptLegal.set($event)"
+          name="acceptLegal"
+          required
+        >
+          <span class="text-sm">
+            {{ 'auth.register.accept.termsPrefix' | translate }}
+            <a
+              [href]="'assets/legal/terms-' + preferredLanguage() + '.html'"
+              target="_blank" rel="noopener"
+              class="text-[var(--accent)] hover:underline"
+            >
+              {{ 'auth.register.links.terms' | translate }}
+            </a>
+            {{ 'auth.register.accept.and' | translate }}
+            <a
+              [href]="'assets/legal/privacy-' + preferredLanguage() + '.html'"
+              target="_blank" rel="noopener"
+              class="text-[var(--accent)] hover:underline"
+            >
+              {{ 'auth.register.links.privacy' | translate }}
+            </a>.
+          </span>
+        </mat-checkbox>
+
+        <p class="error-text" *ngIf="submitAttempted() && !acceptLegal()">
+          {{ 'auth.register.errors.acceptLegal' | translate }}
+        </p>
+      </div>
+
       <!-- feedback -->
       <p class="error-text text-center" *ngIf="errorMsg()">{{ errorMsg() | translate }}</p>
       <p class="text-green-600 text-center text-sm" *ngIf="successMsg()">{{ successMsg() | translate }}</p>

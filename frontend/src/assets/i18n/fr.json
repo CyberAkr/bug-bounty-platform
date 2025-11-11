@@ -50,6 +50,7 @@
       "subtitle": "Rejoignez la plateforme bug bounty citoyenne.",
       "asResearcher": "Chercheur",
       "asCompany": "Entreprise",
+
       "firstName": "Prénom",
       "lastName": "Nom",
       "email": "Adresse e-mail",
@@ -59,6 +60,7 @@
       "lang": "Langue préférée",
       "bio": "Biographie (optionnel)",
       "companyNumber": "Numéro d’entreprise",
+
       "already": "Vous avez déjà un compte ?",
       "signIn": "Se connecter",
       "submit": "Créer le compte",
@@ -67,6 +69,15 @@
       "savedButEmailIssue": "Compte créé, mais l’e-mail de vérification n’a pas pu être envoyé. Vous pouvez tout de même vérifier plus tard.",
       "emailInUse": "Cet e-mail est déjà utilisé.",
       "error": "Une erreur est survenue. Réessayez.",
+
+      "accept": {
+        "termsPrefix": "En créant un compte, j’accepte les",
+        "and": "et la"
+      },
+      "links": {
+        "terms": "Conditions d’utilisation",
+        "privacy": "Politique de confidentialité"
+      },
 
       "passwordRules": {
         "hint": "Minimum 8 caractères avec au moins 1 minuscule, 1 majuscule, 1 chiffre et 1 symbole.",
@@ -88,9 +99,11 @@
           "required": "Le mot de passe est requis.",
           "rules": "Le mot de passe ne respecte pas les règles de sécurité."
         },
-        "confirmPassword": "Les mots de passe ne correspondent pas."
+        "confirmPassword": "Les mots de passe ne correspondent pas.",
+        "acceptLegal": "Veuillez accepter les Conditions d’utilisation et la Politique de confidentialité."
       }
     }
+
   },
 
   "verify": {

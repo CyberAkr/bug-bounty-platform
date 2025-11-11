@@ -13,5 +13,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
 
     org.springframework.data.domain.Page<User> findByRole(String role, org.springframework.data.domain.Pageable pageable);
-    List<User> findTop10ByRoleOrderByPointDesc(String role);
+    java.util.List<User> findTop10ByRoleOrderByPointDesc(String role);
+
+    long countByRoleIgnoreCaseAndPointGreaterThan(String role, int point);
+
+    // ✅ nouveaux fallbacks insensibles à la casse
+    Optional<User> findByUsernameIgnoreCase(String username);
+    Optional<User> findByEmailIgnoreCase(String email);
 }

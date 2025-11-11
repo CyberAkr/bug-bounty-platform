@@ -68,6 +68,13 @@
       "savedButEmailIssue": "Account created, but we couldn’t send the verification email. You can verify later.",
       "emailInUse": "This email is already in use.",
       "error": "Something went wrong. Please try again.",
+      "accept": {
+        "termsPrefix": "By creating an account, I accept the",
+        "and": "and the"
+      }, "links": {
+        "terms": "Terms of Service",
+        "privacy": "Privacy Policy"
+      },
 
       "passwordRules": {
         "hint": "At least 8 chars with 1 lowercase, 1 uppercase, 1 digit and 1 symbol.",
@@ -80,6 +87,8 @@
       },
 
       "errors": {
+        "acceptLegal": "Please accept the Terms of Service and the Privacy Policy.",
+
         "firstName": "First name is required.",
         "lastName": "Last name is required.",
         "email": "Please enter a valid email.",

@@ -1,5 +1,6 @@
 package be.bugbounty.backend.controller;
 
+import be.bugbounty.backend.dto.user.UserRankDTO;
 import be.bugbounty.backend.dto.user.UserRankingDTO;
 import be.bugbounty.backend.model.User;
 import be.bugbounty.backend.repository.UserRepository;
@@ -20,7 +21,6 @@ public class RankingController {
 
     private final UserRepository userRepository;
 
-    // on garde la "taille désirée" par client pour le SSE
     private static class Client {
         final SseEmitter emitter;
         final int size;
@@ -31,10 +31,32 @@ public class RankingController {
     }
     private final CopyOnWriteArrayList<Client> clients = new CopyOnWriteArrayList<>();
 
-    /**
-     * GET /api/rankings?page=0&size=50&role=researcher
-     * Tri descendant par points, taille bornée [1..200]
-     */
+    @GetMapping("/rank")
+    public UserRankDTO getRankForUser(
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String email,
+            @RequestParam(defaultValue = "researcher") String role
+    ) {
+        if (userId == null && (username == null || username.isBlank()) && (email == null || email.isBlank())) {
+            throw new IllegalArgumentException("userId or username or email is required");
+        }
+
+        User u = (userId != null)
+                ? userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId))
+                : (username != null && !username.isBlank()
+                ? userRepository.findByUsernameIgnoreCase(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + username))
+                : userRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + email)));
+
+        long ahead = userRepository.countByRoleIgnoreCaseAndPointGreaterThan(role, u.getPoint());
+        int rank = (int) ahead + 1;
+
+        return new UserRankDTO(u.getUserId(), u.getUsername(), u.getPoint(), rank, u.getProfilePhoto());
+    }
+    /** GET /api/rankings?page=0&size=50&role=researcher */
     @GetMapping
     public List<UserRankingDTO> getTopResearchers(
             @RequestParam(defaultValue = "0") int page,
@@ -50,10 +72,7 @@ public class RankingController {
                 .toList();
     }
 
-    /**
-     * SSE initial + mises à jour
-     * GET /api/rankings/stream?size=50&role=researcher
-     */
+    /** SSE initial + mises à jour */
     @GetMapping(path = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter stream(
             @RequestParam(defaultValue = "50") int size,
@@ -72,7 +91,7 @@ public class RankingController {
         return emitter;
     }
 
-    /** À appeler quand le classement change (ex: points modifiés) */
+    /** À appeler quand le classement change */
     public void broadcastRanking() {
         clients.forEach(c -> {
             try {
@@ -86,10 +105,7 @@ public class RankingController {
     }
 
     // ===== Helpers =====
-
-    private int clamp(int v, int min, int max) {
-        return Math.max(min, Math.min(max, v));
-    }
+    private int clamp(int v, int min, int max) { return Math.max(min, Math.min(max, v)); }
 
     private UserRankingDTO toRankingDTO(User u) {
         return new UserRankingDTO(u.getUserId(), u.getUsername(), u.getPoint(), u.getProfilePhoto());

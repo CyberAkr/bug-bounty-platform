@@ -59,6 +59,8 @@ public class SecurityConfig {
 
                         // Classement + SSE (public)
                         .requestMatchers(HttpMethod.GET, "/api/rankings", "/api/rankings/stream").permitAll()
+                        // 👇 CHANGEMENT: rendre public le calcul de rang utilisateur
+                        .requestMatchers(HttpMethod.GET, "/api/rankings/rank").permitAll()
 
                         // Profils publics + badges (lecture publique)
                         .requestMatchers(HttpMethod.GET, "/api/users/*/public").permitAll()
