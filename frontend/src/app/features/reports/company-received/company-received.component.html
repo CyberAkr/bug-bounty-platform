@@ -1,31 +1,60 @@
-<div class="reports-wrapper">
-  <div class="reports-card reports-card--tall">
-    <header class="reports-head">
-      <h2 class="reports-title">{{ 'reports.received.title' | translate }}</h2>
-      <button mat-icon-button class="btn-ghost" (click)="refresh()" [attr.aria-label]="'reports.actions.refresh' | translate">
+<section class="auth-wrapper">
+  <mat-card class="auth-card reports-card">
+    <header class="flex items-center justify-between gap-4 border-b pb-3">
+      <h2 class="reports-title m-0 text-xl font-semibold">
+        {{ 'reports.received.title' | translate }}
+      </h2>
+
+      <button
+        mat-icon-button
+        class="btn-ghost"
+        (click)="refresh()"
+        [attr.aria-label]="'reports.actions.refresh' | translate">
         <mat-icon>refresh</mat-icon>
       </button>
     </header>
 
+    <!-- Toolbar: search / sort / page size / paginator -->
+    <app-list-controls
+      class="mt-4"
+      [total]="totalSig()"
+      [pageIndex]="pageIndexSig()"
+      [pageSize]="pageSizeSig()"
+      [query]="querySig()"
+      [sort]="sortSig()"
+      [pageSizeOptions]="pageSizeOptions"
+      [sortOptionsInput]="sortOptions"
+      (change)="onControlsChange($event)">
+    </app-list-controls>
+
+    <!-- Loading -->
     <div class="reports-state" *ngIf="loading()">
       <mat-progress-spinner mode="indeterminate" diameter="28"></mat-progress-spinner>
       <span>{{ 'common.loading' | translate }}</span>
     </div>
 
+    <!-- Error -->
     <div class="reports-error" *ngIf="!loading() && error()">
       <mat-icon>error_outline</mat-icon>
       <span>{{ error() }}</span>
     </div>
 
-    <div class="reports-empty" *ngIf="!loading() && !error() && reports().length === 0">
+    <!-- Empty -->
+    <div class="reports-empty" *ngIf="!loading() && !error() && totalSig() === 0">
       {{ 'reports.received.empty' | translate }}
     </div>
 
-    <mat-nav-list *ngIf="!loading() && !error() && reports().length > 0" class="reports-list">
-      <a mat-list-item *ngFor="let r of reports(); trackBy: trackById" class="reports-item" (click)="$event.preventDefault()">
+    <!-- Grid paginée -->
+    <div *ngIf="!loading() && !error() && totalSig() > 0"
+         class="grid gap-4 md:grid-cols-2 xl:grid-cols-2 reports-grid">
+      <mat-card
+        class="report-item"
+        *ngFor="let r of pagedReports(); trackBy: trackById">
         <div class="item-top">
           <div class="item-title">{{ r.title }}</div>
-          <span class="item-status" [style.borderColor]="(r.status | statusColor)" [style.color]="(r.status | statusColor)">
+          <span class="status-chip"
+                [style.borderColor]="(r.status | statusColor)"
+                [style.color]="(r.status | statusColor)">
             {{ r.status }}
           </span>
         </div>
@@ -35,14 +64,17 @@
             <span class="meta-label">{{ 'reports.labels.program' | translate }}</span>
             <span class="meta-value">{{ r.programTitle }}</span>
           </div>
+
           <div class="meta-row" *ngIf="r.severity">
             <span class="meta-label">{{ 'reports.labels.severity' | translate }}</span>
             <span class="meta-value font-semibold">{{ r.severity }}</span>
           </div>
+
           <div class="meta-row">
             <span class="meta-label">{{ 'reports.labels.receivedAt' | translate }}</span>
             <span class="meta-value">{{ r.submittedAt | dateFormat }}</span>
           </div>
+
           <div class="meta-row" *ngIf="r.researcher">
             <span class="meta-label">{{ 'reports.labels.researcher' | translate }}</span>
             <span class="meta-value">{{ r.researcher }}</span>
@@ -50,15 +82,16 @@
         </div>
 
         <div class="item-actions">
-          <button mat-stroked-button
-                  class="btn-wide"
-                  [disabled]="r.status !== 'APPROVED'"
-                  (click)="download(r)">
+          <button
+            mat-stroked-button
+            class="btn-primary btn-wide"
+            [disabled]="r.status !== 'APPROVED'"
+            (click)="download(r)">
             <mat-icon>download</mat-icon>
             <span>{{ 'reports.actions.download' | translate }}</span>
           </button>
         </div>
-      </a>
-    </mat-nav-list>
-  </div>
-</div>
+      </mat-card>
+    </div>
+  </mat-card>
+</section>
