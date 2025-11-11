@@ -13,8 +13,10 @@
     "ranking": "Classement",
     "notifications": "Notifications",
     "logout": "Déconnexion",
-    "langFr": "🇫🇷 FR",
-    "langEn": "🇬🇧 EN"
+    "langFr": " FR",
+    "langEn": " EN",
+    "forum": "Forum "
+
   },
 
   "footer": {

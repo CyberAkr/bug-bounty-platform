@@ -7,8 +7,6 @@
         {{ 'navbar.title' | translate }}
       </a>
 
-
-
       <!-- NAVIGATION DESKTOP -->
       <nav class="hidden md:flex items-center gap-4 font-medium">
         <!-- ✅ Accueil -> dashboard -->
@@ -19,18 +17,28 @@
         <a routerLink="/classement" *ngIf="isLoggedIn()" class="link-accent">
           {{ 'navbar.ranking' | translate }}
         </a>
+
         <a routerLink="/programs" *ngIf="isLoggedIn()" class="link-accent">
           {{ 'navbar.programs' | translate }}
         </a>
+
+        <!-- 💬 Forum communautaire -->
+        <a routerLink="/forum" *ngIf="isLoggedIn()" class="link-accent">
+          {{ 'navbar.forum' | translate }}
+        </a>
+
         <a routerLink="/challenge/semaine" *ngIf="isLoggedIn()" class="link-accent">
           {{ 'navbar.challenge' | translate }}
         </a>
+
         <a routerLink="/company" *ngIf="isLoggedIn() && isCompany()" class="link-accent">
           {{ 'navbar.companySpace' | translate }}
         </a>
+
         <a routerLink="/admin" *ngIf="isLoggedIn() && isAdmin()" class="link-accent">
           {{ 'navbar.admin' | translate }}
         </a>
+
         <a routerLink="/profile" *ngIf="isLoggedIn()" class="link-accent">
           {{ 'navbar.profile' | translate }}
         </a>
@@ -75,6 +83,12 @@
       <a routerLink="/programs" *ngIf="isLoggedIn()" (click)="closeMobile()" class="link-accent py-2">
         {{ 'navbar.programs' | translate }}
       </a>
+
+      <!-- 💬 Forum -->
+      <a routerLink="/forum" *ngIf="isLoggedIn()" (click)="closeMobile()" class="link-accent py-2">
+        {{ 'navbar.forum' | translate }}
+      </a>
+
       <a routerLink="/challenge/semaine" *ngIf="isLoggedIn()" (click)="closeMobile()" class="link-accent py-2">
         {{ 'navbar.challenge' | translate }}
       </a>
@@ -82,6 +96,7 @@
       <a routerLink="/company" *ngIf="isLoggedIn() && isCompany()" (click)="closeMobile()" class="link-accent py-2">
         {{ 'navbar.companySpace' | translate }}
       </a>
+
       <a routerLink="/admin" *ngIf="isLoggedIn() && isAdmin()" (click)="closeMobile()" class="link-accent py-2">
         {{ 'navbar.admin' | translate }}
       </a>
