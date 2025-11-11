@@ -1,5 +1,7 @@
 package be.bugbounty.backend.controller;
 
+import jakarta.validation.Valid;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import be.bugbounty.backend.dto.user.RegisterRequest;
 import be.bugbounty.backend.model.LoginRequest;
 import be.bugbounty.backend.model.LoginResponse;
@@ -85,9 +87,15 @@ public class AuthController {
 
     // ========= REGISTER =========
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "Cet email est déjà utilisé"));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "auth.register.emailInUse"));
+        }
+
+        // rôle company => companyNumber requis
+        if ("company".equalsIgnoreCase(request.getRole())
+                && (request.getCompanyNumber() == null || request.getCompanyNumber().isBlank())) {
+            return ResponseEntity.badRequest().body(Map.of("message", "auth.register.errors.companyNumber"));
         }
 
         User user = new User();
@@ -116,12 +124,25 @@ public class AuthController {
         boolean emailSent = sendVerificationEmail(user.getEmail(), code);
 
         return ResponseEntity.accepted().body(Map.of(
-                "message", "Utilisateur enregistré. Vérifiez votre e-mail.",
+                "message", "auth.register.success",
                 "email", user.getEmail(),
                 "expiresAt", user.getEmailVerificationExpires().toString(),
                 "emailSent", emailSent
         ));
     }
+
+    // Centralise les erreurs de Bean Validation -> 400 { errors: [ {field, message} ] }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleValidation(MethodArgumentNotValidException ex) {
+        var errors = ex.getBindingResult().getFieldErrors().stream()
+                .map(fe -> Map.of(
+                        "field", fe.getField(),
+                        "message", fe.getDefaultMessage() // ex: "auth.register.errors.password.rules"
+                ))
+                .toList();
+        return ResponseEntity.badRequest().body(Map.of("errors", errors));
+    }
+
 
     // ========= VERIFY EMAIL =========
     @PostMapping("/verify-email")

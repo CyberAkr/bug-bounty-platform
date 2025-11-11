@@ -28,7 +28,7 @@
       </button>
     </div>
 
-    <form #f="ngForm" (ngSubmit)="register(f)" class="space-y-6 mt-4">
+    <form #f="ngForm" (ngSubmit)="register(f)" class="space-y-6 mt-4" novalidate>
       <!-- grille 2 colonnes -->
       <div class="form-grid">
         <!-- first / last name -->
@@ -36,12 +36,18 @@
           <mat-label>{{ 'auth.register.firstName' | translate }}</mat-label>
           <input matInput name="firstName" required
                  [ngModel]="firstName()" (ngModelChange)="firstName.set($event)" />
+          <mat-error *ngIf="submitAttempted() && !firstName().trim()">
+            {{ 'auth.register.errors.firstName' | translate }}
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="w-full">
           <mat-label>{{ 'auth.register.lastName' | translate }}</mat-label>
           <input matInput name="lastName" required
                  [ngModel]="lastName()" (ngModelChange)="lastName.set($event)" />
+          <mat-error *ngIf="submitAttempted() && !lastName().trim()">
+            {{ 'auth.register.errors.lastName' | translate }}
+          </mat-error>
         </mat-form-field>
 
         <!-- email -->
@@ -49,7 +55,10 @@
           <mat-label>{{ 'auth.register.email' | translate }}</mat-label>
           <mat-icon matPrefix>mail</mat-icon>
           <input matInput type="email" name="email" required email autocomplete="email"
-                 [ngModel]="email()" (ngModelChange)="email.set($event)" />
+                 [ngModel]="email()" (ngModelChange)="email.set($event)" #emailModel="ngModel" />
+          <mat-error *ngIf="submitAttempted() && (emailModel.invalid || !email().trim())">
+            {{ 'auth.register.errors.email' | translate }}
+          </mat-error>
         </mat-form-field>
 
         <!-- username -->
@@ -58,15 +67,68 @@
           <mat-icon matPrefix>account_circle</mat-icon>
           <input matInput name="username" required
                  [ngModel]="username()" (ngModelChange)="username.set($event)" />
+          <mat-error *ngIf="submitAttempted() && !username().trim()">
+            {{ 'auth.register.errors.username' | translate }}
+          </mat-error>
         </mat-form-field>
 
         <!-- password -->
         <mat-form-field appearance="fill" class="w-full md:col-span-1">
           <mat-label>{{ 'auth.register.password' | translate }}</mat-label>
           <mat-icon matPrefix>lock</mat-icon>
-          <input matInput type="password" name="password" required minlength="6" autocomplete="new-password"
-                 [ngModel]="password()" (ngModelChange)="password.set($event)" />
+          <input
+            matInput
+            type="password"
+            name="password"
+            required
+            [attr.minlength]="8"
+            [attr.pattern]="PASSWORD_REGEX"
+            autocomplete="new-password"
+            [ngModel]="password()"
+            (ngModelChange)="onPasswordInput($event)"
+            #pwdModel="ngModel"
+          />
+          <mat-hint>
+            {{ 'auth.register.passwordRules.hint' | translate }}
+          </mat-hint>
+          <mat-error *ngIf="submitAttempted() && pwdModel.errors?.['required']">
+            {{ 'auth.register.errors.password.required' | translate }}
+          </mat-error>
+          <mat-error *ngIf="submitAttempted() && (pwdModel.errors?.['minlength'] || pwdModel.errors?.['pattern'])">
+            {{ 'auth.register.errors.password.rules' | translate }}
+          </mat-error>
         </mat-form-field>
+
+        <!-- confirm password -->
+        <mat-form-field appearance="fill" class="w-full md:col-span-1">
+          <mat-label>{{ 'auth.register.confirmPassword' | translate }}</mat-label>
+          <mat-icon matPrefix>verified_user</mat-icon>
+          <input
+            matInput
+            type="password"
+            name="confirmPassword"
+            required
+            autocomplete="new-password"
+            [ngModel]="confirmPassword()"
+            (ngModelChange)="confirmPassword.set($event)"
+            #confirmModel="ngModel"
+          />
+          <mat-error *ngIf="submitAttempted() && (!confirmPassword().trim() || !passwordsMatch())">
+            {{ 'auth.register.errors.confirmPassword' | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- visual feedback chips -->
+        <div class="md:col-span-2">
+          <div class="pw-rules">
+            <span class="pw-chip" [class.pw-chip--ok]="hasMinLength()">{{ 'auth.register.passwordRules.min' | translate }}</span>
+            <span class="pw-chip" [class.pw-chip--ok]="hasLower()">{{ 'auth.register.passwordRules.lower' | translate }}</span>
+            <span class="pw-chip" [class.pw-chip--ok]="hasUpper()">{{ 'auth.register.passwordRules.upper' | translate }}</span>
+            <span class="pw-chip" [class.pw-chip--ok]="hasDigit()">{{ 'auth.register.passwordRules.digit' | translate }}</span>
+            <span class="pw-chip" [class.pw-chip--ok]="hasSpecial()">{{ 'auth.register.passwordRules.special' | translate }}</span>
+            <span class="pw-chip" [class.pw-chip--ok]="passwordsMatch()">{{ 'auth.register.passwordRules.match' | translate }}</span>
+          </div>
+        </div>
 
         <!-- language -->
         <mat-form-field appearance="fill" class="w-full md:col-span-1">
@@ -93,6 +155,9 @@
             <mat-icon matPrefix>badge</mat-icon>
             <input matInput name="companyNumber" required
                    [ngModel]="companyNumber()" (ngModelChange)="companyNumber.set($event)" />
+            <mat-error *ngIf="submitAttempted() && role() === 'company' && !companyNumber().trim()">
+              {{ 'auth.register.errors.companyNumber' | translate }}
+            </mat-error>
           </mat-form-field>
         </ng-container>
       </div>
@@ -102,12 +167,12 @@
       <p class="text-green-600 text-center text-sm" *ngIf="successMsg()">{{ successMsg() | translate }}</p>
 
       <div class="form-actions">
-  <span class="text-sm">
-    {{ 'auth.register.already' | translate }}
-    <a [routerLink]="'/login'" class="text-[var(--accent)] font-medium hover:underline">
-      {{ 'auth.register.signIn' | translate }}
-    </a>
-  </span>
+        <span class="text-sm">
+          {{ 'auth.register.already' | translate }}
+          <a [routerLink]="'/login'" class="text-[var(--accent)] font-medium hover:underline">
+            {{ 'auth.register.signIn' | translate }}
+          </a>
+        </span>
 
         <button
           mat-flat-button color="primary"
@@ -118,9 +183,6 @@
           {{ loading() ? ('auth.register.loading' | translate) : ('auth.register.submit' | translate) }}
         </button>
       </div>
-
-
-
     </form>
   </div>
 </div>

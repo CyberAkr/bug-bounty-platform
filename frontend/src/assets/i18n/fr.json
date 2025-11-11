@@ -47,26 +47,49 @@
     },
     "register": {
       "title": "Créer un compte",
-      "subtitle": "Choisissez votre profil et complétez vos informations",
-      "asResearcher": "Je suis un chercheur",
-      "asCompany": "Je suis une entreprise",
+      "subtitle": "Rejoignez la plateforme bug bounty citoyenne.",
+      "asResearcher": "Chercheur",
+      "asCompany": "Entreprise",
       "firstName": "Prénom",
       "lastName": "Nom",
       "email": "Adresse e-mail",
-      "password": "Mot de passe",
       "username": "Nom d’utilisateur",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
       "lang": "Langue préférée",
-      "bio": "Bio",
+      "bio": "Biographie (optionnel)",
       "companyNumber": "Numéro d’entreprise",
-      "submit": "S’inscrire",
-      "loading": "Inscription…",
-      "haveAccount": "Déjà un compte ? Connectez-vous",
-      "success": "Inscription réussie ! Vérifiez votre e-mail.",
+      "already": "Vous avez déjà un compte ?",
+      "signIn": "Se connecter",
+      "submit": "Créer le compte",
+      "loading": "Création…",
+      "success": "Compte créé. Vérifiez votre e-mail pour confirmer.",
+      "savedButEmailIssue": "Compte créé, mais l’e-mail de vérification n’a pas pu être envoyé. Vous pouvez tout de même vérifier plus tard.",
       "emailInUse": "Cet e-mail est déjà utilisé.",
-      "savedButEmailIssue": "Inscription enregistrée. Problème d’e-mail : entrez le code ou renvoyez-le.",
-      "error": "Erreur lors de l’inscription.",
-      "already": "Déjà inscrit ?",
-      "signIn": "Se connecter"
+      "error": "Une erreur est survenue. Réessayez.",
+
+      "passwordRules": {
+        "hint": "Minimum 8 caractères avec au moins 1 minuscule, 1 majuscule, 1 chiffre et 1 symbole.",
+        "min": "≥ 8 caractères",
+        "lower": "1 minuscule",
+        "upper": "1 majuscule",
+        "digit": "1 chiffre",
+        "special": "1 symbole",
+        "match": "Correspondance"
+      },
+
+      "errors": {
+        "firstName": "Le prénom est requis.",
+        "lastName": "Le nom est requis.",
+        "email": "Veuillez saisir un e-mail valide.",
+        "username": "Le nom d’utilisateur est requis.",
+        "companyNumber": "Le numéro d’entreprise est requis.",
+        "password": {
+          "required": "Le mot de passe est requis.",
+          "rules": "Le mot de passe ne respecte pas les règles de sécurité."
+        },
+        "confirmPassword": "Les mots de passe ne correspondent pas."
+      }
     }
   },
 

@@ -45,28 +45,52 @@
     "errors": {
       "invalid": "Invalid credentials."
     },
+
     "register": {
       "title": "Create an account",
-      "subtitle": "Choose your profile and fill in your details",
-      "asResearcher": "I am a researcher",
-      "asCompany": "I am a company",
+      "subtitle": "Join the citizen bug bounty platform.",
+      "asResearcher": "Researcher",
+      "asCompany": "Company",
       "firstName": "First name",
       "lastName": "Last name",
       "email": "Email address",
-      "password": "Password",
       "username": "Username",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
       "lang": "Preferred language",
-      "bio": "Bio",
+      "bio": "Bio (optional)",
       "companyNumber": "Company number",
-      "submit": "Sign up",
-      "loading": "Signing up…",
-      "haveAccount": "Already have an account? Sign in",
-      "success": "Registration successful! Check your email.",
+      "already": "Already have an account?",
+      "signIn": "Sign in",
+      "submit": "Create account",
+      "loading": "Creating...",
+      "success": "Account created. Please check your email to verify.",
+      "savedButEmailIssue": "Account created, but we couldn’t send the verification email. You can verify later.",
       "emailInUse": "This email is already in use.",
-      "savedButEmailIssue": "Registration saved. Email issue: enter the code or resend it.",
-      "error": "Error during registration.",
-      "already": "Already registered?",
-      "signIn": "Sign in"
+      "error": "Something went wrong. Please try again.",
+
+      "passwordRules": {
+        "hint": "At least 8 chars with 1 lowercase, 1 uppercase, 1 digit and 1 symbol.",
+        "min": "≥ 8 characters",
+        "lower": "1 lowercase",
+        "upper": "1 uppercase",
+        "digit": "1 digit",
+        "special": "1 symbol",
+        "match": "Match"
+      },
+
+      "errors": {
+        "firstName": "First name is required.",
+        "lastName": "Last name is required.",
+        "email": "Please enter a valid email.",
+        "username": "Username is required.",
+        "companyNumber": "Company number is required.",
+        "password": {
+          "required": "Password is required.",
+          "rules": "Password does not meet security requirements."
+        },
+        "confirmPassword": "Passwords do not match."
+      }
     }
   },
 

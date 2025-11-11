@@ -1,15 +1,13 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import {Router, RouterLink} from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule }      from '@angular/material/input';
-import { MatSelectModule }     from '@angular/material/select';
-import { MatButtonModule }     from '@angular/material/button';
-import { MatIconModule }       from '@angular/material/icon';
-
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '@app/core/auth/auth.service';
 
 @Component({
@@ -26,9 +24,12 @@ export class RegisterComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
 
+  // Règle MDP : min 8, 1 minuscule, 1 majuscule, 1 chiffre, 1 spécial
+  readonly PASSWORD_REGEX = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,}$';
+
   // état
   role = signal<'company' | 'researcher'>('researcher');
-  email = signal(''); password = signal('');
+  email = signal(''); password = signal(''); confirmPassword = signal('');
   firstName = signal(''); lastName = signal('');
   username = signal(''); preferredLanguage = signal<'fr'|'en'>('fr');
   bio = signal(''); companyNumber = signal('');
@@ -37,6 +38,20 @@ export class RegisterComponent {
   successMsg = signal<string | null>(null);
   submitAttempted = signal(false);
 
+  // Helpers MDP
+  private regex = new RegExp(this.PASSWORD_REGEX);
+  hasMinLength = () => this.password().length >= 8;
+  hasLower    = () => /[a-z]/.test(this.password());
+  hasUpper    = () => /[A-Z]/.test(this.password());
+  hasDigit    = () => /\d/.test(this.password());
+  hasSpecial  = () => /[^A-Za-z0-9]/.test(this.password());
+  passwordsMatch = () => !!this.confirmPassword().length && this.password() === this.confirmPassword();
+  passwordValid  = () => this.regex.test(this.password());
+
+  onPasswordInput(value: string) {
+    this.password.set(value);
+  }
+
   canSubmit = computed(() =>
     !this.loading()
     && !!this.email().trim()
@@ -44,6 +59,8 @@ export class RegisterComponent {
     && !!this.firstName().trim()
     && !!this.lastName().trim()
     && !!this.username().trim()
+    && this.passwordValid()
+    && this.passwordsMatch()
     && (this.role() !== 'company' || !!this.companyNumber().trim())
   );
 
@@ -55,6 +72,16 @@ export class RegisterComponent {
     this.submitAttempted.set(true);
     this.errorMsg.set(null);
     this.successMsg.set(null);
+
+    // Garde-front : empêche l’envoi si règles MDP non respectées
+    if (!this.passwordValid()) {
+      this.errorMsg.set('auth.register.errors.password.rules');
+      return;
+    }
+    if (!this.passwordsMatch()) {
+      this.errorMsg.set('auth.register.errors.confirmPassword');
+      return;
+    }
     if (f.invalid || !this.canSubmit()) return;
 
     const payload: any = {
@@ -78,6 +105,15 @@ export class RegisterComponent {
       },
       error: (err) => {
         this.loading.set(false);
+
+        // Si le back renvoie un 400 avec un message de validation
+        if (err?.status === 400 && (err?.error?.message || err?.error?.errors)) {
+          // errors = tableau des violations Bean Validation
+          const first = Array.isArray(err.error.errors) ? err.error.errors[0] : null;
+          this.errorMsg.set(first?.message || err.error.message || 'auth.register.error');
+          return;
+        }
+
         if (err?.status === 409) {
           this.errorMsg.set(err?.error?.message || 'auth.register.emailInUse');
           return;

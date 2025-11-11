@@ -928,3 +928,14 @@ html, body {
 .brand-logo {
   @apply h-14 w-auto md:h-16 object-contain;
 }
+.role-switch { @apply flex gap-2 justify-center; }
+.role-chip { @apply rounded-2xl px-3 py-1 border border-[var(--surface)] text-sm hover:opacity-90; }
+.role-chip--active { @apply bg-[var(--surface)] font-medium; }
+
+.form-grid { @apply grid gap-4 md:grid-cols-2; }
+
+.pw-rules { @apply flex flex-wrap gap-2 mt-1; }
+.pw-chip { @apply text-xs px-2 py-1 rounded-full border border-[var(--surface)] opacity-70; }
+.pw-chip--ok { @apply opacity-100 font-medium; }
+
+.auth-card { @apply bg-[var(--surface)] p-6 rounded-2xl shadow; }
