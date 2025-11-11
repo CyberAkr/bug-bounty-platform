@@ -3,10 +3,10 @@ package be.bugbounty.backend.dto.user;
 import lombok.*;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserResponseDTO {
-    private Long id;
+    private Long userId;
     private String email;
     private String firstName;
     private String lastName;
@@ -15,7 +15,7 @@ public class UserResponseDTO {
     private String bio;
     private String preferredLanguage;
     private String profilePhoto;
-
     private String companyNumber;
     private String verificationStatus;
+    private String bankAccount;
 }

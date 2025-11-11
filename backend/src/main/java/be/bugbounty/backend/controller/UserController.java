@@ -2,9 +2,11 @@ package be.bugbounty.backend.controller;
 
 import be.bugbounty.backend.dto.user.UserPublicDTO;
 import be.bugbounty.backend.dto.user.UserResponseDTO;
+import be.bugbounty.backend.dto.user.ChangePasswordRequestDTO;
 import be.bugbounty.backend.model.User;
 import be.bugbounty.backend.repository.UserRepository;
 import be.bugbounty.backend.service.FileStorageService;
+import be.bugbounty.backend.service.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,10 +23,14 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final FileStorageService fileStorageService;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository, FileStorageService fileStorageService) {
+    public UserController(UserRepository userRepository,
+                          FileStorageService fileStorageService,
+                          UserService userService) {
         this.userRepository = userRepository;
         this.fileStorageService = fileStorageService;
+        this.userService = userService;
     }
 
     // -------------------------
@@ -46,7 +52,8 @@ public class UserController {
                 user.getPreferredLanguage(),
                 user.getProfilePhoto(),
                 user.getCompanyNumber(),
-                user.getVerificationStatus() != null ? user.getVerificationStatus().name() : null
+                user.getVerificationStatus() != null ? user.getVerificationStatus().name() : null,
+                user.getBankAccount()
         );
         return ResponseEntity.ok(dto);
     }
@@ -59,6 +66,7 @@ public class UserController {
             @RequestPart("lastName") String lastName,
             @RequestPart("preferredLanguage") String preferredLanguage,
             @RequestPart("bio") String bio,
+            @RequestPart(value = "bankAccount", required = false) String bankAccount,
             @RequestPart(value = "profilePhoto", required = false) String profilePhoto,
             @RequestPart(value = "verificationDocument", required = false) MultipartFile verificationDocument
     ) {
@@ -69,11 +77,14 @@ public class UserController {
         user.setPreferredLanguage(preferredLanguage);
         user.setBio(bio);
 
+        if (bankAccount != null) {
+            user.setBankAccount(bankAccount.replaceAll("\\s+", "").toUpperCase());
+        }
+
         if (profilePhoto != null && !profilePhoto.isBlank()) {
             user.setProfilePhoto(profilePhoto);
         }
 
-        // 🔐 PDF de vérification (privé) + statut PENDING
         if ("company".equalsIgnoreCase(user.getRole()) && verificationDocument != null && !verificationDocument.isEmpty()) {
             try {
                 long maxPdfBytes = 20L * 1024 * 1024; // 20MB
@@ -89,6 +100,21 @@ public class UserController {
 
         userRepository.save(user);
         return ResponseEntity.ok(Map.of("message", "✅ Profil mis à jour"));
+    }
+
+    // 🔐 Changement de mot de passe
+    @PostMapping(value = "/me/password", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> changePassword(@AuthenticationPrincipal User user,
+                                            @RequestBody ChangePasswordRequestDTO dto) {
+        if (user == null) return ResponseEntity.status(401).body("Non authentifié");
+        try {
+            userService.changePassword(user, dto);
+            return ResponseEntity.ok(Map.of("message", "🔒 Mot de passe mis à jour"));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
+        } catch (Exception ex) {
+            return ResponseEntity.internalServerError().body(Map.of("error", "Échec du changement de mot de passe"));
+        }
     }
 
     // Upload fichier photo de profil

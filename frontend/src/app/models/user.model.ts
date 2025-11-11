@@ -1,18 +1,17 @@
 export interface UserResponse {
-  id: number;
+  userId: number;
   email: string;
   firstName: string;
   lastName: string;
   role: string;
-  username: string;
-  bio: string;
-  preferredLanguage: string;
+  username: string | null;
+  bio: string | null;
+  preferredLanguage: 'fr' | 'en';
   profilePhoto: string | null;
-
-  companyNumber: string | null;
-  verificationStatus: string;
+  companyNumber?: string | null;
+  verificationStatus?: 'PENDING' | 'APPROVED' | 'REJECTED' | null;
+  bankAccount?: string | null; //  AJOUT
 }
-
 
 export interface UserUpdateRequest {
   firstName: string;

@@ -575,7 +575,9 @@
       "lastName": "Last name",
       "email": "Email",
       "language": "Preferred language",
-      "bio": "Bio"
+      "bio": "Bio",
+      "bankAccount": "Bank account (IBAN)",
+      "bankAccountHint": "Optional. Example: BE68 5390 0754 7034."
     },
     "company": {
       "title": "Company information",
@@ -592,6 +594,14 @@
     },
     "reports": {
       "title": "My reports"
+    },
+    "security": {
+      "title": "Security – Change password",
+      "current": "Current password",
+      "new": "New password",
+      "confirm": "Confirm new password",
+      "action": "Update password",
+      "hint": "12+ characters, at least 1 lowercase, 1 uppercase and 1 digit."
     }
   },
 

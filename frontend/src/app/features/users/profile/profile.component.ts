@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -38,13 +38,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   user = signal<UserResponse | null>(null);
 
-  // Entreprise (doc de vérif)
   verificationDocument: File | null = null;
   verificationDocumentName = signal<string>('');
 
-  // Photo
   photoFile: File | null = null;
   photoPreviewUrl = signal<string | null>(null);
+
+  // 🔐 état local du formulaire password
+  showPwd = false;
+  pwd = signal<{ current: string; next: string; confirm: string }>({ current: '', next: '', confirm: '' });
 
   /** À supprimer si proxy /files configuré */
   private backendBase = 'http://localhost:8080';
@@ -55,12 +57,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void { this.revokePreview(); }
 
-  // Rôle
   isCompany(): boolean {
     return (this.user()?.role ?? '').toLowerCase() === 'company';
   }
 
-  // Update
+  toggleShowPwd(): void { this.showPwd = !this.showPwd; }
+
+  /** Normalise simplement l'IBAN: trim + uppercase */
+  normalizeIban(): void {
+    const u = this.user();
+    if (!u?.bankAccount) return;
+    const compact = u.bankAccount.replace(/\s+/g, '').toUpperCase();
+    this.user.set({ ...u, bankAccount: compact });
+  }
+
   update(): void {
     const current = this.user();
     if (!current) return;
@@ -72,6 +82,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     form.append('bio', current.bio || '');
     form.append('profilePhoto', current.profilePhoto || '');
 
+    // ✅ Envoi du champ optionnel
+    if (current.bankAccount) {
+      form.append('bankAccount', current.bankAccount);
+    }
+
     if (this.verificationDocument) {
       form.append('verificationDocument', this.verificationDocument);
     }
@@ -79,6 +94,33 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.userService.updateWithForm(form).subscribe({
       next: () => alert('Profil mis à jour'),
       error: () => alert('Erreur lors de l’enregistrement')
+    });
+  }
+
+  changePassword(): void {
+    const { current, next, confirm } = this.pwd();
+    if (!current || !next || !confirm) {
+      alert('Veuillez remplir tous les champs.');
+      return;
+    }
+    if (next !== confirm) {
+      alert('Les nouveaux mots de passe ne correspondent pas.');
+      return;
+    }
+    if (next.length < 12 || !/[a-z]/.test(next) || !/[A-Z]/.test(next) || !/\d/.test(next)) {
+      alert('Le nouveau mot de passe ne respecte pas la politique de sécurité (12+ caractères, minuscule, majuscule, chiffre).');
+      return;
+    }
+
+    this.userService.changePassword({ currentPassword: current, newPassword: next }).subscribe({
+      next: () => {
+        this.pwd.set({ current: '', next: '', confirm: '' });
+        alert('Mot de passe mis à jour');
+      },
+      error: (err: HttpErrorResponse) => {
+        const msg = (err.error && (err.error.error || err.error.message)) || err.message || 'Échec du changement de mot de passe';
+        alert(msg);
+      }
     });
   }
 
@@ -95,7 +137,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Doc vérif (PDF)
   onVerificationSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (!input?.files?.length) return;
@@ -119,7 +160,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.verificationDocumentName.set(f.name);
   }
 
-  // Photo
   onPhotoSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (!input?.files?.length) return;
@@ -148,7 +188,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Helpers image
   resolvePhotoUrl(path?: string | null): string | null {
     if (!path) return null;
     if (path.startsWith('http://') || path.startsWith('https://')) return path;

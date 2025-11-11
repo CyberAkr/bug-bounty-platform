@@ -1025,3 +1025,20 @@ html, body {
 .list-toolbar ::ng-deep .mat-mdc-paginator-page-size {
   display: none !important;
 }
+.panel { @apply bg-[var(--surface)] rounded-2xl p-5 shadow-sm; }
+.panel-title { @apply text-lg font-semibold mb-3; }
+.avatar-wrap { @apply w-20 h-20 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center; }
+.avatar-img { @apply w-full h-full object-cover; }
+.avatar-ph { @apply w-full h-full flex items-center justify-center text-gray-400; }
+.file-input { @apply block w-full text-sm; }
+.label-row { @apply flex items-center justify-between text-sm; }
+.label { @apply text-gray-500; }
+.value { @apply font-medium; }
+.chip { @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium; }
+.chip-pending { @apply bg-yellow-100; }
+.chip-rejected { @apply bg-red-100; }
+.chip-verified { @apply bg-green-100; }
+.form-grid { @apply grid grid-cols-1 md:grid-cols-2 gap-4; }
+.btn-primary { @apply bg-[var(--color-primary)] text-white rounded-xl px-4 py-2; }
+.btn-ghost { @apply border rounded-xl px-4 py-2; }
+.section-title { @apply text-xl font-semibold; }

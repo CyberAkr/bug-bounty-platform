@@ -11,4 +11,5 @@ public class UserUpdateRequestDTO {
     private String preferredLanguage;
     private String bio;
     private String profilePhoto;
+    private String bankAccount;
 }

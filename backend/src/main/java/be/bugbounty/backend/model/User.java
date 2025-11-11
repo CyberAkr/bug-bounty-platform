@@ -61,6 +61,10 @@ public class User {
 
     private LocalDateTime emailVerificationExpires;
 
+    /** IBAN / compte bancaire - optionnel */
+    @Column(name = "bank_account", length = 34)
+    private String bankAccount;
+
     public enum VerificationStatus {
         PENDING, APPROVED, REJECTED
     }

@@ -22,6 +22,11 @@ export class UserService {
     return this.http.put('/api/users/me', data);
   }
 
+  // === 🔐 Changement de mot de passe ===
+  changePassword(payload: { currentPassword: string; newPassword: string }) {
+    return this.http.post('/api/users/me/password', payload);
+  }
+
   // === 🗑️ Supprime le compte utilisateur ===
   delete(): Observable<any> {
     return this.http.delete('/api/users/me');
@@ -30,7 +35,7 @@ export class UserService {
   // === 📸 Upload d'une photo de profil ===
   uploadPhoto(photoFile: File): Observable<UploadPhotoResponse> {
     const formData = new FormData();
-    formData.append('photo', photoFile); // champ "photo" attendu par ton backend
+    formData.append('photo', photoFile);
     return this.http.post<UploadPhotoResponse>('/api/users/me/photo', formData);
   }
 

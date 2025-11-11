@@ -4,6 +4,7 @@ import be.bugbounty.backend.dto.admin.AdminUserCreateRequestDTO;
 import be.bugbounty.backend.dto.admin.AdminUserUpdateRequestDTO;
 import be.bugbounty.backend.dto.user.UserResponseDTO;
 import be.bugbounty.backend.dto.user.UserUpdateRequestDTO;
+import be.bugbounty.backend.dto.user.ChangePasswordRequestDTO;
 import be.bugbounty.backend.model.User;
 import be.bugbounty.backend.repository.UserRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -45,7 +46,8 @@ public class UserService {
                 user.getPreferredLanguage(),
                 user.getProfilePhoto(),
                 user.getCompanyNumber(),
-                user.getVerificationStatus() != null ? user.getVerificationStatus().name() : null
+                user.getVerificationStatus() != null ? user.getVerificationStatus().name() : null,
+                user.getBankAccount()
         );
     }
 
@@ -56,7 +58,37 @@ public class UserService {
         if (dto.getPreferredLanguage() != null) user.setPreferredLanguage(dto.getPreferredLanguage());
         if (dto.getBio() != null) user.setBio(dto.getBio());
         if (dto.getProfilePhoto() != null) user.setProfilePhoto(dto.getProfilePhoto());
+        if (dto.getBankAccount() != null) {
+            user.setBankAccount(normalizeIban(dto.getBankAccount()));
+        }
         userRepository.save(user);
+    }
+
+    /** 🔐 Changement de mot de passe avec vérifications de base */
+    @Transactional
+    public void changePassword(User user, ChangePasswordRequestDTO dto) {
+        if (dto == null || dto.getCurrentPassword() == null || dto.getNewPassword() == null) {
+            throw new IllegalArgumentException("Requête invalide");
+        }
+
+        // 1) Vérifier l'ancien mot de passe
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPasswordHash())) {
+            throw new IllegalArgumentException("Mot de passe actuel incorrect");
+        }
+
+        // 2) Politique minimale de complexité (ex : 12+, 1 minuscule, 1 majuscule, 1 chiffre)
+        String np = dto.getNewPassword();
+        if (np.length() < 12
+                || !np.matches(".*[a-z].*")
+                || !np.matches(".*[A-Z].*")
+                || !np.matches(".*\\d.*")) {
+            throw new IllegalArgumentException("Le nouveau mot de passe ne respecte pas la politique de sécurité");
+        }
+
+        // 3) Encoder et sauver
+        user.setPasswordHash(passwordEncoder.encode(np));
+        userRepository.save(user);
+        // (optionnel) Invalidation de sessions / refresh tokens à gérer si nécessaire
     }
 
     @Transactional
@@ -89,7 +121,7 @@ public class UserService {
         }
 
         if (dto.getBanned() != null) {
-            user.setBanned(dto.getBanned()); // ✅ fonctionne avec Lombok et le champ "banned"
+            user.setBanned(dto.getBanned());
         }
 
         if (dto.getVerificationStatus() != null) {
@@ -123,7 +155,7 @@ public class UserService {
         u.setUsername(dto.getUsername());
         u.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
         u.setRole(role);
-        u.setBanned(Boolean.TRUE.equals(dto.getBanned())); // ✅ champ cohérent
+        u.setBanned(Boolean.TRUE.equals(dto.getBanned()));
         u.setVerificationStatus(
                 dto.getVerificationStatus() != null
                         ? User.VerificationStatus.valueOf(dto.getVerificationStatus().toUpperCase())
@@ -154,5 +186,11 @@ public class UserService {
         if (!ALLOWED_ROLES.contains(roleLowercase)) {
             throw new IllegalArgumentException("Rôle invalide");
         }
+    }
+
+    /** Normalise un IBAN : retire les espaces et met en uppercase */
+    private String normalizeIban(String raw) {
+        if (raw == null) return null;
+        return raw.replaceAll("\\s+", "").toUpperCase();
     }
 }
