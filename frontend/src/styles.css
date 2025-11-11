@@ -939,3 +939,65 @@ html, body {
 .pw-chip--ok { @apply opacity-100 font-medium; }
 
 .auth-card { @apply bg-[var(--surface)] p-6 rounded-2xl shadow; }
+.btn-ghost {
+  @apply text-[var(--accent)] font-medium px-3 py-1.5 rounded-lg transition;
+  background-color: rgba(59,130,246,0.1); /* bleu clair transparent */
+}
+.btn-ghost:hover {
+  background-color: rgba(59,130,246,0.2);
+}
+/* DETAIL PROGRAMME  */
+.auth-wrapper {
+  @apply py-8 px-4 md:px-6;
+}
+
+.auth-card {
+  @apply bg-white border rounded-2xl shadow-sm mx-auto;
+}
+
+.btn-ghost {
+  @apply border rounded-xl px-3 py-2 text-sm hover:bg-[var(--surface)];
+}
+
+.status-chip {
+  @apply rounded-full px-3 py-1 text-xs font-medium;
+}
+
+/* Compact typography for program description */
+.prose {
+  line-height: 1.55;
+}
+.prose h1, .prose h2, .prose h3 {
+  @apply text-[var(--color-primary)] font-semibold mt-3 mb-2 leading-snug;
+}
+.prose h1 { @apply text-xl; }
+.prose h2 { @apply text-lg; }
+.prose h3 { @apply text-base; }
+.prose p { @apply mb-2 mt-1 text-[0.95rem] text-gray-700; }
+.prose ul, .prose ol { @apply mt-2 mb-3 pl-5; }
+.prose li { @apply mb-1; }
+.prose table {
+  @apply w-full border-collapse text-sm mb-4;
+}
+.prose th, .prose td {
+  @apply border px-3 py-2 text-left align-top;
+}
+.prose hr { @apply my-3 border-gray-200; }
+.prose code { @apply bg-gray-100 px-1 rounded; }
+.prose > *:first-child { margin-top: 0 !important; }
+
+.banner-warn {
+  @apply rounded-xl border border-yellow-300/70 bg-yellow-50 text-yellow-900 p-3;
+}
+.banner-error {
+  @apply rounded-xl border border-red-300/70 bg-red-50 text-red-700 p-3;
+}
+
+.editor-surface {
+  @apply rounded-xl border bg-white;
+  min-height: 320px;
+}
+
+.btn-ghost {
+  @apply border rounded-xl px-3 py-2 text-sm hover:bg-[var(--surface)];
+}

@@ -411,15 +411,14 @@
     },
     "detail": {
       "title": "Détails du programme",
-      "subtitle": "Consulter les informations et soumettre un rapport",
-      "back": "Retour à la liste",
+      "subtitle": "Consultez les informations et soumettez un rapport.",
+      "back": "Retour",
       "company": "Entreprise",
       "status": "Statut",
       "submitTitle": "Soumettre un rapport",
-      "publishTitle": "Publier le programme",
-      "publishDesc": "Activez votre programme en finalisant le paiement sécurisé Stripe.",
-      "publishBtn": "Publier (100 €)",
-      "notFound": "Programme introuvable."
+      "notFound": "Programme introuvable.",
+      "invalidId": "Identifiant de programme invalide.",
+      "loadError": "Erreur lors du chargement du programme."
     }
   },
 

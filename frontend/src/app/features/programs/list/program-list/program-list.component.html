@@ -35,8 +35,9 @@
           </div>
         </div>
 
-        <p class="tile-description">
-          {{ p.description || ('programs.list.noDesc' | translate) }}
+        <!-- ✅ Description courte sans balises -->
+        <p class="tile-description line-clamp-2">
+          {{ p.description | asPlainText:150:('programs.list.noDesc' | translate) }}
         </p>
 
         <div class="flex justify-between items-center mt-4">

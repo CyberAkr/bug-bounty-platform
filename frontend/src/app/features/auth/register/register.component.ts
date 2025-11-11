@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '@app/core/auth/auth.service';
 import {MatCheckboxRequiredValidator} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,7 @@ import {MatCheckboxRequiredValidator} from '@angular/material/checkbox';
   imports: [
     CommonModule, FormsModule, TranslateModule,
     MatFormFieldModule, MatInputModule, MatSelectModule,
-    MatButtonModule, MatIconModule, RouterLink, MatCheckboxRequiredValidator
+    MatButtonModule,MatCheckboxModule, MatIconModule, RouterLink, MatCheckboxRequiredValidator
   ],
   templateUrl: './register.component.html',
 })

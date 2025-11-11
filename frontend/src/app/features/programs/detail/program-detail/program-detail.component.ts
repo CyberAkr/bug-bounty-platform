@@ -1,8 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,6 +11,7 @@ import { ProgramService } from '@app/features/programs/program.service';
 import { ReportSubmitComponent } from '@app/features/reports/submit/report-submit/report-submit.component';
 import { ReportStatusComponent } from '@app/features/reports/status/report-status.component';
 import { StatusColorPipe } from '@app/shared/pipes/status-color.pipe';
+import { CleanHtmlPipe } from '@app/shared/pipes/clean-html.pipe'; // <-- NEW
 
 @Component({
   selector: 'app-program-detail',
@@ -20,19 +19,18 @@ import { StatusColorPipe } from '@app/shared/pipes/status-color.pipe';
   imports: [
     CommonModule, RouterModule, TranslateModule,
     MatProgressSpinnerModule, MatChipsModule, MatIconModule, MatButtonModule,
-    ReportSubmitComponent, ReportStatusComponent, StatusColorPipe
+    ReportSubmitComponent, ReportStatusComponent, StatusColorPipe,
+    CleanHtmlPipe // <-- NEW
   ],
   templateUrl: './program-detail.component.html'
 })
 export class ProgramDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private programService = inject(ProgramService);
-  private sanitizer = inject(DomSanitizer);
 
   program?: any;
   loading = signal(false);
   error = signal<string | null>(null);
-  private _safeDescription = signal<SafeHtml | null>(null);
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -44,10 +42,7 @@ export class ProgramDetailComponent implements OnInit {
     this.loading.set(true);
     this.programService.getOne(id).subscribe({
       next: (data) => {
-        this.program = data;
-        this._safeDescription.set(
-          this.sanitizer.bypassSecurityTrustHtml(data?.description ?? '')
-        );
+        this.program = data;    // le HTML est nettoyé dans le template via le pipe
         this.loading.set(false);
       },
       error: (err) => {
@@ -62,9 +57,5 @@ export class ProgramDetailComponent implements OnInit {
 
   getId(): number {
     return this.program?.id ?? this.program?.programId;
-  }
-
-  safeDescription(): SafeHtml {
-    return this._safeDescription() ?? '';
   }
 }

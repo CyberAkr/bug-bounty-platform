@@ -1,6 +1,5 @@
-<div class="auth-wrapper">
+<section class="auth-wrapper">
   <div class="auth-card w-full max-w-4xl">
-
     <!-- En-tête -->
     <header class="flex items-center justify-between mb-6">
       <div>
@@ -22,11 +21,13 @@
     <!-- Contenu principal -->
     <ng-template #content>
       <div *ngIf="program; else errorTpl">
-        <!-- Bulle état du rapport -->
+        <!-- Statut du rapport -->
         <app-report-status [programId]="getId()" class="mb-6 block"></app-report-status>
 
+        <!-- Titre du programme -->
         <h3 class="text-xl font-semibold mb-2">{{ program.title }}</h3>
 
+        <!-- Infos générales -->
         <div class="text-sm text-gray-500 mb-4">
           <strong>{{ 'programs.detail.company' | translate }} :</strong> {{ program.companyName }} <br />
           <strong>{{ 'programs.detail.status' | translate }} :</strong>
@@ -35,23 +36,25 @@
           </mat-chip>
         </div>
 
-        <!-- Description HTML -->
-        <div class="prose max-w-none bg-white rounded-xl p-5 border"
-             [innerHTML]="safeDescription()"></div>
+        <!-- Description (HTML rendu proprement, nettoyé) -->
+        <div
+          class="prose max-w-none bg-white rounded-xl p-5 border leading-relaxed"
+          [innerHTML]="program?.description | cleanHtml"
+        ></div>
 
-        <!-- Soumission de rapport -->
+        <!-- Bloc de soumission de rapport -->
         <section class="mt-8">
           <h4 class="text-lg font-medium mb-3">{{ 'programs.detail.submitTitle' | translate }}</h4>
           <app-report-submit [programId]="getId()"></app-report-submit>
         </section>
       </div>
 
+      <!-- Erreur de chargement -->
       <ng-template #errorTpl>
         <div class="text-center text-red-600 py-8">
           {{ error() || ('programs.detail.notFound' | translate) }}
         </div>
       </ng-template>
     </ng-template>
-
   </div>
-</div>
+</section>

@@ -409,15 +409,14 @@
     },
     "detail": {
       "title": "Program details",
-      "subtitle": "View program information and submit a report",
-      "back": "Back to list",
+      "subtitle": "View information and submit a report.",
+      "back": "Back",
       "company": "Company",
       "status": "Status",
       "submitTitle": "Submit a report",
-      "publishTitle": "Publish program",
-      "publishDesc": "Activate your program by completing the secure Stripe payment.",
-      "publishBtn": "Publish (€100)",
-      "notFound": "Program not found."
+      "notFound": "Program not found.",
+      "invalidId": "Invalid program id.",
+      "loadError": "Failed to load program."
     }
   },
 
