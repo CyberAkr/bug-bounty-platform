@@ -344,7 +344,6 @@
       }
     }
   },
-
   "ranking": {
     "title": "🏆 Researchers ranking",
     "total": "{{count}} profiles",
@@ -368,9 +367,18 @@
       "topPrograms": "Top programs",
       "bio": "Bio"
     },
+    "sort": {
+      "pointsDesc": "Points (highest first)",
+      "pointsAsc": "Points (lowest first)",
+      "nameAsc": "Name A → Z",
+      "nameDesc": "Name Z → A",
+      "recentActive": "Most recently active",
+      "oldActive": "Least recently active"
+    },
     "expand": "See details",
     "na": "N/A"
   },
+
 
   "programs": {
     "list": {
@@ -1059,5 +1067,18 @@
         }
       }
     }
+  },
+  "list": {
+    "searchLabel": "Search",
+    "searchPlaceholder": "Title, company…",
+    "sortLabel": "Sort by",
+    "pageSizeLabel": "Items per page",
+    "sort": {
+      "createdDesc": "Newest",
+      "createdAsc": "Oldest",
+      "titleAsc": "Title A → Z",
+      "titleDesc": "Title Z → A"
+    }
   }
+
 }

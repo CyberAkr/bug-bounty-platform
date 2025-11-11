@@ -1001,3 +1001,68 @@ html, body {
 .btn-ghost {
   @apply border rounded-xl px-3 py-2 text-sm hover:bg-[var(--surface)];
 }
+/* BARRE DE RECHERCHE  */
+
+@media (min-width: 768px) {
+  .list-toolbar {
+    @apply flex-row items-end justify-between;
+  }
+}
+.list-toolbar .mat-mdc-form-field {
+  @apply w-full;
+}
+.list-toolbar .mat-mdc-paginator {
+  @apply w-full border rounded-xl shadow-sm;
+  background: var(--surface);
+}
+
+/* Clamp visuel à 2 lignes (si plugin line-clamp absent) */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ----- Cartes programme (safe si déjà présentes) ----- */
+.program-tile {
+  @apply border rounded-2xl p-4 shadow-sm bg-white;
+  background: var(--surface);
+}
+
+.tile-header {
+  @apply flex items-center mb-3;
+}
+
+.tile-avatar {
+  @apply h-10 w-10 rounded-full flex items-center justify-center font-semibold uppercase border;
+  background: var(--surface);
+  color: var(--color-primary);
+}
+
+.tile-title {
+  @apply text-base font-medium;
+}
+
+.tile-subtitle {
+  @apply text-sm opacity-70;
+}
+
+.tile-description {
+  @apply text-sm mt-2;
+}
+
+/* Chip statut : laisse les couleurs au thème, juste la forme */
+.status-chip {
+  @apply rounded-full px-3 py-1 text-xs font-medium border;
+  background: var(--surface);
+}
+.list-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}

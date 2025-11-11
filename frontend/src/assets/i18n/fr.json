@@ -370,9 +370,18 @@
       "topPrograms": "Top programmes",
       "bio": "Bio"
     },
+    "sort": {
+      "pointsDesc": "Points (du plus élevé au plus bas)",
+      "pointsAsc": "Points (du plus bas au plus élevé)",
+      "nameAsc": "Nom A → Z",
+      "nameDesc": "Nom Z → A",
+      "recentActive": "Plus récemment actif",
+      "oldActive": "Moins récemment actif"
+    },
     "expand": "Voir les détails",
     "na": "N/A"
   },
+
 
   "programs": {
     "list": {
@@ -1064,5 +1073,18 @@
         }
       }
     }
+  },
+  "list": {
+    "searchLabel": "Recherche",
+    "searchPlaceholder": "Titre, entreprise…",
+    "sortLabel": "Trier par",
+    "pageSizeLabel": "Éléments par page",
+    "sort": {
+      "createdDesc": "Plus récent",
+      "createdAsc": "Plus ancien",
+      "titleAsc": "Titre A → Z",
+      "titleDesc": "Titre Z → A"
+    }
   }
+
 }

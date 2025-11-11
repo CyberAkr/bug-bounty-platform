@@ -1,0 +1,55 @@
+<div class="list-toolbar flex flex-wrap items-center justify-between gap-4">
+  <!-- 🔍 Recherche -->
+  <mat-form-field appearance="fill" class="w-full sm:w-64 md:w-72">
+    <mat-label>{{ 'list.searchLabel' | translate }}</mat-label>
+    <input
+      matInput
+      [placeholder]="'list.searchPlaceholder' | translate"
+      [value]="querySig()"
+      (input)="onSearch($any($event.target).value)"
+    />
+    <button
+      mat-icon-button
+      matSuffix
+      aria-label="clear"
+      *ngIf="querySig()"
+      (click)="onSearch('')">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <!-- ↕️ Tri -->
+  <mat-form-field appearance="fill" class="w-48">
+    <mat-label>{{ 'list.sortLabel' | translate }}</mat-label>
+    <mat-select [value]="sortSig()" (selectionChange)="onSort($event.value)">
+      <mat-select-trigger>
+        {{ labelFor(sortSig()) | translate }}
+      </mat-select-trigger>
+
+      <mat-option *ngFor="let opt of sortOptionsSig()" [value]="opt.value">
+        {{ opt.label | translate }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- 📄 Taille de page -->
+  <mat-form-field appearance="fill" class="w-40">
+    <mat-label>{{ 'list.pageSizeLabel' | translate }}</mat-label>
+    <mat-select [value]="pageSizeSig()" (selectionChange)="onPageSize($event.value)">
+      <mat-option *ngFor="let size of pageSizeOptionsSig()" [value]="size">
+        {{ size }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- 🔢 Pagination -->
+  <div class="flex-grow sm:flex sm:justify-end">
+    <mat-paginator
+      [length]="totalSig()"
+      [pageIndex]="pageIndexSig()"
+      [pageSize]="pageSizeSig()"
+      [pageSizeOptions]="pageSizeOptionsSig()"
+      (page)="onPage($event)">
+    </mat-paginator>
+  </div>
+</div>
