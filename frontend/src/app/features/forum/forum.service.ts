@@ -23,9 +23,13 @@ export type Page<T> = {
   content: T[];
   totalElements: number;
   totalPages: number;
-  number: number; // current page index
+  number: number;
   size: number;
 };
+
+export type ForumEvent =
+  | { type: 'CREATED'; payload: ForumMessage }
+  | { type: 'STATUS';  payload: { id: number; status: 'ACTIVE' | 'DELETED' } };
 
 @Injectable({ providedIn: 'root' })
 export class ForumService {
@@ -45,7 +49,21 @@ export class ForumService {
 
   // ADMIN
   adminSetStatus(id: number, status: 'ACTIVE' | 'DELETED'): Observable<void> {
-    // (corrigé) pas de double /api
     return this.http.patch<void>(`${this.base}/admin/forum/messages/${id}/status?status=${status}`, {});
+  }
+
+  // 🔔 SSE
+  connectStream(onEvent: (evt: ForumEvent) => void): () => void {
+    const es = new EventSource(`${this.base}/forum/stream`);
+    es.addEventListener('message', (e: MessageEvent) => {
+      try {
+        const parsed = JSON.parse(e.data) as ForumEvent;
+        if (parsed?.type) onEvent(parsed);
+      } catch { /* ignore */ }
+    });
+    es.addEventListener('error', () => {
+      // le navigateur tente déjà de reconnecter
+    });
+    return () => es.close();
   }
 }

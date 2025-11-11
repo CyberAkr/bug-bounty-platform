@@ -853,7 +853,67 @@ html, body {
   mat-paginator {
     @apply bg-white border-t border-gray-100;
   }
+  /* ====== Forum (compact & responsive) ====== */
 
+  /* carte principale + densité des champs */
+  .forum-card {
+    @apply rounded-2xl border shadow-sm bg-[var(--surface-2)] p-4 md:p-6;
+    max-width: 820px; /* largeur modérée */
+    border-color: rgba(2,6,23,.06);
+  }
+  .forum-card .mat-mdc-form-field-appearance-fill .mat-mdc-form-field-infix {
+    padding-block: .4rem !important; /* densité compacte */
+  }
+  .forum-card textarea.mat-mdc-input-element {
+    line-height: 1.4;
+    min-height: 72px;
+  }
+
+  /* item message */
+  .message-item {
+    @apply rounded-xl border bg-white p-3 md:p-4;
+    border-color: rgba(2,6,23,.08);
+  }
+  .message-head { @apply flex items-center justify-between gap-2; }
+
+  /* avatar petit et propre */
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 9999px; object-fit: cover; background: #e5e7eb;
+  }
+  @screen md { .avatar { width: 42px; height: 42px; } }
+
+  /* titres/meta plus discrets */
+  .username { @apply text-sm md:text-base leading-tight; }
+  .message-meta { @apply text-xs text-gray-500; }
+
+  /* contenu texte plus compact + images responsives */
+  .message-content { @apply text-sm md:text-[15px] leading-6 break-words; }
+  .message-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-top: .25rem;
+    border-radius: .5rem;
+  }
+
+  /* actions admin petites */
+  .message-actions .mat-icon {
+    font-size: 18px; width: 18px; height: 18px;
+  }
+  .danger-icon .mat-icon { @apply text-red-600; }
+
+  /* chip de rôle compacte */
+  .role-chip.mat-mdc-standard-chip {
+    --mdc-chip-container-height: 22px;
+    @apply !text-[11px] !px-2 !py-0;
+  }
+
+  /* compteur caractères discret */
+  .composer .text-xs { @apply opacity-70; }
+
+  /* container page un peu plus étroit sur cette vue */
+  .container-page { @apply max-w-4xl mx-auto px-4 py-6; }
   /* Snackbar feedback */
   ::ng-deep .mat-mdc-snack-bar-container {
     @apply rounded-lg shadow-lg !important;

@@ -53,30 +53,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .getBody();
 
             String email = claims.getSubject();
-
-            System.out.println("📨 Email extrait du token : " + email);
+            System.out.println(" Email extrait du token : " + email);
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                User user = userRepository.findByEmail(email).orElse(null);
+                // NB: avec utf8mb4_unicode_ci, la recherche email est tolérante à la casse
+                User user = userRepository.findByEmail(email.trim().toLowerCase()).orElse(null);
 
                 if (user != null) {
                     String role = user.getRole().toUpperCase();
                     String authority = "ROLE_" + role;
 
-                    System.out.println("🛡️ Rôle utilisateur en base : " + user.getRole());
-                    System.out.println("✅ Authority injectée : " + authority);
+                    System.out.println(" Rôle utilisateur en base : " + user.getRole());
+                    System.out.println(" Authority injectée : " + authority);
 
                     UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                            user,
+                            user, // principal = entité User (utilisé ensuite par ForumController)
                             null,
                             Collections.singletonList(new SimpleGrantedAuthority(authority))
                     );
                     SecurityContextHolder.getContext().setAuthentication(auth);
-                    System.out.println("✅ Utilisateur injecté dans SecurityContext : " + user.getEmail());
+                    System.out.println(" Utilisateur injecté dans SecurityContext : " + user.getEmail());
                 }
             }
         } catch (Exception e) {
-            System.out.println("❌ Token invalide ou erreur : " + e.getMessage());
+            System.out.println(" Token invalide ou erreur : " + e.getMessage());
         }
 
         filterChain.doFilter(request, response);

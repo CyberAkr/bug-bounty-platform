@@ -7,6 +7,7 @@ import be.bugbounty.backend.model.ForumMessage;
 import be.bugbounty.backend.model.User;
 import be.bugbounty.backend.repository.ForumMessageRepository;
 import be.bugbounty.backend.repository.UserRepository;
+import be.bugbounty.backend.service.ForumEventsService;
 import be.bugbounty.backend.service.ForumService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +24,22 @@ public class ForumServiceImpl implements ForumService {
 
     private final ForumMessageRepository forumRepo;
     private final UserRepository userRepo;
+    private final ForumEventsService events; // 👈
 
     @Override
     public ForumMessageViewDTO createMessage(String currentUserEmail, ForumMessageCreateRequest req) {
         String content = req.content() == null ? "" : req.content().trim();
-        if (content.isEmpty() || content.length() > 2000) {
+        if (content.isEmpty() || content.length() > 300) {
             throw new IllegalArgumentException("Invalid content");
         }
 
-        User user = userRepo.findByEmail(currentUserEmail)
-                .orElseThrow(() -> new IllegalStateException("User not found"));
+        String key = currentUserEmail == null ? "" : currentUserEmail.trim().toLowerCase();
+        User user = userRepo.findByEmail(key)
+                .or(() -> userRepo.findByUsername(key))
+                .orElseThrow(() -> new IllegalStateException("USER_NOT_FOUND"));
 
         if (user.isBanned()) {
-            throw new SecurityException("User banned");
+            throw new SecurityException("USER_BANNED");
         }
 
         ForumMessage msg = new ForumMessage();
@@ -45,7 +49,12 @@ public class ForumServiceImpl implements ForumService {
         msg.setMessageStatus(ForumMessage.MessageStatus.ACTIVE);
 
         ForumMessage saved = forumRepo.save(msg);
-        return map(saved);
+        ForumMessageViewDTO dto = map(saved);
+
+        // 🔔 push temps réel
+        events.broadcastCreated(dto);
+
+        return dto;
     }
 
     @Override
@@ -67,6 +76,9 @@ public class ForumServiceImpl implements ForumService {
         ForumMessage.MessageStatus st = ForumMessage.MessageStatus.valueOf(status.toUpperCase());
         msg.setMessageStatus(st);
         forumRepo.save(msg);
+
+        // 🔔 push temps réel
+        events.broadcastStatus(msg.getMessageId(), st.name());
     }
 
     private ForumMessageViewDTO map(ForumMessage m) {

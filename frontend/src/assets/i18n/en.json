@@ -596,7 +596,38 @@
     "reset": "Reset",
     "uploading": "Uploading..."
   },
+  "forum": {
+    "title": "Discussion space",
+    "subtitle": "Researchers, companies and admins chat here.",
+    "composer": {
+      "placeholder": "Write your message…",
+      "submit": "Post"
+    },
+    "admin": {
+      "ban": "Ban",
+      "unban": "Unban",
+      "banned": "Banned",
+      "delete": "Delete",
+      "restore": "Restore",
+      "tooLong": "Your message is too long (max 300 characters)."
 
+
+    },
+    "banned": "You have been banned and cannot post.",
+    "status": {
+      "ACTIVE": "active",
+      "DELETED": "deleted"
+    },
+
+    "loadMore": "Load more",
+    "empty": "No messages yet.",
+    "error": "An error occurred. Please try again."
+  },
+  "roles": {
+    "researcher": "Researcher",
+    "company": "Company",
+    "admin": "Administrator"
+  },
   "admin": {
     "layout": {
       "title": "Bug Bounty Platform — Admin",

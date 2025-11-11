@@ -10,15 +10,13 @@
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>{{ 'forum.composer.placeholder' | translate }}</mat-label>
         <textarea matInput rows="3"
+                  [attr.maxlength]="maxLen"
                   [ngModel]="draft()" (ngModelChange)="draft.set($event)"></textarea>
       </mat-form-field>
 
       <div class="flex items-center justify-between mt-2">
-        <span class="text-xs opacity-70">{{ draft().length }}/2000</span>
-        <button mat-flat-button color="primary"
-                class="btn-primary"
-                [disabled]="!canPost()"
-                (click)="post()">
+        <span class="text-xs opacity-70">{{ draft().length }}/{{ maxLen }}</span>
+        <button mat-flat-button color="primary" class="btn-primary" [disabled]="!canPost()" (click)="post()">
           <mat-icon class="mr-1">send</mat-icon>
           {{ 'forum.composer.submit' | translate }}
         </button>
@@ -37,7 +35,7 @@
       <ng-container *ngIf="messages().length; else noData">
         <article class="message-item" *ngFor="let m of messages(); trackBy: trackById">
           <div class="message-head">
-            <div class="flex items-center gap-2">
+            <div class="flex items-start gap-2">
               <img *ngIf="m.author.profilePhoto" [src]="m.author.profilePhoto" class="avatar" alt="" />
               <div>
                 <div class="flex items-center gap-2">
@@ -45,6 +43,9 @@
                   <mat-chip-set>
                     <mat-chip [disabled]="true" class="role-chip">
                       {{ 'roles.' + (m.author.role || 'researcher') | translate }}
+                    </mat-chip>
+                    <mat-chip [disabled]="true" *ngIf="m.author.banned">
+                      <mat-icon class="mr-1 text-xs">block</mat-icon>{{ 'forum.admin.banned' | translate }}
                     </mat-chip>
                   </mat-chip-set>
                 </div>
@@ -59,12 +60,17 @@
             </div>
 
             <!-- Actions admin -->
-            <div *ngIf="isAdmin()" class="message-actions">
-              <button mat-icon-button
-                      class="danger-icon"
+            <div *ngIf="isAdmin()" class="message-actions flex items-center gap-1">
+              <button mat-icon-button class="danger-icon"
                       matTooltip="{{ m.status==='ACTIVE' ? ('forum.admin.delete' | translate) : ('forum.admin.restore' | translate) }}"
                       (click)="toggleStatus(m)">
                 <mat-icon>{{ m.status==='ACTIVE' ? 'delete' : 'restore_from_trash' }}</mat-icon>
+              </button>
+
+              <button mat-icon-button
+                      matTooltip="{{ m.author.banned ? ('forum.admin.unban' | translate) : ('forum.admin.ban' | translate) }}"
+                      (click)="toggleBan(m.author.id, m.author.banned)">
+                <mat-icon>{{ m.author.banned ? 'how_to_reg' : 'block' }}</mat-icon>
               </button>
             </div>
           </div>

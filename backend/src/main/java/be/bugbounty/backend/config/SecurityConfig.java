@@ -64,6 +64,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/users/*/public").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users/*/badges").permitAll()
 
+                        .requestMatchers(HttpMethod.GET, "/api/forum/stream").permitAll()
+
                         // ----- PROTÉGÉ -----
                         .anyRequest().authenticated()
                 )

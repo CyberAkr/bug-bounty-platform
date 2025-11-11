@@ -596,7 +596,41 @@
     "reset": "Réinitialiser",
     "uploading": "Envoi…"
   },
+  "forum": {
+    "title": "Espace de discussion",
+    "subtitle": "Chercheurs, entreprises et administrateurs échangent ici.",
+    "composer": {
+      "placeholder": "Écrivez votre message…",
+      "submit": "Publier",
+      "admin": {
+        "ban": "Bannir",
+        "unban": "Débannir",
+        "banned": "Banni",
+        "delete": "Supprimer",
+        "restore": "Restaurer",
+        "tooLong": "Votre message est trop long (max. 300 caractères)."
 
+
+      }
+    },
+    "banned": "Vous avez été banni et ne pouvez plus publier.",
+    "status": {
+      "ACTIVE": "actif",
+      "DELETED": "supprimé"
+    },
+    "admin": {
+      "delete": "Supprimer",
+      "restore": "Restaurer"
+    },
+    "loadMore": "Charger plus",
+    "empty": "Aucun message pour l'instant.",
+    "error": "Une erreur est survenue. Réessayez."
+  },
+  "roles": {
+    "researcher": "Chercheur",
+    "company": "Entreprise",
+    "admin": "Administrateur"
+  },
   "admin": {
     "layout": {
       "title": "Bug Bounty Platform — Admin",
