@@ -109,4 +109,19 @@ export class AuthService {
     localStorage.removeItem('auth_token');
     this.tokenSig.set(null);
   }
+
+  // ======== Password reset (Option A: code 6 chiffres) ========
+  /**
+   * Demande l’envoi d’un code de réinitialisation (toujours réponse neutre côté back).
+   */
+  requestPasswordReset(email: string): Observable<any> {
+    return this.http.post<any>('/api/auth/request-password-reset', { email });
+  }
+
+  /**
+   * Valide le code + définit le nouveau mot de passe.
+   */
+  resetPassword(param: { email: string; code: string; newPassword: string }): Observable<any> {
+    return this.http.post<any>('/api/auth/reset-password', param);
+  }
 }

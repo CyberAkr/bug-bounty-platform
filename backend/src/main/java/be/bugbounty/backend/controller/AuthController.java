@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -193,7 +194,72 @@ public class AuthController {
         boolean emailSent = sendVerificationEmail(u.getEmail(), code);
         return ResponseEntity.ok(Map.of("status", "resent", "emailSent", emailSent));
     }
+// ========= PASSWORD RESET =========
 
+    @PostMapping("/request-password-reset")
+    public ResponseEntity<?> requestPasswordReset(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        if (email == null || email.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Email requis"));
+        }
+
+        // Vérifier existence + email vérifié
+        Optional<User> optional = userRepository.findByEmail(email);
+        if (optional.isPresent()) {
+            User user = optional.get();
+            if (Boolean.TRUE.equals(user.getEmailVerified())) {
+                String code = generateCode6();
+                user.setEmailVerificationCode(code);
+                user.setEmailVerificationExpires(LocalDateTime.now().plusMinutes(15));
+                userRepository.save(user);
+                sendVerificationEmail(user.getEmail(), code); // ✅ réutilise ton mail sender existant
+            }
+        }
+
+        // Toujours réponse neutre (anti user enumeration)
+        return ResponseEntity.accepted()
+                .body(Map.of("message", "Si ce compte existe, un code a été envoyé."));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String code = body.get("code");
+        String newPassword = body.get("newPassword");
+
+        if (email == null || code == null || newPassword == null) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Champs manquants"));
+        }
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+
+        if (!Boolean.TRUE.equals(user.getEmailVerified())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", "Email non vérifié"));
+        }
+
+        // Vérifie code + expiration
+        if (user.getEmailVerificationCode() == null
+                || user.getEmailVerificationExpires() == null
+                || LocalDateTime.now().isAfter(user.getEmailVerificationExpires())
+                || !user.getEmailVerificationCode().equals(code)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Code invalide ou expiré"));
+        }
+
+        // Valider format mot de passe (même regex que front si tu veux)
+        if (newPassword.length() < 8) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mot de passe trop court"));
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
+        user.setEmailVerificationCode(null);
+        user.setEmailVerificationExpires(null);
+        userRepository.save(user);
+
+        return ResponseEntity.ok(Map.of("message", "Mot de passe réinitialisé avec succès"));
+    }
     // ======= helpers =======
     private String generateCode6() {
         int n = SECURE_RANDOM.nextInt(1_000_000);

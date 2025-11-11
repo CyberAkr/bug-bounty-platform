@@ -102,8 +102,23 @@
         "confirmPassword": "Les mots de passe ne correspondent pas.",
         "acceptLegal": "Veuillez accepter les Conditions d’utilisation et la Politique de confidentialité."
       }
+    },
+    "reset": {
+      "title": "Mot de passe oublié",
+      "requestHint": "Saisissez l’adresse e-mail liée à votre compte.",
+      "requestSend": "Envoyer le code",
+      "requestLoading": "Envoi…",
+      "requestSent": "Si ce compte existe, un code a été envoyé à votre adresse.",
+      "goToCode": "J’ai reçu un code — continuer",
+      "confirmTitle": "Réinitialiser le mot de passe",
+      "confirmHint": "Entrez le code reçu et choisissez un nouveau mot de passe.",
+      "code": "Code à 6 chiffres",
+      "newPassword": "Nouveau mot de passe",
+      "submit": "Réinitialiser",
+      "loading": "Validation…",
+      "success": "Mot de passe modifié. Vous pouvez vous connecter.",
+      "invalidCode": "Code invalide ou expiré."
     }
-
   },
 
   "verify": {
@@ -116,6 +131,8 @@
     "loading": "Vérification…",
     "resent": "Code renvoyé. Vérifiez votre boîte de réception.",
     "success": "Adresse vérifiée ! Vous pouvez vous connecter.",
+    "backToLogin": "Retour à la connexion",
+
     "errors": {
       "invalidCode": "Code invalide ou expiré.",
       "resendFail": "Impossible de renvoyer le code pour le moment.",

@@ -100,6 +100,22 @@
         },
         "confirmPassword": "Passwords do not match."
       }
+    },
+    "reset": {
+      "title": "Forgot password",
+      "requestHint": "Enter the email address associated with your account.",
+      "requestSend": "Send code",
+      "requestLoading": "Sending…",
+      "requestSent": "If this account exists, a code has been sent to your address.",
+      "goToCode": "I’ve received a code — continue",
+      "confirmTitle": "Reset password",
+      "confirmHint": "Enter the code you received and choose a new password.",
+      "code": "6-digit code",
+      "newPassword": "New password",
+      "submit": "Reset",
+      "loading": "Validating…",
+      "success": "Password updated. You can sign in.",
+      "invalidCode": "Invalid or expired code."
     }
   },
 
@@ -113,6 +129,8 @@
     "loading": "Verifying…",
     "resent": "Code resent. Check your inbox.",
     "success": "Email verified! You can sign in.",
+    "backToLogin": "Back to login",
+
     "errors": {
       "invalidCode": "Invalid or expired code.",
       "resendFail": "Unable to resend the code right now.",
