@@ -304,6 +304,14 @@
       "paid": "Paid reports",
       "last": "Last active"
     },
+    "share": {
+      "title": "Share your ranking",
+      "subtitle": "Currently #{{rank}} with {{points}} points.",
+      "text": "{{username}} is ranked #{{rank}} with {{points}} points on the Sentinelle platform.",
+      "cta": "Share",
+      "linkedin": "Share on LinkedIn",
+      "aria": "Share my ranking"
+    },
     "detail": {
       "stats": "Statistics",
       "topPrograms": "Top programs",

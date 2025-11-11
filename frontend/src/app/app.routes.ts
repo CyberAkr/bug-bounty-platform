@@ -47,7 +47,7 @@ export const routes: Routes = [
       {
         path: 'classement',
         loadComponent: () =>
-          import('./features/ranking/ranking.component').then(m => m.RankingComponent)
+          import('./features/ranking/pages/ranking.component').then(m => m.RankingComponent)
       },
 
       // 👤 Profil public (via classement)

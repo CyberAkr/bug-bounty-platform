@@ -7,6 +7,13 @@
       </div>
     </header>
 
+    <!-- 🚀 Bouton de partage (données de l'utilisateur courant déduites côté TS) -->
+    <app-share-rank-button
+      [username]="currentUsername()"
+      [rank]="currentRank()"
+      [points]="currentPoints()">
+    </app-share-rank-button>
+
     <!-- Loading -->
     <div class="flex justify-center py-8" *ngIf="loading()">
       <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
@@ -67,10 +74,9 @@
             <div>
               <h4 class="extra-title">{{ 'ranking.detail.stats' | translate }}</h4>
               <ul class="extra-list">
-                <li>{{ 'ranking.col.score'    | translate }}: <b>{{ r.score }}</b></li>
-                <li>{{ 'ranking.col.earnings' | translate }}: <b>{{ r.earnings | number:'1.0-0' }} $</b></li>
-                <li>{{ 'ranking.col.paid'     | translate }}: <b>{{ r.paidReports }}</b></li>
-                <li>{{ 'ranking.col.last'     | translate }}: <b>{{ r.lastActive | date:'mediumDate' }}</b></li>
+                <li>{{ 'ranking.col.score' | translate }}: <b>{{ r.score }}</b></li>
+                <li>{{ 'ranking.col.paid'  | translate }}: <b>{{ r.paidReports }}</b></li>
+                <li>{{ 'ranking.col.last'  | translate }}: <b>{{ r.lastActive | date:'mediumDate' }}</b></li>
               </ul>
             </div>
 

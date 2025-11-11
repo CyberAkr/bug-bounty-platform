@@ -304,6 +304,14 @@
       "paid": "Rapports payés",
       "last": "Dernière activité"
     },
+    "share": {
+      "title": "Partage ton classement",
+      "subtitle": "Actuellement #{{rank}} avec {{points}} points.",
+      "text": "{{username}} est classé(e) #{{rank}} avec {{points}} points sur la plateforme Sentinelle.",
+      "cta": "Partager",
+      "linkedin": "Partager sur LinkedIn",
+      "aria": "Partager mon classement"
+    },
     "detail": {
       "stats": "Statistiques",
       "topPrograms": "Top programmes",

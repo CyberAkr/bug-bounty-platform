@@ -5,15 +5,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { RankingService } from './ranking.service';
-import { UserService } from '@app/features/users/user.service'; // <-- pour récupérer la bio publique
+import { RankingService } from '../ranking.service';
+import { UserService } from '@app/features/users/user.service';
 import { UserRanking, UserPublic } from '@app/models/user.model';
 import { forkJoin, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
+// ⚠️ chemin conforme à ta capture (share-rank-button à la racine de /ranking)
+import { ShareRankButtonComponent } from '@app/features/ranking/share-rank-button/share-rank-button.component';
+
 type Row = UserRanking & {
   score: number;
-  earnings: number;
+  earnings: number;     // gardé dans le type si utilisé ailleurs (pas affiché)
   paidReports: number;
   lastActive: string;
   profilePhoto: string | null;
@@ -24,12 +27,19 @@ type Row = UserRanking & {
 @Component({
   selector: 'app-ranking',
   standalone: true,
-  imports: [CommonModule, TranslateModule, MatProgressSpinnerModule, MatIconModule, MatButtonModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatButtonModule,
+    ShareRankButtonComponent
+  ],
   templateUrl: './ranking.component.html'
 })
 export class RankingComponent implements OnInit, OnDestroy {
   private rankingSvc = inject(RankingService);
-  private usersSvc   = inject(UserService);
+  protected usersSvc = inject(UserService);
 
   loading = signal(true);
   expandedId = signal<number | null>(null);
@@ -40,7 +50,6 @@ export class RankingComponent implements OnInit, OnDestroy {
 
   private disconnect: (() => void) | null = null;
 
-  // petit cache pour éviter de recharger la bio à chaque refresh
   private bioCache = new Map<number, string | null>();
 
   ngOnInit(): void {
@@ -49,7 +58,7 @@ export class RankingComponent implements OnInit, OnDestroy {
     // SSE live → on ré-enrichit avec les bios (en utilisant le cache)
     this.disconnect = this.rankingSvc.connectStream((list) => {
       this.enrichWithBios(list).subscribe((rows) => this._rows.set(rows));
-    });
+    }, 50, 'researcher'); // size + role
   }
 
   ngOnDestroy(): void { if (this.disconnect) this.disconnect(); }
@@ -60,7 +69,8 @@ export class RankingComponent implements OnInit, OnDestroy {
 
   private loadAll() {
     this.loading.set(true);
-    this.rankingSvc.getTopResearchers(0).pipe(
+    // aligné avec backend : page=0, size=50, role='researcher'
+    this.rankingSvc.getTopResearchers(0, 50, 'researcher').pipe(
       switchMap((list) => this.enrichWithBios(list))
     ).subscribe({
       next: (rows) => { this._rows.set(rows); this.loading.set(false); },
@@ -75,8 +85,12 @@ export class RankingComponent implements OnInit, OnDestroy {
     const requests = list.map(u => {
       const cached = this.bioCache.get(u.userId);
       if (cached !== undefined) {
-        // on retourne un "UserPublic" minimal combiné au cache
-        return of({ userId: u.userId, bio: cached, profilePhoto: (u as any).profilePhoto ?? null, username: u.username } as Partial<UserPublic>);
+        return of({
+          userId: u.userId,
+          bio: cached,
+          profilePhoto: (u as any).profilePhoto ?? null,
+          username: u.username
+        } as Partial<UserPublic>);
       }
       return this.usersSvc.getPublic(u.userId).pipe(
         map((pub) => {
@@ -102,7 +116,6 @@ export class RankingComponent implements OnInit, OnDestroy {
       null
     );
 
-    // priorité à la photo publique si disponible
     const photo =
       (pub as any)?.profilePhoto ??
       (u as any).profilePhoto ??
@@ -130,4 +143,47 @@ export class RankingComponent implements OnInit, OnDestroy {
   }
 
   trackUser = (_: number, u: Row) => u.userId;
-}
+
+  // =========================
+  // Helpers pour le bouton de partage
+  // =========================
+
+  /** Username courant (insensible à la casse) avec fallback sur le top 1 si inconnu. */
+  currentUsername(): string {
+    const svc: any = this.usersSvc as any;
+    const me =
+      (typeof svc.me === 'function' && svc.me()) ||
+      svc.currentUser ||
+      (typeof svc.current === 'function' && svc.current()) ||
+      (typeof svc.getCurrent === 'function' && svc.getCurrent()) ||
+      null;
+
+    const uname =
+      me?.username ??
+      me?.user?.username ??
+      me?.value?.username ??
+      null;
+
+    // Fallback: si pas de user connu, on prend le #1 actuel (utile quand TU ES top1 😉)
+    return (uname ?? this.rows()[0]?.username ?? 'anonymous');
+  }
+
+  /** Points de l'utilisateur courant ; fallback = points du #1 si user inconnu. */
+  currentPoints(): number {
+    const uname = this.currentUsername();
+    const row = this.rows().find(
+      r => (r.username ?? '').toLowerCase() === (uname ?? '').toLowerCase()
+    );
+    if (row) return (row.point ?? row.score ?? 0);
+    return this.rows()[0]?.point ?? this.rows()[0]?.score ?? 0 ?? 0;
+  }
+
+  /** Rang (position) ; fallback = 1 si user inconnu mais qu’on a des rows. */
+  currentRank(): number {
+    const uname = this.currentUsername();
+    const idx = this.rows().findIndex(
+      r => (r.username ?? '').toLowerCase() === (uname ?? '').toLowerCase()
+    );
+    if (idx >= 0) return idx + 1;
+    return this.rows().length ? 1 : 0;
+  }}
