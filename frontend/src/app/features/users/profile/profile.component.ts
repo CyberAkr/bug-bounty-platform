@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { UserService, UploadPhotoResponse } from '@app/features/users/user.service';
 import { UserResponse } from '@app/models/user.model';
@@ -29,12 +30,14 @@ const MAX_PDF_BYTES = 20 * 1024 * 1024; // 20MB
     MatCardModule, MatButtonModule, MatIconModule,
     MatFormFieldModule, MatInputModule, MatSelectModule,
     MatDividerModule, MatProgressSpinnerModule,
-    MyReportsComponent, CompanyReceivedReportsComponent
+    MyReportsComponent, CompanyReceivedReportsComponent,
+    MatSnackBarModule
   ],
   templateUrl: './profile.component.html'
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   private userService = inject(UserService);
+  private snack = inject(MatSnackBar);
 
   user = signal<UserResponse | null>(null);
 
@@ -62,6 +65,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   toggleShowPwd(): void { this.showPwd = !this.showPwd; }
+
+  /** Helpers snackbars */
+  private snackOk(msg: string): void {
+    this.snack.open(msg, 'OK', { duration: 3000 });
+  }
+  private snackErr(msg: string): void {
+    this.snack.open(msg, 'OK', { duration: 4000 });
+  }
 
   /** Normalise simplement l'IBAN: trim + uppercase */
   normalizeIban(): void {
@@ -92,48 +103,50 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     this.userService.updateWithForm(form).subscribe({
-      next: () => alert('Profil mis à jour'),
-      error: () => alert('Erreur lors de l’enregistrement')
+      next: () => this.snackOk('Profil mis à jour'),
+      error: () => this.snackErr('Erreur lors de l’enregistrement')
     });
   }
 
   changePassword(): void {
     const { current, next, confirm } = this.pwd();
     if (!current || !next || !confirm) {
-      alert('Veuillez remplir tous les champs.');
+      this.snackErr('Veuillez remplir tous les champs.');
       return;
     }
     if (next !== confirm) {
-      alert('Les nouveaux mots de passe ne correspondent pas.');
+      this.snackErr('Les nouveaux mots de passe ne correspondent pas.');
       return;
     }
     if (next.length < 12 || !/[a-z]/.test(next) || !/[A-Z]/.test(next) || !/\d/.test(next)) {
-      alert('Le nouveau mot de passe ne respecte pas la politique de sécurité (12+ caractères, minuscule, majuscule, chiffre).');
+      this.snackErr('Le nouveau mot de passe ne respecte pas la politique (12+ caractères, minuscule, majuscule, chiffre).');
       return;
     }
 
     this.userService.changePassword({ currentPassword: current, newPassword: next }).subscribe({
       next: () => {
         this.pwd.set({ current: '', next: '', confirm: '' });
-        alert('Mot de passe mis à jour');
+        this.snackOk('Mot de passe mis à jour');
       },
       error: (err: HttpErrorResponse) => {
         const msg = (err.error && (err.error.error || err.error.message)) || err.message || 'Échec du changement de mot de passe';
-        alert(msg);
+        this.snackErr(msg);
       }
     });
   }
 
   delete(): void {
+    // on garde la confirmation navigateur pour éviter les suppressions accidentelles
     if (!confirm('Supprimer votre compte ?')) return;
+
     this.userService.delete().subscribe({
       next: () => {
-        alert('Compte supprimé');
+        this.snackOk('Compte supprimé');
         this.user.set(null);
         localStorage.removeItem('auth_token');
         window.location.href = '/';
       },
-      error: () => alert('Erreur lors de la suppression')
+      error: () => this.snackErr('Erreur lors de la suppression')
     });
   }
 
@@ -143,14 +156,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     const f = input.files[0];
     if (f.type !== 'application/pdf') {
-      alert('Seuls les PDF sont acceptés.');
+      this.snackErr('Seuls les PDF sont acceptés.');
       input.value = '';
       this.verificationDocument = null;
       this.verificationDocumentName.set('');
       return;
     }
     if (f.size > MAX_PDF_BYTES) {
-      alert('Fichier trop volumineux (>20MB).');
+      this.snackErr('Fichier trop volumineux (>20MB).');
       input.value = '';
       this.verificationDocument = null;
       this.verificationDocumentName.set('');
@@ -158,6 +171,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
     this.verificationDocument = f;
     this.verificationDocumentName.set(f.name);
+    this.snackOk('Document sélectionné');
   }
 
   onPhotoSelected(event: Event): void {
@@ -171,7 +185,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   uploadPhoto(): void {
-    if (!this.photoFile) { alert('Sélectionnez une image.'); return; }
+    if (!this.photoFile) {
+      this.snackErr('Sélectionnez une image.');
+      return;
+    }
 
     this.userService.uploadPhoto(this.photoFile).subscribe({
       next: (res: UploadPhotoResponse) => {
@@ -179,11 +196,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
         if (u) this.user.set({ ...u, profilePhoto: res.profilePhoto });
         this.revokePreview();
         this.photoFile = null;
-        alert('Photo mise à jour');
+        this.snackOk('Photo mise à jour');
       },
       error: (err: HttpErrorResponse) => {
         const msg = (err.error && (err.error.error || err.error.message)) || err.message || 'Échec de l’upload';
-        alert(msg);
+        this.snackErr(msg);
       }
     });
   }
