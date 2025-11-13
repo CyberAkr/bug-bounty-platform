@@ -1,17 +1,21 @@
 <footer class="app-footer bg-[var(--surface-2)] text-[var(--text)] border-t border-black/5">
-  <div class="container-default grid gap-10 md:grid-cols-3 text-sm py-10">
+  <div class="container-default grid gap-10 md:grid-cols-4 text-sm py-10">
 
     <!-- 🧩 Colonne 1 : présentation -->
     <div>
-      <h3 class="font-semibold text-base mb-3">{{ 'footer.aboutTitle' | translate }}</h3>
+      <h3 class="font-semibold text-base mb-3">
+        {{ 'footer.aboutTitle' | translate }}
+      </h3>
       <p class="opacity-80 leading-relaxed">
         {{ 'footer.aboutText' | translate }}
       </p>
     </div>
 
-    <!-- 🧭 Colonne 2 : liens utiles (réduits) -->
+    <!-- 🧭 Colonne 2 : liens légaux -->
     <div>
-      <h3 class="font-semibold text-base mb-3">{{ 'footer.linksTitle' | translate }}</h3>
+      <h3 class="font-semibold text-base mb-3">
+        {{ 'footer.legalTitle' | translate }}
+      </h3>
       <ul class="space-y-2">
         <li>
           <a routerLink="/legal/contact" class="link-accent hover:underline">
@@ -23,22 +27,66 @@
             {{ 'footer.legal' | translate }}
           </a>
         </li>
+        <li>
+          <a routerLink="/legal/privacy" class="link-accent hover:underline">
+            {{ 'footer.privacy' | translate }}
+          </a>
+        </li>
+        <li>
+          <a routerLink="/legal/terms" class="link-accent hover:underline">
+            {{ 'footer.terms' | translate }}
+          </a>
+        </li>
+        <li>
+          <a routerLink="/legal/cookies" class="link-accent hover:underline">
+            {{ 'footer.cookies' | translate }}
+          </a>
+        </li>
+        <li>
+          <a routerLink="/legal/bugbounty-policy" class="link-accent hover:underline">
+            {{ 'footer.bugbountyPolicy' | translate }}
+          </a>
+        </li>
       </ul>
     </div>
 
-    <!-- 🌐 Colonne 3 : réseaux sociaux -->
+    <!-- 📬 Colonne 3 : support / RGPD -->
     <div>
-      <h3 class="font-semibold text-base mb-3">{{ 'footer.followTitle' | translate }}</h3>
+      <h3 class="font-semibold text-base mb-3">
+        {{ 'footer.supportTitle' | translate }}
+      </h3>
+      <ul class="space-y-2">
+        <li>
+          <a href="mailto:support@bugbounty.be" class="link-accent hover:underline">
+            {{ 'footer.supportEmail' | translate }}
+          </a>
+        </li>
+        <li>
+          <a href="mailto:privacy@bugbounty.be" class="link-accent hover:underline">
+            {{ 'footer.rgpdEmail' | translate }}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 🌐 Colonne 4 : réseaux sociaux -->
+    <div>
+      <h3 class="font-semibold text-base mb-3">
+        {{ 'footer.followTitle' | translate }}
+      </h3>
       <div class="flex gap-4 text-lg">
-        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter"
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
+           aria-label="Twitter"
            class="hover:text-[var(--accent)] transition">
           <mat-icon aria-hidden="true">alternate_email</mat-icon>
         </a>
-        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
+        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+           aria-label="LinkedIn"
            class="hover:text-[var(--accent)] transition">
           <mat-icon aria-hidden="true">business</mat-icon>
         </a>
-        <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub"
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+           aria-label="GitHub"
            class="hover:text-[var(--accent)] transition">
           <mat-icon aria-hidden="true">code</mat-icon>
         </a>

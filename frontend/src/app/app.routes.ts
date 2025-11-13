@@ -113,20 +113,21 @@ export const routes: Routes = [
           import('./features/reports/reports.routes').then(m => m.REPORTS_ROUTES)
       },
 
-
       // 🎯 Challenges
       {
         path: 'challenge',
         loadChildren: () =>
           import('./features/challenges/challenges.routes').then(m => m.challengesRoutes)
       },
+
       // 💬 Forum communautaire
       {
         path: 'forum',
-        canActivate: [authGuard], // si tu veux réserver l'accès aux connectés
+        canActivate: [authGuard], // réservé aux connectés
         loadChildren: () =>
           import('./features/forum/forum.routes').then(m => m.default)
       },
+
       // 🔔 Notifications
       {
         path: 'notifications',
@@ -135,12 +136,40 @@ export const routes: Routes = [
           import('./features/notifications/notifications.routes').then(m => m.NOTIFICATIONS_ROUTES)
       },
 
-      // ⚖️ Mentions légales & contact
+      // ⚖️ Pages légales (routes explicites)
       {
-        path: 'legal',
-        loadChildren: () =>
-          import('./features/legal/legal.routes').then(m => m.LEGAL_ROUTES)
+        path: 'legal/contact',
+        loadComponent: () =>
+          import('./features/legal/contact/contact.component').then(m => m.ContactComponent)
       },
+      {
+        path: 'legal/mentions',
+        loadComponent: () =>
+          import('./features/legal/mentions/mentions.component').then(m => m.MentionsComponent)
+      },
+      {
+        path: 'legal/privacy',
+        loadComponent: () =>
+          import('./features/legal/privacy/privacy.component').then(m => m.PrivacyComponent)
+      },
+      {
+        path: 'legal/terms',
+        loadComponent: () =>
+          import('./features/legal/terms/terms.component').then(m => m.TermsComponent)
+      },
+      {
+        path: 'legal/cookies',
+        loadComponent: () =>
+          import('./features/legal/cookies/cookies.component').then(m => m.CookiesComponent)
+      },
+      {
+        path: 'legal/bugbounty-policy',
+        loadComponent: () =>
+          import('./features/legal/bugbounty-policy/bugbounty-policy.component')
+            .then(m => m.BugBountyPolicyComponent)
+      },
+
+      // 🌐 Redirections pratiques
       {
         path: 'contact',
         redirectTo: 'legal/contact',
@@ -158,7 +187,7 @@ export const routes: Routes = [
         canActivate: [authGuard],
         loadChildren: () =>
           import('./features/admin/admin.routes').then(m => m.adminRoutes)
-      },
+      }
     ]
   },
 

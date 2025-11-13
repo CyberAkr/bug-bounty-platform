@@ -20,16 +20,165 @@
   },
 
   "footer": {
-    "aboutTitle": "À propos",
-    "aboutText": "Plateforme belge de bug bounty dédiée aux PME et aux chercheurs en cybersécurité. Signalez, collaborez et renforcez ensemble la sécurité du numérique.",
-    "linksTitle": "Navigation",
-    "programs": "Programmes",
-    "ranking": "Classement",
-    "forum": "Forum",
+    "aboutTitle": "À propos de Sentinelle",
+    "aboutText": "Sentinelle est une plateforme citoyenne de bug bounty qui aide les PME belges à sécuriser leurs applications web à moindre coût grâce à une communauté de chercheurs en sécurité.",
+    "legalTitle": "Informations légales",
+    "linksTitle": "Liens utiles",
+    "supportTitle": "Support et RGPD",
+    "followTitle": "Nous suivre",
     "contact": "Contact",
     "legal": "Mentions légales",
-    "followTitle": "Nous suivre",
-    "copyright": "© {{year}} Bug Bounty — Tous droits réservés."
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d’utilisation",
+    "cookies": "Politique de cookies",
+    "bugbountyPolicy": "Politique Bug Bounty",
+    "supportEmail": "Support : support@bugbounty.be",
+    "rgpdEmail": "Données personnelles : privacy@bugbounty.be",
+    "copyright": "© {{year}} Sentinelle – Projet de plateforme de bug bounty citoyenne pour la Belgique."
+  },
+  "legal": {
+    "mentions": {
+      "title": "Mentions légales",
+      "identity": {
+        "title": "Identité",
+        "text": "Sentinelle est un projet pédagogique de plateforme citoyenne de bug bounty destiné à la sécurisation des PME belges. Contact : support@bugbounty.be."
+      },
+      "hosting": {
+        "title": "Hébergement",
+        "text": "Cette application est hébergée uniquement dans un cadre académique et de démonstration."
+      },
+      "object": {
+        "title": "Objet du site",
+        "text": "La plateforme permet de mettre en relation des chercheurs en sécurité et des entreprises dans un but d'amélioration de la sécurité informatique."
+      },
+      "liability": {
+        "title": "Limitation de responsabilité",
+        "text": "Sentinelle est un prototype. Aucune garantie n'est fournie concernant la disponibilité, les performances ou l'exactitude des données."
+      }
+    },
+    "privacy": {
+      "title": "Politique de confidentialité (RGPD)",
+      "data": {
+        "title": "Données collectées",
+        "text1": "Nous collectons uniquement les données nécessaires au fonctionnement de la plateforme :",
+        "item1": "Données de compte : nom, prénom, adresse e-mail, mot de passe (haché).",
+        "item2": "Données de profil : rôle (entreprise, chercheur, administrateur), biographie, liens professionnels.",
+        "item3": "Données techniques : journaux de connexion, adresse IP, informations de navigateur.",
+        "item4": "Données liées aux rapports : vulnérabilités signalées et historique des échanges.",
+        "item5": "Données financières : montants payés ou reçus, identifiants de transaction via nos prestataires de paiement."
+      },
+      "purposes": {
+        "title": "Finalités du traitement",
+        "item1": "Création et gestion de votre compte utilisateur.",
+        "item2": "Mise en relation des entreprises et des chercheurs en sécurité.",
+        "item3": "Gestion des programmes de bug bounty, rapports et récompenses.",
+        "item4": "Sécurisation de la plateforme et prévention des abus.",
+        "item5": "Production de statistiques anonymisées pour améliorer le service."
+      },
+      "basis": {
+        "title": "Bases légales",
+        "text": "Les traitements sont fondés sur l'exécution du contrat (gestion de compte), le respect d'obligations légales (comptabilité), notre intérêt légitime (sécurité de la plateforme) et, le cas échéant, votre consentement (communication optionnelle)."
+      },
+      "retention": {
+        "title": "Durée de conservation",
+        "item1": "Les données de compte sont supprimées ou anonymisées dans un délai maximal de 30 jours après la demande de suppression.",
+        "item2": "Les données financières sont conservées 10 ans conformément aux obligations comptables.",
+        "item3": "Les journaux techniques liés à la sécurité sont conservés entre 6 et 12 mois.",
+        "item4": "Les données anonymisées peuvent être conservées sans limite de durée à des fins statistiques."
+      },
+      "rights": {
+        "title": "Vos droits",
+        "text": "Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation du traitement, de portabilité et d'opposition.",
+        "contact": "Pour exercer vos droits, vous pouvez nous contacter à l'adresse : privacy@bugbounty.be."
+      }
+    },
+    "terms": {
+      "title": "Conditions générales d’utilisation",
+      "object": {
+        "title": "Objet",
+        "text": "Les présentes conditions définissent les règles d'utilisation de la plateforme Sentinelle par les entreprises, les chercheurs et les administrateurs."
+      },
+      "accounts": {
+        "title": "Création de compte",
+        "text": "L'utilisateur s'engage à fournir des informations exactes, à conserver la confidentialité de son mot de passe et à ne pas usurper l'identité d'un tiers."
+      },
+      "roles": {
+        "title": "Rôles",
+        "item1": "L'entreprise crée des programmes de bug bounty et définit un périmètre de test.",
+        "item2": "Le chercheur participe aux programmes et soumet des rapports de vulnérabilité.",
+        "item3": "L'administrateur modère les rapports, gère les utilisateurs et supervise la plateforme."
+      },
+      "acceptableUse": {
+        "title": "Utilisation acceptable",
+        "text": "Toute utilisation de la plateforme doit se faire dans le respect des lois en vigueur et des règles de bug bounty définies.",
+        "item1": "Interdiction de toute activité illégale ou frauduleuse.",
+        "item2": "Interdiction d'effectuer des tests destructifs ou hors du périmètre autorisé.",
+        "item3": "Interdiction de publier du contenu diffamatoire, haineux ou contraire à l'ordre public."
+      },
+      "suspension": {
+        "title": "Suspension et suppression",
+        "text": "L'administrateur se réserve le droit de suspendre ou supprimer un compte en cas d'abus, de non-respect des conditions ou de comportement malveillant."
+      },
+      "liability": {
+        "text": "La plateforme est fournie à titre de prototype pédagogique et sans garantie de disponibilité ou d'absence d'erreurs."
+      }
+    },
+    "cookies": {
+      "title": "Politique de cookies",
+      "use": {
+        "title": "Utilisation des cookies",
+        "text": "La plateforme utilise uniquement des cookies techniques strictement nécessaires à son fonctionnement (par exemple, conservation de la session ou de certaines préférences). Aucun cookie publicitaire ou de suivi n'est utilisé dans ce prototype."
+      },
+      "types": {
+        "title": "Types de cookies",
+        "item1": "Cookies de session nécessaires au fonctionnement de l'application.",
+        "item2": "Cookies éventuellement liés aux préférences (par exemple langue) si activés.",
+        "item3": "Aucun cookie de suivi analytique ou marketing n'est utilisé par défaut."
+      }
+    },
+    "policy": {
+      "title": "Politique Bug Bounty et règles de participation",
+      "object": {
+        "title": "Objet",
+        "text": "Cette politique encadre la participation des chercheurs aux programmes de bug bounty publiés sur Sentinelle et définit un cadre légal et responsable pour les tests de sécurité."
+      },
+      "scope": {
+        "title": "Périmètre autorisé",
+        "text": "Les tests ne sont autorisés que sur les programmes et cibles explicitement listés sur la plateforme.",
+        "item1": "Les tests doivent rester strictement dans le périmètre (scope) défini par le programme.",
+        "item2": "Toute attaque visant des systèmes ou données hors scope est strictement interdite.",
+        "item3": "Les tests doivent être réalisés de manière à limiter l'impact sur la disponibilité des services."
+      },
+      "rulesDo": {
+        "title": "Bonnes pratiques (à faire)",
+        "item1": "Privilégier les tests non destructifs et la preuve minimale de la vulnérabilité.",
+        "item2": "Signaler les vulnérabilités uniquement via la plateforme et ne pas les divulguer publiquement.",
+        "item3": "Respecter la confidentialité des données et supprimer toute copie après le rapport."
+      },
+      "rulesDont": {
+        "title": "Pratiques interdites",
+        "item1": "Attaques par déni de service (DoS ou DDoS).",
+        "item2": "Destruction ou altération volontaire de données.",
+        "item3": "Exfiltration massive de données ou exploitation malveillante des vulnérabilités."
+      },
+      "safeharbor": {
+        "title": "Safe Harbor",
+        "text": "Tant que le chercheur respecte cette politique et le périmètre défini, Sentinelle et les entreprises participantes s'engagent à traiter les signalements de bonne foi et à ne pas poursuivre le chercheur pour les actions effectuées dans ce cadre."
+      }
+    },
+    "contact": {
+      "title": "Contact",
+      "support": {
+        "title": "Support général",
+        "text": "Pour toute question relative à l'utilisation de la plateforme ou à votre compte, vous pouvez nous contacter à l'adresse suivante :",
+        "button": "Contacter le support"
+      },
+      "rgpd": {
+        "title": "Données personnelles (RGPD)",
+        "text": "Pour toute demande d'accès, de rectification ou de suppression de vos données personnelles, vous pouvez nous écrire à :",
+        "button": "Contacter le délégué RGPD"
+      }
+    }
   },
 
   "auth": {
@@ -614,30 +763,6 @@
     }
   },
 
-  "legal": {
-    "title": "Mentions légales",
-    "back": "Retour",
-    "publisher": {
-      "title": "Éditeur",
-      "body": "Plateforme Bug Bounty — ASBL/entreprise belge dédiée aux PME et aux chercheurs en sécurité."
-    },
-    "host": {
-      "title": "Hébergement",
-      "body": "Hébergé par un prestataire situé dans l’UE. Disponibilité et sauvegardes selon les bonnes pratiques."
-    },
-    "contact": {
-      "title": "Contact",
-      "body": "Pour toute demande liée au site, à la modération ou aux mentions légales, écrivez à"
-    },
-    "data": {
-      "title": "Données personnelles",
-      "body": "Données traitées conformément au RGPD. Vous disposez de droits d’accès, rectification, effacement et opposition."
-    },
-    "ip": {
-      "title": "Propriété intellectuelle",
-      "body": "Les contenus publiés (textes, logos, graphismes) sont protégés. Toute reproduction non autorisée est interdite."
-    }
-  },
 
   "contact": {
     "title": "Contact",

@@ -18,20 +18,167 @@
     "forum": " Forum"
 
   },
-
   "footer": {
-    "aboutTitle": "About",
-    "aboutText": "Belgian bug bounty platform for SMEs and security researchers. Report, collaborate and strengthen digital security together.",
-    "linksTitle": "Navigation",
-    "programs": "Programs",
-    "ranking": "Ranking",
-    "forum": "Forum",
+    "aboutTitle": "About Sentinelle",
+    "aboutText": "Sentinelle is a citizen bug bounty platform helping Belgian SMEs secure their web applications at low cost thanks to a community of security researchers.",
+    "legalTitle": "Legal information",
+    "linksTitle": "Useful links",
+    "supportTitle": "Support & GDPR",
+    "followTitle": "Follow us",
     "contact": "Contact",
     "legal": "Legal notice",
-    "followTitle": "Follow us",
-    "copyright": "© {{year}} Bug Bounty — All rights reserved."
+    "privacy": "Privacy policy",
+    "terms": "Terms of use",
+    "cookies": "Cookie policy",
+    "bugbountyPolicy": "Bug Bounty policy",
+    "supportEmail": "Support: support@bugbounty.be",
+    "rgpdEmail": "Data protection: privacy@bugbounty.be",
+    "copyright": "© {{year}} Sentinelle – Citizen bug bounty platform project for Belgium."
   },
-
+  "legal": {
+    "mentions": {
+      "title": "Legal Notice",
+      "identity": {
+        "title": "Identity",
+        "text": "Sentinelle is an educational project of a citizen bug bounty platform designed to help secure Belgian SMEs. Contact: support@bugbounty.be."
+      },
+      "hosting": {
+        "title": "Hosting",
+        "text": "This application is hosted only for academic and demonstration purposes."
+      },
+      "object": {
+        "title": "Purpose of the website",
+        "text": "The platform connects security researchers with companies in order to improve cybersecurity."
+      },
+      "liability": {
+        "title": "Limitation of liability",
+        "text": "Sentinelle is a prototype. No guarantee is provided regarding availability, performance or accuracy of the data."
+      }
+    },
+    "privacy": {
+      "title": "Privacy Policy (GDPR)",
+      "data": {
+        "title": "Data collected",
+        "text1": "We only collect the data necessary for the operation of the platform:",
+        "item1": "Account data: first name, last name, email address, password (hashed).",
+        "item2": "Profile data: role (company, researcher, administrator), biography, professional links.",
+        "item3": "Technical data: login logs, IP address, browser information.",
+        "item4": "Report data: reported vulnerabilities and history of exchanges.",
+        "item5": "Financial data: amounts paid or received, transaction identifiers through our payment providers."
+      },
+      "purposes": {
+        "title": "Purposes of processing",
+        "item1": "Creating and managing your user account.",
+        "item2": "Connecting companies with security researchers.",
+        "item3": "Managing bug bounty programs, reports and rewards.",
+        "item4": "Securing the platform and preventing abuse.",
+        "item5": "Producing anonymised statistics to improve the service."
+      },
+      "basis": {
+        "title": "Legal basis",
+        "text": "Processing is based on the performance of a contract (account management), compliance with legal obligations (accounting), our legitimate interest (platform security) and, where applicable, your consent (optional communication)."
+      },
+      "retention": {
+        "title": "Data retention",
+        "item1": "Account data are deleted or anonymised within 30 days after a deletion request.",
+        "item2": "Financial data are kept for 10 years in accordance with accounting obligations.",
+        "item3": "Security-related technical logs are kept between 6 and 12 months.",
+        "item4": "Anonymised data may be kept without time limit for statistical purposes."
+      },
+      "rights": {
+        "title": "Your rights",
+        "text": "You have the right of access, rectification, erasure, restriction of processing, portability and objection.",
+        "contact": "To exercise your rights, you can contact us at: privacy@bugbounty.be."
+      }
+    },
+    "terms": {
+      "title": "Terms of Use",
+      "object": {
+        "title": "Purpose",
+        "text": "These terms define the rules for using the Sentinelle platform by companies, researchers and administrators."
+      },
+      "accounts": {
+        "title": "Account creation",
+        "text": "The user agrees to provide accurate information, keep their password confidential and not impersonate any third party."
+      },
+      "roles": {
+        "title": "Roles",
+        "item1": "The company creates bug bounty programs and defines the testing scope.",
+        "item2": "The researcher participates in programs and submits vulnerability reports.",
+        "item3": "The administrator moderates reports, manages users and supervises the platform."
+      },
+      "acceptableUse": {
+        "title": "Acceptable use",
+        "text": "Any use of the platform must comply with applicable laws and the bug bounty rules defined herein.",
+        "item1": "Any illegal or fraudulent activity is prohibited.",
+        "item2": "Destructive tests or tests outside the authorised scope are prohibited.",
+        "item3": "It is forbidden to publish defamatory, hateful or unlawful content."
+      },
+      "suspension": {
+        "title": "Suspension and deletion",
+        "text": "The administrator may suspend or delete an account in case of abuse, breach of these terms or malicious behaviour."
+      },
+      "liability": {
+        "text": "The platform is provided as an educational prototype without any guarantee of availability or absence of errors."
+      }
+    },
+    "cookies": {
+      "title": "Cookie Policy",
+      "use": {
+        "title": "Use of cookies",
+        "text": "The platform only uses technical cookies that are strictly necessary for its operation (for example, to maintain the session or certain preferences). No advertising or tracking cookies are used in this prototype."
+      },
+      "types": {
+        "title": "Types of cookies",
+        "item1": "Session cookies required for the application to function.",
+        "item2": "Possible preference cookies (for example language) if enabled.",
+        "item3": "No analytical or marketing tracking cookies are used by default."
+      }
+    },
+    "policy": {
+      "title": "Bug Bounty Policy and Participation Rules",
+      "object": {
+        "title": "Purpose",
+        "text": "This policy governs the participation of researchers in bug bounty programs published on Sentinelle and defines a lawful and responsible framework for security testing."
+      },
+      "scope": {
+        "title": "Authorised scope",
+        "text": "Testing is only allowed on programs and targets explicitly listed on the platform.",
+        "item1": "All tests must remain strictly within the scope defined by the program.",
+        "item2": "Any attack on systems or data outside the scope is strictly forbidden.",
+        "item3": "Tests must be designed to minimise impact on service availability."
+      },
+      "rulesDo": {
+        "title": "Best practices (do)",
+        "item1": "Prefer non-destructive tests and provide the minimum proof required for the vulnerability.",
+        "item2": "Report vulnerabilities only through the platform and do not disclose them publicly.",
+        "item3": "Respect data confidentiality and delete any copy after reporting."
+      },
+      "rulesDont": {
+        "title": "Prohibited practices (don't)",
+        "item1": "Denial of service attacks (DoS or DDoS).",
+        "item2": "Intentional destruction or alteration of data.",
+        "item3": "Massive data exfiltration or malicious exploitation of vulnerabilities."
+      },
+      "safeharbor": {
+        "title": "Safe Harbor",
+        "text": "As long as the researcher complies with this policy and the defined scope, Sentinelle and participating companies commit to handle reports in good faith and not to take legal action for actions performed within this framework."
+      }
+    },
+    "contact": {
+      "title": "Contact",
+      "support": {
+        "title": "General support",
+        "text": "For any question related to the use of the platform or your account, you can contact us at:",
+        "button": "Contact support"
+      },
+      "rgpd": {
+        "title": "Data protection (GDPR)",
+        "text": "For any request to access, rectify or delete your personal data, you can write to:",
+        "button": "Contact the data officer"
+      }
+    }
+  },
   "auth": {
     "login": {
       "title": "Sign in",
@@ -611,30 +758,6 @@
     }
   },
 
-  "legal": {
-    "title": "Legal notice",
-    "back": "Back",
-    "publisher": {
-      "title": "Publisher",
-      "body": "Bug Bounty Platform – Belgian non-profit/company dedicated to SMEs and security researchers."
-    },
-    "host": {
-      "title": "Hosting",
-      "body": "Hosted by a provider located in the EU. Availability and backups follow best practices."
-    },
-    "contact": {
-      "title": "Contact",
-      "body": "For any request related to the site, moderation or legal notices, write to"
-    },
-    "data": {
-      "title": "Personal data",
-      "body": "Data is processed in compliance with GDPR. You have rights of access, rectification, erasure and objection."
-    },
-    "ip": {
-      "title": "Intellectual property",
-      "body": "Published content (texts, logos, graphics) is protected. Any unauthorised reproduction is prohibited."
-    }
-  },
 
   "contact": {
     "title": "Contact",
