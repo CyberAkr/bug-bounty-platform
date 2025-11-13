@@ -590,6 +590,10 @@
       "docHint2": "You can resend the document if your verification is pending or rejected.",
       "selected": "Selected file"
     },
+    "delete": {
+      "warningTitle": "Account deletion",
+      "warningText": "Warning: this operation is permanent and irreversible. All your personal data will be anonymized and you will never be able to recover access to your account."
+    },
     "actions": {
       "save": "Save",
       "delete": "Delete my account"

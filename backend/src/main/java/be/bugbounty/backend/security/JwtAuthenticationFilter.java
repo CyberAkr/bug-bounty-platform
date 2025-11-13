@@ -34,6 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        // lire le header
 
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
@@ -43,6 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String token = header.replace("Bearer ", "");
+        // valider le jwt avec la clé
 
         try {
             Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
@@ -56,15 +58,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             System.out.println(" Email extrait du token : " + email);
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                // NB: avec utf8mb4_unicode_ci, la recherche email est tolérante à la casse
+                //        charge l'utilisateur
                 User user = userRepository.findByEmail(email.trim().toLowerCase()).orElse(null);
 
                 if (user != null) {
+                    //        Il crée lauthority Spring Security à partir du rôle en base
+
                     String role = user.getRole().toUpperCase();
                     String authority = "ROLE_" + role;
 
                     System.out.println(" Rôle utilisateur en base : " + user.getRole());
                     System.out.println(" Authority injectée : " + authority);
+                    //        injecte cela dans le seecurity context
 
                     UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                             user, // principal = entité User (utilisé ensuite par ForumController)

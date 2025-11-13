@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -91,9 +92,14 @@ public class UserService {
         // (optionnel) Invalidation de sessions / refresh tokens à gérer si nécessaire
     }
 
+    /**
+     * Suppression côté utilisateur :
+     * - pas de delete physique pour éviter de casser les FKs (reports, payments, challenges…)
+     * - anonymisation RGPD + désactivation du compte.
+     */
     @Transactional
     public void deleteUser(User user) {
-        userRepository.delete(user);
+        anonymizeUserInternal(user);
     }
 
     public User getByEmail(String email) {
@@ -168,13 +174,25 @@ public class UserService {
         return userRepository.save(u);
     }
 
+    /**
+     * Suppression côté admin :
+     * - on tente un delete physique
+     * - si la DB refuse (DataIntegrityViolationException => user référencé),
+     *   on tombe en mode anonymisation RGPD.
+     */
     @Transactional
     public void adminDeleteUser(Long id) {
-        if (!userRepository.existsById(id)) return;
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            return;
+        }
+
         try {
-            userRepository.deleteById(id);
+            userRepository.delete(user);
         } catch (DataIntegrityViolationException e) {
-            throw new IllegalStateException("Suppression impossible : l'utilisateur est référencé (rapports, challenges, ...).");
+            // L'utilisateur a déjà des rapports / paiements / challenges, etc.
+            // => on anonymise pour respecter RGPD + contraintes comptables.
+            anonymizeUserInternal(user);
         }
     }
 
@@ -192,5 +210,40 @@ public class UserService {
     private String normalizeIban(String raw) {
         if (raw == null) return null;
         return raw.replaceAll("\\s+", "").toUpperCase();
+    }
+
+    /**
+     * Anonymisation RGPD :
+     * - conserve l'ID et les liens pour les rapports / paiements / challenges
+     * - efface les données personnelles
+     * - désactive le compte.
+     */
+    @Transactional
+    protected void anonymizeUserInternal(User user) {
+        String anonSuffix = "deleted_" + user.getUserId();
+        String randomPassword = UUID.randomUUID().toString();
+
+        user.setFirstName("Deleted");
+        user.setLastName("User");
+        user.setEmail(anonSuffix + "@anon.bugbounty.local");
+        user.setUsername(anonSuffix);
+
+        user.setBio(null);
+        user.setCompanyNumber(null);
+        user.setVerificationDocument(null);
+        user.setProfilePhoto(null);
+        user.setPreferredLanguage(null);
+        user.setBankAccount(null);
+
+        user.setPasswordHash(passwordEncoder.encode(randomPassword));
+        user.setEmailVerified(false);
+        user.setEmailVerificationCode(null);
+        user.setEmailVerificationExpires(null);
+
+        user.setBanned(true);
+        // Option : tu peux remettre les points à 0 ou les laisser.
+        // user.setPoint(0);
+
+        userRepository.save(user);
     }
 }

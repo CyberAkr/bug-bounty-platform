@@ -214,8 +214,19 @@
   </mat-card>
 
   <!-- Danger zone -->
-  <div class="mt-6 flex justify-end">
-    <button mat-stroked-button color="warn" (click)="delete()" class="w-full md:w-auto">
+  <div class="mt-8 p-4 border border-red-300 rounded-xl bg-red-50">
+    <h3 class="text-lg font-semibold text-red-700 mb-2 flex items-center gap-2">
+      <mat-icon color="warn">warning</mat-icon>
+      {{ 'profile.delete.warningTitle' | translate }}
+    </h3>
+
+    <p class="text-sm text-red-600 mb-4">
+      {{ 'profile.delete.warningText' | translate }}
+    </p>
+
+    <button mat-stroked-button color="warn"
+            (click)="delete()"
+            class="w-full md:w-auto">
       <mat-icon class="mr-2">delete</mat-icon>
       {{ 'profile.actions.delete' | translate }}
     </button>

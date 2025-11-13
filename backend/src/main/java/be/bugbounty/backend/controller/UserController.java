@@ -163,12 +163,12 @@ public class UserController {
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<?> deleteUser(@AuthenticationPrincipal User user) {
-        if (user == null) return ResponseEntity.status(401).body("Non authentifié");
-        userRepository.delete(user);
-        return ResponseEntity.ok(Map.of("message", "Compte supprimé"));
+    public ResponseEntity<?> deleteUser(@AuthenticationPrincipal User currentUser) {
+        userService.deleteUser(currentUser);  // ✅ soft anonymize, pas de delete physique
+        return ResponseEntity.ok(Map.of(
+                "message", "user.deleted"
+        ));
     }
-
     // -------------------------
     // Section: profil public (lecture)
     // -------------------------

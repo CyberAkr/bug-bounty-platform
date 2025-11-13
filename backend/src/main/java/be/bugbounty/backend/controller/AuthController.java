@@ -61,12 +61,12 @@ public class AuthController {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Email introuvable"));
 
-        // 1) banni ?
+        // 1) banni ou non  ?
         if (user.isBanned()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Compte banni");
         }
 
-        // 2) email non vérifié ?  ⟵ AVANT le check password
+        // 2) email  vérifié ?  ⟵ AVANT le check password
         if (Boolean.FALSE.equals(user.getEmailVerified())) {
             // soit message texte (front détecte par regex)
             // return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Email non vérifié");

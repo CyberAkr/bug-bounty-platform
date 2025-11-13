@@ -571,6 +571,10 @@
     "title": "Mon profil",
     "subtitle": "Gérez vos informations et votre photo",
     "settings": "Paramètres",
+    "delete": {
+      "warningTitle": "Suppression du compte",
+      "warningText": "Attention : cette opération est définitive et irréversible. Toutes vos données personnelles seront anonymisées et vous ne pourrez plus jamais récupérer l’accès à votre compte."
+    },
     "photo": {
       "title": "Photo de profil",
       "update": "Mettre à jour la photo"

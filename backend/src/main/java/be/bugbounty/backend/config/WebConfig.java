@@ -25,7 +25,7 @@ public class WebConfig implements WebMvcConfigurer {
         Path root = Paths.get(uploadDir).toAbsolutePath().normalize();
         String base = "file:" + (root.toString().endsWith("/") ? root : root + "/");
 
-        // ✅ Exposer uniquement les sous-dossiers PUBLICS
+        //  Exposer uniquement les sous-dossiers PUBLICS
         registry.addResourceHandler("/files/" + profileSubDir + "/**")
                 .addResourceLocations(base + profileSubDir + "/");
         registry.addResourceHandler("/files/" + badgeSubDir + "/**")
